@@ -20,11 +20,11 @@ namespace 恒温测试机
         }
         DAQ_profile collectData;
         DAQ_profile control;
-        private byte[] doData= new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+        private byte[] doData = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
         private byte[] diData = new byte[4];
         double[] aoData = new double[2];
-    
-    private config collectConfig;
+
+        private config collectConfig;
         private config controlConfig;
         public const int CHANNEL_COUNT_MAX = 16;
         private double[] m_dataScaled = new double[CHANNEL_COUNT_MAX];
@@ -38,7 +38,6 @@ namespace 恒温测试机
             collectConfig.sectionLength = 100;
             collectConfig.startChannel = 0;
 
-
             controlConfig = new config();
             controlConfig.deviceDescription = "PCI-1756,BID#0";
             controlConfig.sectionCount = 0;//The 0 means setting 'streaming' mode.
@@ -50,14 +49,14 @@ namespace 恒温测试机
             control = new DAQ_profile(0, controlConfig);
             control.InstantDo();
             control.InstantDi();
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 doData[i] = 0x00;
             }//初始化数字量输出
             control.InstantDo_Write(doData);//输出数字量函数
             control.InstantDi();
-            diData[0]= control.InstantDi_Read();//读取数字量函数
-
+            diData[0] = control.InstantDi_Read();//读取数字量函数
+            Console.WriteLine("didata:" + diData[0]);
             WaveformAi();//
             waveformAiCtrl1_Start();//开始高速读取模拟量数据
         }
@@ -68,7 +67,7 @@ namespace 恒温测试机
         {
             waveformAiCtrl1 = new Automation.BDaq.WaveformAiCtrl();
             waveformAiCtrl1.SelectedDevice = new DeviceInformation(collectConfig.deviceDescription);
-           
+
             // waveformAiCtrl1._StateStream = ((Automation.BDaq.DeviceStateStreamer)(resources.GetObject("waveformAiCtrl1._StateStream")));
 
             Conversion conversion = waveformAiCtrl1.Conversion;
@@ -137,24 +136,24 @@ namespace 恒温测试机
                 int chanCount = waveformAiCtrl1.Conversion.ChannelCount;
                 int sectionLength = waveformAiCtrl1.Record.SectionLength;
                 err = waveformAiCtrl1.GetData(args.Count, m_dataScaled);//读取数据     
-               // Console.WriteLine("length:"+m_dataScaled.Length);
+                                                                        // Console.WriteLine("length:"+m_dataScaled.Length);
                 DateTime t = DateTime.Now;
                 //
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
                 for (int i = 0; i < m_dataScaled.Length; i += 4)
                 {
-                    
+
                     t = t.AddMilliseconds(10.0);
                 }
 
-               
-                
+
+
                 if (err != ErrorCode.Success && err != ErrorCode.WarningRecordEnd)
                 {
                     HandleError(err);
                     return;
                 }
-               // System.Diagnostics.Debug.WriteLine("读取数据长度"+args.Count.ToString());
+                // System.Diagnostics.Debug.WriteLine("读取数据长度"+args.Count.ToString());
 
             }
             catch (System.Exception) { HandleError(err); }
