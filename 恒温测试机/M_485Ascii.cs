@@ -13,7 +13,7 @@ using HslCommunication.ModBus;
 using System.Threading;
 using System.IO.Ports;
 
-namespace 冲水阀水力特性测试机
+namespace 恒温测试机
 {
     class M_485Ascii
     {

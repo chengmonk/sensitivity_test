@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace 冲水阀水力特性测试机
+namespace 恒温测试机
 {   
    /// <summary>
    /// 用于初始化串口的各种参数
