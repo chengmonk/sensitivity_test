@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28809.33
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "恒温测试机", "恒温测试机.csproj", "{2661FE05-84B8-4EF3-9C51-571F05069DBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2661FE05-84B8-4EF3-9C51-571F05069DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2661FE05-84B8-4EF3-9C51-571F05069DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2661FE05-84B8-4EF3-9C51-571F05069DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2661FE05-84B8-4EF3-9C51-571F05069DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EFF33497-91C2-47FB-9B0D-3C66C9A5ED33}
+	EndGlobalSection
+EndGlobal
