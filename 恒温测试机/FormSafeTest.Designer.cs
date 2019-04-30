@@ -298,8 +298,8 @@
             // 
             // hslWaterBox1
             // 
-            this.hslWaterBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(205)))), ((int)(((byte)(152)))));
-            this.hslWaterBox1.EdgeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(233)))), ((int)(((byte)(208)))));
+            this.hslWaterBox1.BorderColor = System.Drawing.Color.Gray;
+            this.hslWaterBox1.EdgeColor = System.Drawing.Color.Silver;
             this.hslWaterBox1.Location = new System.Drawing.Point(3, 3);
             this.hslWaterBox1.Name = "hslWaterBox1";
             this.hslWaterBox1.Size = new System.Drawing.Size(82, 95);
@@ -385,8 +385,8 @@
             // 
             // hslWaterBox5
             // 
-            this.hslWaterBox5.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(205)))), ((int)(((byte)(152)))));
-            this.hslWaterBox5.EdgeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(233)))), ((int)(((byte)(208)))));
+            this.hslWaterBox5.BorderColor = System.Drawing.Color.Gray;
+            this.hslWaterBox5.EdgeColor = System.Drawing.Color.Silver;
             this.hslWaterBox5.Location = new System.Drawing.Point(387, 3);
             this.hslWaterBox5.Name = "hslWaterBox5";
             this.hslWaterBox5.Size = new System.Drawing.Size(82, 95);
@@ -396,8 +396,8 @@
             // 
             // hslWaterBox3
             // 
-            this.hslWaterBox3.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(205)))), ((int)(((byte)(152)))));
-            this.hslWaterBox3.EdgeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(233)))), ((int)(((byte)(208)))));
+            this.hslWaterBox3.BorderColor = System.Drawing.Color.Gray;
+            this.hslWaterBox3.EdgeColor = System.Drawing.Color.Silver;
             this.hslWaterBox3.Location = new System.Drawing.Point(195, 3);
             this.hslWaterBox3.Name = "hslWaterBox3";
             this.hslWaterBox3.Size = new System.Drawing.Size(82, 95);
@@ -407,8 +407,8 @@
             // 
             // hslWaterBox4
             // 
-            this.hslWaterBox4.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(205)))), ((int)(((byte)(152)))));
-            this.hslWaterBox4.EdgeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(233)))), ((int)(((byte)(208)))));
+            this.hslWaterBox4.BorderColor = System.Drawing.Color.Gray;
+            this.hslWaterBox4.EdgeColor = System.Drawing.Color.Silver;
             this.hslWaterBox4.Location = new System.Drawing.Point(291, 3);
             this.hslWaterBox4.Name = "hslWaterBox4";
             this.hslWaterBox4.Size = new System.Drawing.Size(82, 95);
@@ -418,8 +418,8 @@
             // 
             // hslWaterBox2
             // 
-            this.hslWaterBox2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(205)))), ((int)(((byte)(152)))));
-            this.hslWaterBox2.EdgeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(233)))), ((int)(((byte)(208)))));
+            this.hslWaterBox2.BorderColor = System.Drawing.Color.Gray;
+            this.hslWaterBox2.EdgeColor = System.Drawing.Color.Silver;
             this.hslWaterBox2.Location = new System.Drawing.Point(99, 3);
             this.hslWaterBox2.Name = "hslWaterBox2";
             this.hslWaterBox2.Size = new System.Drawing.Size(82, 95);
@@ -446,7 +446,7 @@
             this.groupBox4.Size = new System.Drawing.Size(496, 152);
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "压力监控区";
+            this.groupBox4.Text = "压力监控区(Bar)";
             // 
             // tableLayoutPanel4
             // 
@@ -619,7 +619,7 @@
             this.groupBox5.Size = new System.Drawing.Size(496, 152);
             this.groupBox5.TabIndex = 12;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "流量监控区";
+            this.groupBox5.Text = "流量监控区(L/s)";
             // 
             // tableLayoutPanel5
             // 
@@ -792,7 +792,7 @@
             this.groupBox3.Size = new System.Drawing.Size(496, 152);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "压力监控区";
+            this.groupBox3.Text = "压力监控区(℃)";
             // 
             // tableLayoutPanel3
             // 
@@ -955,7 +955,7 @@
             this.TcMin.TabIndex = 18;
             this.TcMin.Text = "label13";
             // 
-            // Form1
+            // FormSafeTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -966,7 +966,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form1";
+            this.Name = "FormSafeTest";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "安全性测试";

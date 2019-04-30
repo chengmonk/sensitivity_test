@@ -213,12 +213,12 @@ namespace 恒温测试机
         private void HslButton2_Click(object sender, EventArgs e)
         {
             Hide();
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(10);
             using (FormValueRangeSet form = new FormValueRangeSet())
             {
                 form.ShowDialog();
             }
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(10);
             Show();
             loadData();
         }
