@@ -31,8 +31,40 @@ namespace 恒温测试机
         private config controlConfig;
         public const int CHANNEL_COUNT_MAX = 16;
         private double[] m_dataScaled = new double[CHANNEL_COUNT_MAX];
+
+        bool startFlag = false;
+
+        double Temp1;
+        double Temp2;
+        double Temp3;
+        double Temp4;
+        double Temp5;
+        double Pm;
+        double Pc;
+        double Ph;
+        double Tm;
+        double Tc;
+        double Th;
+        double Qm;
+        double Qc;
+        double Qh;
+        double Qm5;
+        private DataTable dt;
         private void Form1_Load(object sender, EventArgs e)
         {
+            dt = new DataTable();
+            dt.Clear();
+            dt.Columns.Add("时间", typeof(string));
+            dt.Columns.Add("冷水流量Qc", typeof(double));   //新建第一列 通道0
+            dt.Columns.Add("热水流量Qh", typeof(double));   //1
+            dt.Columns.Add("出水流量Qm", typeof(double));   //2
+            dt.Columns.Add("冷水温度Tc", typeof(double));   //3
+            dt.Columns.Add("热水温度Th", typeof(double));   //4
+            dt.Columns.Add("出水温度Tm", typeof(double));   //5
+            dt.Columns.Add("冷水压力Pc", typeof(double));   //6
+            dt.Columns.Add("热水压力Ph", typeof(double));   //7
+            dt.Columns.Add("出水压力Pm", typeof(double));   //8
+            dt.Columns.Add("出水重量Qm5", typeof(double));   //9
             Temp1Status.Text = "温度：10℃\n" + "状态：制冷中.";
             Temp2Status.Text = "温度：10℃\n" + "状态：加热中.";
             Temp3Status.Text = "温度：10℃\n" + "状态：加热中.";
@@ -172,12 +204,44 @@ namespace 恒温测试机
                 int chanCount = waveformAiCtrl1.Conversion.ChannelCount;
                 int sectionLength = waveformAiCtrl1.Record.SectionLength;
                 err = waveformAiCtrl1.GetData(args.Count, m_dataScaled);//读取数据     
-                                                                        // Console.WriteLine("length:"+m_dataScaled.Length);
+                Console.WriteLine("length:" + m_dataScaled.Length);
+
                 DateTime t = DateTime.Now;
                 //
+                //t = t.AddSeconds(-);
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
-                for (int i = 0; i < m_dataScaled.Length; i += 4)
+                Console.WriteLine("time:" + t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
+                for (int i = 0; i < m_dataScaled.Length; i += 15)
                 {
+                    Qc = Math.Round(m_dataScaled[i + 0], 2);
+                    Qh = Math.Round(m_dataScaled[i + 1], 2);
+                    Qm = Math.Round(m_dataScaled[i + 2], 2);
+                    Tc = Math.Round(m_dataScaled[i + 3], 2);
+                    Th = Math.Round(m_dataScaled[i + 4], 2);
+                    Tm = Math.Round(m_dataScaled[i + 5], 2);
+                    Pc = Math.Round(m_dataScaled[i + 6], 2);
+                    Ph = Math.Round(m_dataScaled[i + 7], 2);
+                    Pm = Math.Round(m_dataScaled[i + 8], 2);
+                    Qm5 = Math.Round(m_dataScaled[i + 9], 2);
+                    Temp1 = Math.Round(m_dataScaled[i + 10], 2);
+                    Temp2 = Math.Round(m_dataScaled[i + 11], 2);
+                    Temp3 = Math.Round(m_dataScaled[i + 12], 2);
+                    Temp4 = Math.Round(m_dataScaled[i + 13], 2);
+                    Temp5 = Math.Round(m_dataScaled[i + 14], 2);
+                    if (startFlag)
+                    {
+                        dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
+                            Qc,
+                            Qh,
+                            Qm,
+                            Tc,
+                            Th,
+                            Tm,
+                            Pc,
+                            Ph,
+                            Pm,
+                            Qm5);
+                    }                    
 
                     t = t.AddMilliseconds(10.0);
                 }
@@ -226,6 +290,16 @@ namespace 恒温测试机
         private void Label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void HslButton1_Click(object sender, EventArgs e)
+        {
+            startFlag = true;
+        }
+
+        private void HslButton5_Click(object sender, EventArgs e)
+        {
+            startFlag = false;
         }
     }
 }

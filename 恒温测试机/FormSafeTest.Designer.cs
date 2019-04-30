@@ -207,7 +207,8 @@
             this.hslButton1.Name = "hslButton1";
             this.hslButton1.Size = new System.Drawing.Size(88, 44);
             this.hslButton1.TabIndex = 1;
-            this.hslButton1.Text = "hslButton1";
+            this.hslButton1.Text = "开始";
+            this.hslButton1.Click += new System.EventHandler(this.HslButton1_Click);
             // 
             // hslButton3
             // 
@@ -234,7 +235,8 @@
             this.hslButton5.Name = "hslButton5";
             this.hslButton5.Size = new System.Drawing.Size(88, 44);
             this.hslButton5.TabIndex = 5;
-            this.hslButton5.Text = "hslButton5";
+            this.hslButton5.Text = "停止";
+            this.hslButton5.Click += new System.EventHandler(this.HslButton5_Click);
             // 
             // hslButton6
             // 
