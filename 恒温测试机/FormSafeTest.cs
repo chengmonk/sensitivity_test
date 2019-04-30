@@ -49,7 +49,13 @@ namespace 恒温测试机
         double Qc;
         double Qh;
         double Qm5;
+        double T1BaseLine;
+        double T2BaseLine;
+        double T3BaseLine;
+        double T4BaseLine;
+        double T5BaseLine;
         private DataTable dt;
+        private delegate void myDelegate();//声明委托   
         private void Form1_Load(object sender, EventArgs e)
         {
             dt = new DataTable();
@@ -246,7 +252,8 @@ namespace 恒温测试机
                     t = t.AddMilliseconds(10.0);
                 }
 
-
+                myDelegate md = new myDelegate(dataReadyUpdateForm);
+                this.Invoke(md);
 
                 if (err != ErrorCode.Success && err != ErrorCode.WarningRecordEnd)
                 {
@@ -257,6 +264,16 @@ namespace 恒温测试机
 
             }
             catch (System.Exception) { HandleError(err); }
+        }
+
+        private void dataReadyUpdateForm()
+        {
+
+            Temp1Status.Text = "水温:" + Temp1 + "\n" + "状态:" + (Temp1 > (double)Properties.Settings.Default.Temp1Set ? "制冷中" : "保持温度");
+            Temp2Status.Text = "水温:" + Temp2 + "\n" + "状态:" + (Temp2 < (double)Properties.Settings.Default.Temp2Set ? "加热中" : "保持温度");
+            Temp3Status.Text = "水温:" + Temp3 + "\n" + "状态:" + (Temp3 < (double)Properties.Settings.Default.Temp3Set ? "加热中" : "保持温度");
+            Temp4Status.Text = "水温:" + Temp4 + "\n" + "状态:" + (Temp4 < (double)Properties.Settings.Default.Temp4Set ? "加热中" : "保持温度");
+            
         }
 
         private void waveformAiCtrl1_Overrun(object sender, BfdAiEventArgs e)

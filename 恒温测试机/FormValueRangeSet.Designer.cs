@@ -61,6 +61,28 @@
             this.MIN = new System.Windows.Forms.Label();
             this.QmMax = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.Temp4Set = new System.Windows.Forms.NumericUpDown();
+            this.Temp1Set = new System.Windows.Forms.NumericUpDown();
+            this.Temp2Set = new System.Windows.Forms.NumericUpDown();
+            this.Temp1Range = new System.Windows.Forms.NumericUpDown();
+            this.Temp3Set = new System.Windows.Forms.NumericUpDown();
+            this.Temp2Range = new System.Windows.Forms.NumericUpDown();
+            this.Temp3Range = new System.Windows.Forms.NumericUpDown();
+            this.Temp4Range = new System.Windows.Forms.NumericUpDown();
+            this.Temp5Set = new System.Windows.Forms.NumericUpDown();
+            this.Temp5Range = new System.Windows.Forms.NumericUpDown();
             this.groupBox4.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ThMin)).BeginInit();
@@ -81,6 +103,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.QcMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.QmMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.QmMax)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp4Set)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp1Set)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp2Set)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp1Range)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp3Set)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp2Range)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp3Range)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp4Range)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp5Set)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp5Range)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox4
@@ -88,7 +122,7 @@
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox4.Controls.Add(this.tableLayoutPanel4);
             this.groupBox4.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox4.Location = new System.Drawing.Point(51, 47);
+            this.groupBox4.Location = new System.Drawing.Point(51, 73);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(402, 565);
             this.groupBox4.TabIndex = 9;
@@ -628,17 +662,349 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(59, 631);
+            this.label1.Location = new System.Drawing.Point(48, 706);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(236, 17);
             this.label1.TabIndex = 11;
             this.label1.Text = "注意：您在此页面所设置的数据会立即生效";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
+            this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 13F);
+            this.groupBox1.Location = new System.Drawing.Point(487, 73);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(661, 238);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "水箱温度设置";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(307, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(125, 20);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "温度变化幅度±：";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(129, 20);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "设置冷水箱温度：";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 36);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(129, 20);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "设置热水箱温度：";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(3, 72);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(144, 20);
+            this.label15.TabIndex = 8;
+            this.label15.Text = "设置高温水箱温度：";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(3, 108);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(144, 20);
+            this.label20.TabIndex = 12;
+            this.label20.Text = "设置中温水箱温度：";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.label20, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label15, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label6, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label8, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label11, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label12, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label26, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.Temp1Set, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Temp2Set, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.Temp1Range, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Temp3Set, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.Temp2Range, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.Temp3Range, 3, 2);
+            this.tableLayoutPanel1.Controls.Add(this.Temp4Range, 3, 3);
+            this.tableLayoutPanel1.Controls.Add(this.Temp4Set, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.Temp5Set, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.Temp5Range, 3, 4);
+            this.tableLayoutPanel1.Font = new System.Drawing.Font("微软雅黑", 11F);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(20, 37);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(608, 181);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(3, 144);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(144, 20);
+            this.label26.TabIndex = 16;
+            this.label26.Text = "设置常温水箱温度：";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(307, 144);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(125, 20);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "温度变化幅度±：";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(307, 108);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(125, 20);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "温度变化幅度±：";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(307, 72);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(125, 20);
+            this.label11.TabIndex = 19;
+            this.label11.Text = "温度变化幅度±：";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(307, 36);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(125, 20);
+            this.label12.TabIndex = 20;
+            this.label12.Text = "温度变化幅度±：";
+            // 
+            // Temp4Set
+            // 
+            this.Temp4Set.DecimalPlaces = 2;
+            this.Temp4Set.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp4Set.Location = new System.Drawing.Point(155, 111);
+            this.Temp4Set.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.Temp4Set.Name = "Temp4Set";
+            this.Temp4Set.Size = new System.Drawing.Size(122, 27);
+            this.Temp4Set.TabIndex = 50;
+            this.Temp4Set.ValueChanged += new System.EventHandler(this.Temp4Set_ValueChanged);
+            // 
+            // Temp1Set
+            // 
+            this.Temp1Set.DecimalPlaces = 2;
+            this.Temp1Set.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp1Set.Location = new System.Drawing.Point(155, 3);
+            this.Temp1Set.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.Temp1Set.Name = "Temp1Set";
+            this.Temp1Set.Size = new System.Drawing.Size(120, 27);
+            this.Temp1Set.TabIndex = 51;
+            this.Temp1Set.ValueChanged += new System.EventHandler(this.Temp1Set_ValueChanged);
+            // 
+            // Temp2Set
+            // 
+            this.Temp2Set.DecimalPlaces = 2;
+            this.Temp2Set.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp2Set.Location = new System.Drawing.Point(155, 39);
+            this.Temp2Set.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.Temp2Set.Name = "Temp2Set";
+            this.Temp2Set.Size = new System.Drawing.Size(120, 27);
+            this.Temp2Set.TabIndex = 52;
+            this.Temp2Set.ValueChanged += new System.EventHandler(this.Temp2Set_ValueChanged);
+            // 
+            // Temp1Range
+            // 
+            this.Temp1Range.DecimalPlaces = 2;
+            this.Temp1Range.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp1Range.Location = new System.Drawing.Point(459, 3);
+            this.Temp1Range.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Temp1Range.Name = "Temp1Range";
+            this.Temp1Range.Size = new System.Drawing.Size(120, 27);
+            this.Temp1Range.TabIndex = 53;
+            this.Temp1Range.ValueChanged += new System.EventHandler(this.Temp1Range_ValueChanged);
+            // 
+            // Temp3Set
+            // 
+            this.Temp3Set.DecimalPlaces = 2;
+            this.Temp3Set.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp3Set.Location = new System.Drawing.Point(155, 75);
+            this.Temp3Set.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.Temp3Set.Name = "Temp3Set";
+            this.Temp3Set.Size = new System.Drawing.Size(120, 27);
+            this.Temp3Set.TabIndex = 54;
+            this.Temp3Set.ValueChanged += new System.EventHandler(this.Temp3Set_ValueChanged);
+            // 
+            // Temp2Range
+            // 
+            this.Temp2Range.DecimalPlaces = 2;
+            this.Temp2Range.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp2Range.Location = new System.Drawing.Point(459, 39);
+            this.Temp2Range.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Temp2Range.Name = "Temp2Range";
+            this.Temp2Range.Size = new System.Drawing.Size(120, 27);
+            this.Temp2Range.TabIndex = 55;
+            this.Temp2Range.ValueChanged += new System.EventHandler(this.Temp2Range_ValueChanged);
+            // 
+            // Temp3Range
+            // 
+            this.Temp3Range.DecimalPlaces = 2;
+            this.Temp3Range.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp3Range.Location = new System.Drawing.Point(459, 75);
+            this.Temp3Range.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Temp3Range.Name = "Temp3Range";
+            this.Temp3Range.Size = new System.Drawing.Size(120, 27);
+            this.Temp3Range.TabIndex = 56;
+            this.Temp3Range.ValueChanged += new System.EventHandler(this.Temp3Range_ValueChanged);
+            // 
+            // Temp4Range
+            // 
+            this.Temp4Range.DecimalPlaces = 2;
+            this.Temp4Range.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp4Range.Location = new System.Drawing.Point(459, 111);
+            this.Temp4Range.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Temp4Range.Name = "Temp4Range";
+            this.Temp4Range.Size = new System.Drawing.Size(120, 27);
+            this.Temp4Range.TabIndex = 57;
+            this.Temp4Range.ValueChanged += new System.EventHandler(this.Temp4Range_ValueChanged);
+            // 
+            // Temp5Set
+            // 
+            this.Temp5Set.DecimalPlaces = 2;
+            this.Temp5Set.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp5Set.Location = new System.Drawing.Point(155, 147);
+            this.Temp5Set.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.Temp5Set.Name = "Temp5Set";
+            this.Temp5Set.Size = new System.Drawing.Size(120, 27);
+            this.Temp5Set.TabIndex = 58;
+            this.Temp5Set.ValueChanged += new System.EventHandler(this.Temp5Set_ValueChanged);
+            // 
+            // Temp5Range
+            // 
+            this.Temp5Range.DecimalPlaces = 2;
+            this.Temp5Range.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Temp5Range.Location = new System.Drawing.Point(459, 147);
+            this.Temp5Range.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Temp5Range.Name = "Temp5Range";
+            this.Temp5Range.Size = new System.Drawing.Size(120, 27);
+            this.Temp5Range.TabIndex = 59;
+            this.Temp5Range.ValueChanged += new System.EventHandler(this.Temp5Range_ValueChanged);
+            // 
             // FormValueRangeSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(521, 748);
+            this.ClientSize = new System.Drawing.Size(1233, 774);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox4);
             this.Name = "FormValueRangeSet";
@@ -665,6 +1031,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.QcMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.QmMin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.QmMax)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp4Set)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp1Set)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp2Set)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp1Range)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp3Set)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp2Range)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp3Range)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp4Range)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp5Set)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Temp5Range)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -705,5 +1084,27 @@
         private System.Windows.Forms.NumericUpDown QmMin;
         private System.Windows.Forms.NumericUpDown QmMax;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.NumericUpDown Temp1Set;
+        private System.Windows.Forms.NumericUpDown Temp2Set;
+        private System.Windows.Forms.NumericUpDown Temp1Range;
+        private System.Windows.Forms.NumericUpDown Temp3Set;
+        private System.Windows.Forms.NumericUpDown Temp2Range;
+        private System.Windows.Forms.NumericUpDown Temp3Range;
+        private System.Windows.Forms.NumericUpDown Temp4Range;
+        private System.Windows.Forms.NumericUpDown Temp4Set;
+        private System.Windows.Forms.NumericUpDown Temp5Set;
+        private System.Windows.Forms.NumericUpDown Temp5Range;
     }
 }

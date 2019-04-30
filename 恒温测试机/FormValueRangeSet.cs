@@ -52,6 +52,19 @@ namespace 恒温测试机
             PmMin.Value = Properties.Settings.Default.PmMin;
             PcMin.Value = Properties.Settings.Default.PcMin;
             PhMin.Value = Properties.Settings.Default.PhMin;
+
+            Temp1Set.Value = Properties.Settings.Default.Temp1Set;
+            Temp2Set.Value = Properties.Settings.Default.Temp2Set;
+            Temp3Set.Value = Properties.Settings.Default.Temp3Set;
+            Temp4Set.Value = Properties.Settings.Default.Temp4Set;
+            Temp5Set.Value = Properties.Settings.Default.Temp5Set;
+
+            Temp1Range.Value = Properties.Settings.Default.Temp1Range;
+            Temp2Range.Value = Properties.Settings.Default.Temp2Range;
+            Temp3Range.Value = Properties.Settings.Default.Temp3Range;
+            Temp4Range.Value = Properties.Settings.Default.Temp4Range;
+            Temp5Range.Value = Properties.Settings.Default.Temp5Range;
+
         }
 
         private void QmMax_ValueChanged(object sender, EventArgs e)
@@ -159,6 +172,66 @@ namespace 恒温测试机
         private void ThMin_ValueChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ThMin = ThMin.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp1Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp1Set = Temp1Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp2Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp2Set = Temp2Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp3Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp2Set = Temp3Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp4Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp4Set = Temp4Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp5Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp5Set = Temp5Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp1Range_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp1Range = Temp1Range.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp2Range_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp2Range = Temp2Range.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp3Range_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp3Range = Temp3Range.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp4Range_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp4Range = Temp4Range.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Temp5Range_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Temp5Range = Temp5Range.Value;
             Properties.Settings.Default.Save();
         }
     }

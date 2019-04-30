@@ -238,5 +238,125 @@ namespace 恒温测试机.Properties {
                 this["PhMin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp1Set {
+            get {
+                return ((decimal)(this["Temp1Set"]));
+            }
+            set {
+                this["Temp1Set"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp2Set {
+            get {
+                return ((decimal)(this["Temp2Set"]));
+            }
+            set {
+                this["Temp2Set"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp3Set {
+            get {
+                return ((decimal)(this["Temp3Set"]));
+            }
+            set {
+                this["Temp3Set"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp4Set {
+            get {
+                return ((decimal)(this["Temp4Set"]));
+            }
+            set {
+                this["Temp4Set"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp5Set {
+            get {
+                return ((decimal)(this["Temp5Set"]));
+            }
+            set {
+                this["Temp5Set"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp1Range {
+            get {
+                return ((decimal)(this["Temp1Range"]));
+            }
+            set {
+                this["Temp1Range"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp2Range {
+            get {
+                return ((decimal)(this["Temp2Range"]));
+            }
+            set {
+                this["Temp2Range"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp3Range {
+            get {
+                return ((decimal)(this["Temp3Range"]));
+            }
+            set {
+                this["Temp3Range"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp4Range {
+            get {
+                return ((decimal)(this["Temp4Range"]));
+            }
+            set {
+                this["Temp4Range"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Temp5Range {
+            get {
+                return ((decimal)(this["Temp5Range"]));
+            }
+            set {
+                this["Temp5Range"] = value;
+            }
+        }
     }
 }
