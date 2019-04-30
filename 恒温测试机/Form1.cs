@@ -18,8 +18,8 @@ namespace 恒温测试机
         {
             InitializeComponent();
         }
-        
-        
+
+
 
         DAQ_profile collectData;
         DAQ_profile control;
