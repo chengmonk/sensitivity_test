@@ -18,6 +18,9 @@ namespace 恒温测试机
         {
             InitializeComponent();
         }
+        
+        
+
         DAQ_profile collectData;
         DAQ_profile control;
         private byte[] doData = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
@@ -31,7 +34,7 @@ namespace 恒温测试机
         private void Form1_Load(object sender, EventArgs e)
         {
             collectConfig = new config();
-            collectConfig.channelCount = 10;
+            collectConfig.channelCount = 15;
             collectConfig.convertClkRate = 100;
             collectConfig.deviceDescription = "PCI-1710HG,BID#0";//选择设备以这个为准，不用考虑设备序号            
             collectConfig.sectionCount = 0;//The 0 means setting 'streaming' mode.
