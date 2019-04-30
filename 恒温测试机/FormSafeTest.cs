@@ -12,9 +12,9 @@ using Automation.BDaq;
 
 namespace 恒温测试机
 {
-    public partial class Form1 : Form
+    public partial class FormSafeTest : Form
     {
-        public Form1()
+        public FormSafeTest()
         {
             InitializeComponent();
         }
@@ -33,6 +33,11 @@ namespace 恒温测试机
         private double[] m_dataScaled = new double[CHANNEL_COUNT_MAX];
         private void Form1_Load(object sender, EventArgs e)
         {
+            Temp1Status.Text = "温度：10℃\n" + "状态：制冷中.";
+            Temp2Status.Text = "温度：10℃\n" + "状态：加热中.";
+            Temp3Status.Text = "温度：10℃\n" + "状态：加热中.";
+            Temp4Status.Text = "温度：10℃\n" + "状态：加热中.";
+            Temp5Status.Text = "温度：10℃\n" + "状态：无";
             collectConfig = new config();
             collectConfig.channelCount = 15;
             collectConfig.convertClkRate = 100;
@@ -62,8 +67,36 @@ namespace 恒温测试机
             Console.WriteLine("didata:" + diData[0]);
             WaveformAi();//
             waveformAiCtrl1_Start();//开始高速读取模拟量数据
-        }
 
+            loadData();
+        }
+        void loadData()
+        {
+            QmMax.Text = "上限:" + Properties.Settings.Default.QmMax;
+            QcMax.Text = "上限:" + Properties.Settings.Default.QcMax;
+            QhMax.Text = "上限:" + Properties.Settings.Default.QhMax;
+
+            TmMax.Text = "上限:" + Properties.Settings.Default.TmMax;
+            TcMax.Text = "上限:" + Properties.Settings.Default.TcMax;
+            ThMax.Text = "上限:" + Properties.Settings.Default.ThMax;
+
+            PmMax.Text = "上限:" + Properties.Settings.Default.PmMax;
+            PcMax.Text = "上限:" + Properties.Settings.Default.PcMax;
+            PhMax.Text = "上限:" + Properties.Settings.Default.PhMax;
+
+            QmMin.Text = "下限:" + Properties.Settings.Default.QmMin;
+            QcMin.Text = "下限:" + Properties.Settings.Default.QcMin;
+            QhMin.Text = "下限:" + Properties.Settings.Default.QhMin;
+
+            TmMin.Text = "下限:" + Properties.Settings.Default.TmMin;
+            TcMin.Text = "下限:" + Properties.Settings.Default.TcMin;
+            ThMin.Text = "下限:" + Properties.Settings.Default.ThMin;
+
+            PmMin.Text = "下限:" + Properties.Settings.Default.PmMin;
+            PcMin.Text = "下限:" + Properties.Settings.Default.PcMin;
+            PhMin.Text = "下限:" + Properties.Settings.Default.PhMin;
+
+        }
 
         private Automation.BDaq.WaveformAiCtrl waveformAiCtrl1;
         public void WaveformAi()
@@ -170,6 +203,29 @@ namespace 恒温测试机
         private void waveformAiCtrl1_CacheOverflow(object sender, BfdAiEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void TableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void HslButton2_Click(object sender, EventArgs e)
+        {
+            Hide();
+            System.Threading.Thread.Sleep(100);
+            using (FormValueRangeSet form = new FormValueRangeSet())
+            {
+                form.ShowDialog();
+            }
+            System.Threading.Thread.Sleep(100);
+            Show();
+            loadData();
+        }
+
+        private void Label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
