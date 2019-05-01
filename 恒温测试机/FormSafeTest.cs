@@ -67,11 +67,11 @@ namespace 恒温测试机
             dt.Columns.Add("热水压力Ph", typeof(double));   //7
             dt.Columns.Add("出水压力Pm", typeof(double));   //8
             dt.Columns.Add("出水重量Qm5", typeof(double));   //9
-            Temp1Status.Text = "温度：10℃\n" + "状态：制冷中.";
-            Temp2Status.Text = "温度：10℃\n" + "状态：加热中.";
-            Temp3Status.Text = "温度：10℃\n" + "状态：加热中.";
-            Temp4Status.Text = "温度：10℃\n" + "状态：加热中.";
-            Temp5Status.Text = "温度：10℃\n" + "状态：无";
+            //Temp1Status.Text = "温度：10℃\n" + "状态：制冷中.";
+            //Temp2Status.Text = "温度：10℃\n" + "状态：加热中.";
+            //Temp3Status.Text = "温度：10℃\n" + "状态：加热中.";
+            //Temp4Status.Text = "温度：10℃\n" + "状态：加热中.";
+            //Temp5Status.Text = "温度：10℃\n" + "状态：无";
             collectConfig = new config();
             collectConfig.channelCount = 15;
             collectConfig.convertClkRate = 100;
@@ -542,6 +542,19 @@ namespace 恒温测试机
         private void HslButton5_Click(object sender, EventArgs e)
         {
             startFlag = false;
+        }
+
+        private void HslButton3_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "文档|*.csv";
+            fileDialog.InitialDirectory = Application.StartupPath;
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {              
+                dataTableToCsvT(dt, fileDialog.FileName);
+                MessageBox.Show("保存成功!");
+            }
+            fileDialog.Dispose();
         }
     }
 }
