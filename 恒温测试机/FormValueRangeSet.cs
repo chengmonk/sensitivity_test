@@ -29,6 +29,10 @@ namespace 恒温测试机
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            t1Set.Value = Properties.Settings.Default.t1;
+            t2Set.Value = Properties.Settings.Default.t2;
+            t3Set.Value = Properties.Settings.Default.t3;
+
             QmMax.Value = Properties.Settings.Default.QmMax;
             QcMax.Value = Properties.Settings.Default.QcMax;
             QhMax.Value = Properties.Settings.Default.QhMax;
@@ -232,6 +236,24 @@ namespace 恒温测试机
         private void Temp5Range_ValueChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Temp5Range = Temp5Range.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void T1Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.t1 = t1Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void T2Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.t2 = t2Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void T3Set_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.t3 = t3Set.Value;
             Properties.Settings.Default.Save();
         }
     }

@@ -17,10 +17,12 @@ namespace 恒温测试机
         public FormSafeTest()
         {
             InitializeComponent();
+
         }
 
-
-
+        System.Timers.Timer safety;
+        System.Timers.Timer t3Timer;
+        System.Timers.Timer monitor;
         DAQ_profile collectData;
         DAQ_profile control;
         private byte[] doData = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
@@ -49,11 +51,155 @@ namespace 恒温测试机
         double Qc;
         double Qh;
         double Qm5;
-        
+
         private DataTable dt;
-        private delegate void myDelegate();//声明委托   
+        private delegate void myDelegate();//声明委托  
+        private delegate void safetyDelegate(string s);//声明委托  
+        private delegate void alarmDelegate(byte[] data);//声明委托   
+        void monitoractive(byte[] data)
+        {
+            //在这里写一些控制阀的状态监控代码
+
+
+        }
+        void t3TimerAction(object source, System.Timers.ElapsedEventArgs e)
+        {
+            //
+            //safety.Start();
+
+        }
+        void safetyAction(object source, System.Timers.ElapsedEventArgs e)
+        {
+            //启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭vc vm 打开v5
+            set_bit(doData[1], 7, true);//a
+            set_bit(doData[2], 1, true);//c
+            set_bit(doData[0], 5, true);//11
+            set_bit(doData[2], 7, true);//011
+            set_bit(doData[0], 6, true);//12
+            set_bit(doData[3], 1, true);//021
+            set_bit(doData[2], 3, true);//vc
+            set_bit(doData[2], 4, true);//vh
+            set_bit(doData[2], 5, true);//vm
+            control.InstantDo_Write(doData);
+            safetyDelegate mes = new safetyDelegate(systemInfoactive);
+            try { Invoke(mes, "[初始化系统]\n"); }
+            catch { }
+
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
+            double orgPm = Pm;//在界面上显示初始压力，一次判断过后压力恢复到初始压力以后对温度进行判断
+            safetyDelegate org = new safetyDelegate(orgPmShowactive);
+            if (IsHandleCreated)//这里会导致访问到已经被释放的窗体界面
+                Invoke(org, Math.Round(orgPm, 2).ToString());
+            set_bit(doData[2], 3, false);//vc
+            set_bit(doData[2], 5, false);//vm
+            set_bit(doData[2], 6, true);//v5
+            control.InstantDo_Write(doData);
+
+            try
+            {
+                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vc、Vm打开V5，开始冷水失效测试]\n");
+            }
+            catch { }
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t2));
+            //开始收集数据这个过程一共持续t3
+            try
+            {
+                Invoke(mes, "[t2 = " + Properties.Settings.Default.t2.ToString() + "s 延时结束，开始记录冷水失效数据]\n");
+            }
+            catch { }
+            //开始收集数据
+            startFlag = true;
+
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
+            try
+            {
+                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 冷水测试阶段结束，停止记录数据。关闭V5，打开Vc、Vm，压力开始恢复]\n");
+            }
+            catch { }
+            //停止收集数据,持续t3后打开VC Vm同时关闭V5
+            startFlag = false;
+            set_bit(doData[2], 3, true);//vc
+            set_bit(doData[2], 5, true);//vm
+            set_bit(doData[2], 6, false);//v5
+            control.InstantDo_Write(doData);
+
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
+            set_bit(doData[2], 4, false);//vh
+            set_bit(doData[2], 5, false);//vm
+            set_bit(doData[2], 6, true);//v5
+            control.InstantDo_Write(doData);
+            try
+            {
+                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vh、Vm打开V5，开始热水失效测试]\n");
+            }
+            catch { }
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t2));
+            //开始收集数据这个过程一共持续t3
+            try
+            {
+                Invoke(mes, "[t2 = " + Properties.Settings.Default.t2.ToString() + " s 延时结束，开始记录热水失效数据。]\n");
+            }
+            catch { }
+            //开始收集数据
+            startFlag = true;
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
+            try
+            {
+                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 热水测试阶段结束，停止记录数据。关闭V5，打开Vh、Vm，压力开始恢复]\n");
+            }
+            catch { }
+            //停止收集数据,持续t3后打开VC Vm同时关闭V5
+            startFlag = false;
+            set_bit(doData[2], 3, true);//vc
+            set_bit(doData[2], 5, true);//vm
+            set_bit(doData[2], 6, false);//v5
+            control.InstantDo_Write(doData);
+            try
+            {
+                Invoke(mes, "[安全性测试结束，请注意保存数据！]");
+            }
+            catch { }
+            MessageBox.Show("安全性测试结束，请注意保存数据！");
+        }
+        void orgPmShowactive(string s)
+        {
+            orgPmShow.Text = "初始压力:" + s;
+        }
+        void systemInfoactive(string s)
+        {
+            DateTime t = DateTime.Now;
+            systemInfo.AppendText("[时间:" + t.ToString("yyyy-MM-dd hh:mm:ss") + "] " + s);
+            systemInfo.AppendText("\n");
+
+        }
+        void monitorAction(object source, System.Timers.ElapsedEventArgs e)
+        {
+
+            alarmDelegate md = new alarmDelegate(monitoractive);
+            // daq.EventCount_Read();
+            byte[] data = doData;
+            try { Invoke(md, new object[] { data }); }
+            catch
+            { }
+
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
+            monitor = new System.Timers.Timer(50);
+            monitor.Elapsed += new System.Timers.ElapsedEventHandler(monitorAction);//到达时间的时候执行事件； 
+            monitor.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
+            monitor.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
+
+            safety = new System.Timers.Timer(2);
+            safety.Elapsed += new System.Timers.ElapsedEventHandler(safetyAction);//到达时间的时候执行事件； 
+            safety.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
+            safety.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
+
+            t3Timer = new System.Timers.Timer((int)(Properties.Settings.Default.t3 * 1000));
+            t3Timer.Elapsed += new System.Timers.ElapsedEventHandler(t3TimerAction);//到达时间的时候执行事件； 
+            t3Timer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
+            t3Timer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
+
             dt = new DataTable();
             dt.Clear();
             dt.Columns.Add("时间", typeof(string));
@@ -67,11 +213,11 @@ namespace 恒温测试机
             dt.Columns.Add("热水压力Ph", typeof(double));   //7
             dt.Columns.Add("出水压力Pm", typeof(double));   //8
             dt.Columns.Add("出水重量Qm5", typeof(double));   //9
-            //Temp1Status.Text = "温度：10℃\n" + "状态：制冷中.";
-            //Temp2Status.Text = "温度：10℃\n" + "状态：加热中.";
-            //Temp3Status.Text = "温度：10℃\n" + "状态：加热中.";
-            //Temp4Status.Text = "温度：10℃\n" + "状态：加热中.";
-            //Temp5Status.Text = "温度：10℃\n" + "状态：无";
+                                                         //Temp1Status.Text = "温度：10℃\n" + "状态：制冷中.";
+                                                         //Temp2Status.Text = "温度：10℃\n" + "状态：加热中.";
+                                                         //Temp3Status.Text = "温度：10℃\n" + "状态：加热中.";
+                                                         //Temp4Status.Text = "温度：10℃\n" + "状态：加热中.";
+                                                         //Temp5Status.Text = "温度：10℃\n" + "状态：无";
             collectConfig = new config();
             collectConfig.channelCount = 15;
             collectConfig.convertClkRate = 100;
@@ -206,13 +352,13 @@ namespace 恒温测试机
                 int chanCount = waveformAiCtrl1.Conversion.ChannelCount;
                 int sectionLength = waveformAiCtrl1.Record.SectionLength;
                 err = waveformAiCtrl1.GetData(args.Count, m_dataScaled);//读取数据     
-                Console.WriteLine("length:" + m_dataScaled.Length);
+                //Console.WriteLine("length:" + m_dataScaled.Length);
 
                 DateTime t = DateTime.Now;
                 //
                 //t = t.AddSeconds(-);
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
-                Console.WriteLine("time:" + t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
+                //Console.WriteLine("time:" + t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
                 for (int i = 0; i < m_dataScaled.Length; i += 15)
                 {
                     Qc = Math.Round(m_dataScaled[i + 0], 2);
@@ -277,12 +423,13 @@ namespace 恒温测试机
             {
                 QmAlarm.LanternBackground = Color.Red;
             }
-            
+
 
             if (get_bit(doData[0], 0) == 0)//制冷控温
             {
                 if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set + Properties.Settings.Default.Temp1Range))
                     Temp1Status.Text = "水温:" + Temp1 + "℃\n" + "状态:" + "保持温度";
+                    
                 else
                 {
                     Temp1Status.Text = "水温:" + Temp1 + "℃\n" + "状态:" + "制冷中";
@@ -394,7 +541,7 @@ namespace 恒温测试机
 
                 }
             }
-            control.InstantDo_Write(doData);
+             control.InstantDo_Write(doData);
         }
         /// <summary>
         /// 设置某一位的值
@@ -550,11 +697,25 @@ namespace 恒温测试机
             fileDialog.Filter = "文档|*.csv";
             fileDialog.InitialDirectory = Application.StartupPath;
             if (fileDialog.ShowDialog() == DialogResult.OK)
-            {              
+            {
                 dataTableToCsvT(dt, fileDialog.FileName);
                 MessageBox.Show("保存成功!");
             }
             fileDialog.Dispose();
+        }
+
+        private void HslButton4_Click(object sender, EventArgs e)
+        {
+            safety.Enabled = true;
+
+        }
+
+        private void FormSafeTest_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Console.WriteLine("monitor:" + monitor.Enabled);
+            if (monitor.Enabled)
+                monitor.Dispose();
+            Console.WriteLine("monitor:" + monitor.Enabled);
         }
     }
 }

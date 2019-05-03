@@ -358,5 +358,41 @@ namespace 恒温测试机.Properties {
                 this["Temp5Range"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public decimal t1 {
+            get {
+                return ((decimal)(this["t1"]));
+            }
+            set {
+                this["t1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public decimal t2 {
+            get {
+                return ((decimal)(this["t2"]));
+            }
+            set {
+                this["t2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public decimal t3 {
+            get {
+                return ((decimal)(this["t3"]));
+            }
+            set {
+                this["t3"] = value;
+            }
+        }
     }
 }

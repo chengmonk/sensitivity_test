@@ -68,6 +68,12 @@
     <Compile Include="FormSafeTest.Designer.cs">
       <DependentUpon>FormSafeTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormSelectFunction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelectFunction.Designer.cs">
+      <DependentUpon>FormSelectFunction.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormValueRangeSet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormSafeTest.resx">
       <DependentUpon>FormSafeTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelectFunction.resx">
+      <DependentUpon>FormSelectFunction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormValueRangeSet.resx">
       <DependentUpon>FormValueRangeSet.cs</DependentUpon>
