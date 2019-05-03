@@ -25,7 +25,7 @@ namespace 恒温测试机
         System.Timers.Timer monitor;
         DAQ_profile collectData;
         DAQ_profile control;
-        private byte[] doData = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+        private byte[] doData = new byte[4];
         private byte[] diData = new byte[4];
         double[] aoData = new double[2];
 
@@ -71,15 +71,15 @@ namespace 恒温测试机
         void safetyAction(object source, System.Timers.ElapsedEventArgs e)
         {
             //启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭vc vm 打开v5
-            set_bit(doData[1], 7, true);//a
-            set_bit(doData[2], 1, true);//c
-            set_bit(doData[0], 5, true);//11
-            set_bit(doData[2], 7, true);//011
-            set_bit(doData[0], 6, true);//12
-            set_bit(doData[3], 1, true);//021
-            set_bit(doData[2], 3, true);//vc
-            set_bit(doData[2], 4, true);//vh
-            set_bit(doData[2], 5, true);//vm
+            set_bit(ref doData[1], 7, true);//a
+            set_bit(ref doData[2], 1, true);//c
+            set_bit(ref doData[0], 5, true);//11
+            set_bit(ref doData[2], 7, true);//011
+            set_bit(ref doData[0], 6, true);//12
+            set_bit(ref doData[3], 1, true);//021
+            set_bit(ref doData[2], 3, true);//vc
+            set_bit(ref doData[2], 4, true);//vh
+            set_bit(ref doData[2], 5, true);//vm
             control.InstantDo_Write(doData);
             safetyDelegate mes = new safetyDelegate(systemInfoactive);
             try { Invoke(mes, "[初始化系统]\n"); }
@@ -90,9 +90,9 @@ namespace 恒温测试机
             safetyDelegate org = new safetyDelegate(orgPmShowactive);
             if (IsHandleCreated)//这里会导致访问到已经被释放的窗体界面
                 Invoke(org, Math.Round(orgPm, 2).ToString());
-            set_bit(doData[2], 3, false);//vc
-            set_bit(doData[2], 5, false);//vm
-            set_bit(doData[2], 6, true);//v5
+            set_bit(ref doData[2], 3, false);//vc
+            set_bit(ref doData[2], 5, false);//vm
+            set_bit(ref doData[2], 6, true);//v5
             control.InstantDo_Write(doData);
 
             try
@@ -118,15 +118,15 @@ namespace 恒温测试机
             catch { }
             //停止收集数据,持续t3后打开VC Vm同时关闭V5
             startFlag = false;
-            set_bit(doData[2], 3, true);//vc
-            set_bit(doData[2], 5, true);//vm
-            set_bit(doData[2], 6, false);//v5
+            set_bit(ref doData[2], 3, true);//vc
+            set_bit(ref doData[2], 5, true);//vm
+            set_bit(ref doData[2], 6, false);//v5
             control.InstantDo_Write(doData);
 
             System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-            set_bit(doData[2], 4, false);//vh
-            set_bit(doData[2], 5, false);//vm
-            set_bit(doData[2], 6, true);//v5
+            set_bit(ref doData[2], 4, false);//vh
+            set_bit(ref doData[2], 5, false);//vm
+            set_bit(ref doData[2], 6, true);//v5
             control.InstantDo_Write(doData);
             try
             {
@@ -150,9 +150,9 @@ namespace 恒温测试机
             catch { }
             //停止收集数据,持续t3后打开VC Vm同时关闭V5
             startFlag = false;
-            set_bit(doData[2], 3, true);//vc
-            set_bit(doData[2], 5, true);//vm
-            set_bit(doData[2], 6, false);//v5
+            set_bit(ref doData[2], 3, true);//vc
+            set_bit(ref doData[2], 5, true);//vm
+            set_bit(ref doData[2], 6, false);//v5
             control.InstantDo_Write(doData);
             try
             {
@@ -177,8 +177,8 @@ namespace 恒温测试机
 
             alarmDelegate md = new alarmDelegate(monitoractive);
             // daq.EventCount_Read();
-            byte[] data = doData;
-            try { Invoke(md, new object[] { data }); }
+            
+            try { Invoke(md, new object[] { doData }); }
             catch
             { }
 
@@ -421,7 +421,14 @@ namespace 恒温测试机
             PhShow.Text = Ph.ToString();
             if (Qm > (double)Properties.Settings.Default.QmMax || Qm < (double)Properties.Settings.Default.QmMin)
             {
-                QmAlarm.LanternBackground = Color.Red;
+                QmAlarm.LanternBackground = Color.Red;//报警变色
+                DateTime t = DateTime.Now;
+                systemInfo.AppendText("[时间:" + t.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm"+"超出上下限！]");
+                systemInfo.AppendText("\n");
+            }
+            else
+            {
+                QmAlarm.LanternBackground = Color.LimeGreen;
             }
 
 
@@ -429,11 +436,11 @@ namespace 恒温测试机
             {
                 if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set + Properties.Settings.Default.Temp1Range))
                     Temp1Status.Text = "水温:" + Temp1 + "℃\n" + "状态:" + "保持温度";
-                    
+
                 else
                 {
                     Temp1Status.Text = "水温:" + Temp1 + "℃\n" + "状态:" + "制冷中";
-                    set_bit(doData[0], 0, true);
+                    set_bit(ref doData[0], 0, true);
                 }
             }
             else
@@ -441,7 +448,7 @@ namespace 恒温测试机
                 if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
                 {
                     Temp1Status.Text = "水温:" + Temp1 + "℃\n" + "状态:" + "保持温度";
-                    set_bit(doData[0], 0, false);
+                    set_bit(ref doData[0], 0, false);
                 }
                 else
                 {
@@ -456,7 +463,7 @@ namespace 恒温测试机
                 else
                 {
                     Temp2Status.Text = "水温:" + Temp2 + "℃\n" + "状态:" + "加热中";
-                    set_bit(doData[0], 1, true);
+                    set_bit(ref doData[0], 1, true);
                 }
             }
             else
@@ -464,7 +471,7 @@ namespace 恒温测试机
                 if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
                 {
                     Temp2Status.Text = "水温:" + Temp2 + "℃\n" + "状态:" + "保持温度";
-                    set_bit(doData[0], 1, false);
+                    set_bit(ref doData[0], 1, false);
                 }
                 else
                 {
@@ -479,7 +486,7 @@ namespace 恒温测试机
                 else
                 {
                     Temp3Status.Text = "水温:" + Temp3 + "℃\n" + "状态:" + "加热中";
-                    set_bit(doData[0], 2, true);
+                    set_bit(ref doData[0], 2, true);
                 }
             }
             else
@@ -487,7 +494,7 @@ namespace 恒温测试机
                 if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
                 {
                     Temp3Status.Text = "水温:" + Temp3 + "℃\n" + "状态:" + "保持温度";
-                    set_bit(doData[0], 2, false);
+                    set_bit(ref doData[0], 2, false);
                 }
                 else
                 {
@@ -502,7 +509,7 @@ namespace 恒温测试机
                 else
                 {
                     Temp4Status.Text = "水温:" + Temp4 + "℃\n" + "状态:" + "加热中";
-                    set_bit(doData[0], 3, true);
+                    set_bit(ref doData[0], 3, true);
                 }
             }
             else
@@ -510,7 +517,7 @@ namespace 恒温测试机
                 if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
                 {
                     Temp4Status.Text = "水温:" + Temp4 + "℃\n" + "状态:" + "保持温度";
-                    set_bit(doData[0], 3, false);
+                    set_bit(ref doData[0], 3, false);
                 }
                 else
                 {
@@ -525,7 +532,7 @@ namespace 恒温测试机
                 else
                 {
                     Temp5Status.Text = "水温:" + Temp5 + "℃\n" + "状态:" + "制冷中";
-                    set_bit(doData[0], 4, true);
+                    set_bit(ref doData[0], 4, true);
                 }
             }
             else
@@ -533,7 +540,7 @@ namespace 恒温测试机
                 if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
                 {
                     Temp5Status.Text = "水温:" + Temp5 + "℃\n" + "状态:" + "保持温度";
-                    set_bit(doData[0], 4, false);
+                    set_bit(ref doData[0], 4, false);
                 }
                 else
                 {
@@ -541,8 +548,10 @@ namespace 恒温测试机
 
                 }
             }
-             control.InstantDo_Write(doData);
+           
+            control.InstantDo_Write(doData);
         }
+        
         /// <summary>
         /// 设置某一位的值
         /// </summary>
@@ -551,13 +560,14 @@ namespace 恒温测试机
         /// <param name="flag">要设置的值 true / false</param>
         /// 
         /// <returns></returns>
-        byte set_bit(byte data, int index, bool flag)
+        void set_bit(ref byte data, int index, bool flag)
         {
             index++;
             if (index > 8 || index < 1)
                 throw new ArgumentOutOfRangeException();
             int v = index < 2 ? index : (2 << (index - 2));
-            return flag ? (byte)(data | v) : (byte)(data & ~v);
+            data= flag ? (byte)(data | v) : (byte)(data & ~v);
+
         }
         /// <summary>
         /// 获取数据中某一位的值
@@ -706,7 +716,16 @@ namespace 恒温测试机
 
         private void HslButton4_Click(object sender, EventArgs e)
         {
-            safety.Enabled = true;
+            if (get_bit(doData[0], 0) == 0
+                && get_bit(doData[0], 1) == 0
+                && get_bit(doData[0], 2) == 0
+                && get_bit(doData[0], 3) == 0
+                && get_bit(doData[0], 4) == 0)
+                safety.Enabled = true;
+            else
+            {
+                MessageBox.Show("各个水箱温度未达到设定值，请耐心等待...");
+            }
 
         }
 
@@ -716,6 +735,13 @@ namespace 恒温测试机
             if (monitor.Enabled)
                 monitor.Dispose();
             Console.WriteLine("monitor:" + monitor.Enabled);
+        }
+
+        private void HslButton6_Click(object sender, EventArgs e)
+        {
+            systemInfo.Text = "";
+            dt.Clear();
+
         }
     }
 }

@@ -259,7 +259,8 @@
             this.hslButton6.Name = "hslButton6";
             this.hslButton6.Size = new System.Drawing.Size(88, 44);
             this.hslButton6.TabIndex = 6;
-            this.hslButton6.Text = "hslButton6";
+            this.hslButton6.Text = "清空数据";
+            this.hslButton6.Click += new System.EventHandler(this.HslButton6_Click);
             // 
             // hslButton7
             // 
@@ -1070,6 +1071,7 @@
             this.systemInfo.Location = new System.Drawing.Point(582, 156);
             this.systemInfo.Multiline = true;
             this.systemInfo.Name = "systemInfo";
+            this.systemInfo.ReadOnly = true;
             this.systemInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.systemInfo.Size = new System.Drawing.Size(434, 248);
             this.systemInfo.TabIndex = 15;
