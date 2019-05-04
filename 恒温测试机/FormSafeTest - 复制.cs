@@ -206,6 +206,7 @@ namespace 恒温测试机
             DateTime t = DateTime.Now;
             systemInfo.AppendText("[时间:" + t.ToString("yyyy-MM-dd hh:mm:ss") + "] " + s);
             systemInfo.AppendText("\n");
+
         }
         void monitorAction(object source, System.Timers.ElapsedEventArgs e)
         {

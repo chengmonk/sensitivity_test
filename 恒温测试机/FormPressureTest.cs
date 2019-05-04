@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Automation.BDaq;
 
 namespace 恒温测试机
 {
-    public partial class FormSafeTest : Form
+    public partial class FormPressureTest : Form
     {
-        public FormSafeTest()
+        public FormPressureTest()
         {
             InitializeComponent();
-
         }
-
         System.Timers.Timer safety;
         System.Timers.Timer t3Timer;
         System.Timers.Timer monitor;
@@ -56,16 +49,11 @@ namespace 恒温测试机
         private delegate void myDelegate();//声明委托  
         private delegate void safetyDelegate(string s);//声明委托  
         private delegate void alarmDelegate(byte[] data);//声明委托   
+        private Automation.BDaq.WaveformAiCtrl waveformAiCtrl1;
         void monitoractive(byte[] data)
         {
             //在这里写一些控制阀的状态监控代码
 
-
-        }
-        void t3TimerAction(object source, System.Timers.ElapsedEventArgs e)
-        {
-            //
-            //safety.Start();
 
         }
         void safetyAction(object source, System.Timers.ElapsedEventArgs e)
@@ -123,7 +111,7 @@ namespace 恒温测试机
             set_bit(ref doData[2], 6, false);//v5
             control.InstantDo_Write(doData);
             //达到初始压力以后再进行5s的数据收集
-            for(;true ; )
+            for (; true;)
             {
                 if (Math.Abs(Pm - orgPm) <= 0.5) break;
             }
@@ -197,10 +185,6 @@ namespace 恒温测试机
             catch { }
             MessageBox.Show("安全性测试结束，请注意保存数据！");
         }
-        void orgPmShowactive(string s)
-        {
-            orgPmShow.Text = "初始压力:" + s;
-        }
         void systemInfoactive(string s)
         {
             DateTime t = DateTime.Now;
@@ -212,13 +196,123 @@ namespace 恒温测试机
 
             alarmDelegate md = new alarmDelegate(monitoractive);
             // daq.EventCount_Read();
-            
+
             try { Invoke(md, new object[] { doData }); }
             catch
             { }
 
         }
-        private void Form1_Load(object sender, EventArgs e)
+        void orgPmShowactive(string s)
+        {
+            orgPmShow.Text = "初始压力:" + s;
+        }
+        /// <summary>
+        /// 设置某一位的值
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="index">要设置的位， 值从低到高为 0-7</param>
+        /// <param name="flag">要设置的值 true / false</param>
+        /// 
+        /// <returns></returns>
+        void set_bit(ref byte data, int index, bool flag)
+        {
+            index++;
+            if (index > 8 || index < 1)
+                throw new ArgumentOutOfRangeException();
+            int v = index < 2 ? index : (2 << (index - 2));
+            data = flag ? (byte)(data | v) : (byte)(data & ~v);
+
+        }
+        /// <summary>
+        /// 获取数据中某一位的值
+        /// </summary>
+        /// <param name="input">传入的数据类型,可换成其它数据类型,比如Int</param>
+        /// <param name="index">要获取的第几位的序号,从0开始 0-7</param>
+        /// <returns>返回值为-1表示获取值失败</returns>
+        int get_bit(byte input, int index)
+        {
+            //if (index > sizeof(byte))
+            //{
+            //    return -1;
+            //}
+
+            return ((input & (1 << index)) > 0) ? 1 : 0;
+        }
+        /// <summary>
+        /// DataTable导出为CSV
+        /// </summary>
+        /// <param name="dt">DataTable</param>
+        /// <param name="strFilePath">路径</param>
+        public static void dataTableToCsvT(System.Data.DataTable dt, string strFilePath)
+        {
+            if (dt == null || dt.Rows.Count == 0)   //确保DataTable中有数据
+                return;
+            string strBufferLine = "";
+            StreamWriter strmWriterObj = new StreamWriter(strFilePath, false, System.Text.Encoding.Default);
+            //写入列头
+            foreach (System.Data.DataColumn col in dt.Columns)
+                strBufferLine += col.ColumnName + ",";
+            strBufferLine = strBufferLine.Substring(0, strBufferLine.Length - 1);
+            strmWriterObj.WriteLine(strBufferLine);
+            //写入记录
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                strBufferLine = "";
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    if (j > 0)
+                        strBufferLine += ",";
+                    strBufferLine += dt.Rows[i][j].ToString().Replace(",", "");   //因为CSV文件以逗号分割，在这里替换为空
+                }
+                strmWriterObj.WriteLine(strBufferLine);
+            }
+            strmWriterObj.Close();
+        }
+
+        /// <summary>
+        /// 读取CSV
+        /// </summary>
+        /// <param name="filePath">CSV路径</param>
+        /// <param name="n">表示第n行是字段title,第n+1行是记录开始</param>
+        /// <returns></returns>
+        public static System.Data.DataTable CsvToDataTable(string filePath, int n)
+        {
+            System.Data.DataTable dt = new System.Data.DataTable();
+            StreamReader reader = new StreamReader(filePath, System.Text.Encoding.Default, false);
+            int m = 0;
+
+            while (!reader.EndOfStream)
+            {
+                m = m + 1;
+                string str = reader.ReadLine();
+                string[] split = str.Split(',');
+                if (m == n)
+                {
+                    System.Data.DataColumn column; //列名
+                    for (int c = 0; c < split.Length; c++)
+                    {
+                        column = new System.Data.DataColumn();
+                        column.DataType = System.Type.GetType("System.String");
+                        column.ColumnName = split[c];
+                        if (dt.Columns.Contains(split[c]))                 //重复列名处理
+                            column.ColumnName = split[c] + c;
+                        dt.Columns.Add(column);
+                    }
+                }
+                if (m >= n + 1)
+                {
+                    System.Data.DataRow dr = dt.NewRow();
+                    for (int i = 0; i < split.Length; i++)
+                    {
+                        dr[i] = split[i];
+                    }
+                    dt.Rows.Add(dr);
+                }
+            }
+            reader.Close();
+            return dt;
+        }
+        private void FormPressureTest_Load(object sender, EventArgs e)
         {
             monitor = new System.Timers.Timer(50);
             monitor.Elapsed += new System.Timers.ElapsedEventHandler(monitorAction);//到达时间的时候执行事件； 
@@ -228,12 +322,7 @@ namespace 恒温测试机
             safety = new System.Timers.Timer(2);
             safety.Elapsed += new System.Timers.ElapsedEventHandler(safetyAction);//到达时间的时候执行事件； 
             safety.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            safety.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
-
-            t3Timer = new System.Timers.Timer((int)(Properties.Settings.Default.t3 * 1000));
-            t3Timer.Elapsed += new System.Timers.ElapsedEventHandler(t3TimerAction);//到达时间的时候执行事件； 
-            t3Timer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            t3Timer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
+            safety.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；           
 
             dt = new DataTable();
             dt.Clear();
@@ -312,8 +401,6 @@ namespace 恒温测试机
             PhMin.Text = "下限:" + Properties.Settings.Default.PhMin;
 
         }
-
-        private Automation.BDaq.WaveformAiCtrl waveformAiCtrl1;
         public void WaveformAi()
         {
             waveformAiCtrl1 = new Automation.BDaq.WaveformAiCtrl();
@@ -334,6 +421,15 @@ namespace 恒温测试机
             this.waveformAiCtrl1.CacheOverflow += new System.EventHandler<Automation.BDaq.BfdAiEventArgs>(this.waveformAiCtrl1_CacheOverflow);
             this.waveformAiCtrl1.DataReady += new System.EventHandler<Automation.BDaq.BfdAiEventArgs>(this.waveformAiCtrl1_DataReady);
 
+        }
+        private void waveformAiCtrl1_Overrun(object sender, BfdAiEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void waveformAiCtrl1_CacheOverflow(object sender, BfdAiEventArgs e)
+        {
+            throw new NotImplementedException();
         }
         public void waveformAiCtrl1_Start()
         {
@@ -458,7 +554,7 @@ namespace 恒温测试机
             {
                 QmAlarm.LanternBackground = Color.Red;//报警变色
                 DateTime t = DateTime.Now;
-                systemInfo.AppendText("[时间:" + t.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm"+"超出上下限！]");
+                systemInfo.AppendText("[时间:" + t.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm" + "超出上下限！]");
                 systemInfo.AppendText("\n");
             }
             else
@@ -583,129 +679,8 @@ namespace 恒温测试机
 
                 }
             }
-           
+
             control.InstantDo_Write(doData);
-        }
-        
-        /// <summary>
-        /// 设置某一位的值
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="index">要设置的位， 值从低到高为 0-7</param>
-        /// <param name="flag">要设置的值 true / false</param>
-        /// 
-        /// <returns></returns>
-        void set_bit(ref byte data, int index, bool flag)
-        {
-            index++;
-            if (index > 8 || index < 1)
-                throw new ArgumentOutOfRangeException();
-            int v = index < 2 ? index : (2 << (index - 2));
-            data= flag ? (byte)(data | v) : (byte)(data & ~v);
-
-        }
-        /// <summary>
-        /// 获取数据中某一位的值
-        /// </summary>
-        /// <param name="input">传入的数据类型,可换成其它数据类型,比如Int</param>
-        /// <param name="index">要获取的第几位的序号,从0开始 0-7</param>
-        /// <returns>返回值为-1表示获取值失败</returns>
-        int get_bit(byte input, int index)
-        {
-            //if (index > sizeof(byte))
-            //{
-            //    return -1;
-            //}
-
-            return ((input & (1 << index)) > 0) ? 1 : 0;
-        }
-        /// <summary>
-        /// DataTable导出为CSV
-        /// </summary>
-        /// <param name="dt">DataTable</param>
-        /// <param name="strFilePath">路径</param>
-        public static void dataTableToCsvT(System.Data.DataTable dt, string strFilePath)
-        {
-            if (dt == null || dt.Rows.Count == 0)   //确保DataTable中有数据
-                return;
-            string strBufferLine = "";
-            StreamWriter strmWriterObj = new StreamWriter(strFilePath, false, System.Text.Encoding.Default);
-            //写入列头
-            foreach (System.Data.DataColumn col in dt.Columns)
-                strBufferLine += col.ColumnName + ",";
-            strBufferLine = strBufferLine.Substring(0, strBufferLine.Length - 1);
-            strmWriterObj.WriteLine(strBufferLine);
-            //写入记录
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                strBufferLine = "";
-                for (int j = 0; j < dt.Columns.Count; j++)
-                {
-                    if (j > 0)
-                        strBufferLine += ",";
-                    strBufferLine += dt.Rows[i][j].ToString().Replace(",", "");   //因为CSV文件以逗号分割，在这里替换为空
-                }
-                strmWriterObj.WriteLine(strBufferLine);
-            }
-            strmWriterObj.Close();
-        }
-
-        /// <summary>
-        /// 读取CSV
-        /// </summary>
-        /// <param name="filePath">CSV路径</param>
-        /// <param name="n">表示第n行是字段title,第n+1行是记录开始</param>
-        /// <returns></returns>
-        public static System.Data.DataTable CsvToDataTable(string filePath, int n)
-        {
-            System.Data.DataTable dt = new System.Data.DataTable();
-            StreamReader reader = new StreamReader(filePath, System.Text.Encoding.Default, false);
-            int m = 0;
-
-            while (!reader.EndOfStream)
-            {
-                m = m + 1;
-                string str = reader.ReadLine();
-                string[] split = str.Split(',');
-                if (m == n)
-                {
-                    System.Data.DataColumn column; //列名
-                    for (int c = 0; c < split.Length; c++)
-                    {
-                        column = new System.Data.DataColumn();
-                        column.DataType = System.Type.GetType("System.String");
-                        column.ColumnName = split[c];
-                        if (dt.Columns.Contains(split[c]))                 //重复列名处理
-                            column.ColumnName = split[c] + c;
-                        dt.Columns.Add(column);
-                    }
-                }
-                if (m >= n + 1)
-                {
-                    System.Data.DataRow dr = dt.NewRow();
-                    for (int i = 0; i < split.Length; i++)
-                    {
-                        dr[i] = split[i];
-                    }
-                    dt.Rows.Add(dr);
-                }
-            }
-            reader.Close();
-            return dt;
-        }
-        private void waveformAiCtrl1_Overrun(object sender, BfdAiEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void waveformAiCtrl1_CacheOverflow(object sender, BfdAiEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void TableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void HslButton2_Click(object sender, EventArgs e)
@@ -719,21 +694,6 @@ namespace 恒温测试机
             System.Threading.Thread.Sleep(10);
             Show();
             loadData();
-        }
-
-        private void Label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void HslButton1_Click(object sender, EventArgs e)
-        {
-            startFlag = true;
-        }
-
-        private void HslButton5_Click(object sender, EventArgs e)
-        {
-            startFlag = false;
         }
 
         private void HslButton3_Click(object sender, EventArgs e)
@@ -761,22 +721,12 @@ namespace 恒温测试机
             {
                 MessageBox.Show("各个水箱温度未达到设定值，请耐心等待...");
             }
-
-        }
-
-        private void FormSafeTest_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Console.WriteLine("monitor:" + monitor.Enabled);
-            if (monitor.Enabled)
-                monitor.Dispose();
-            Console.WriteLine("monitor:" + monitor.Enabled);
         }
 
         private void HslButton6_Click(object sender, EventArgs e)
         {
             systemInfo.Text = "";
             dt.Clear();
-
         }
     }
 }

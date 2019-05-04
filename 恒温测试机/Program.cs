@@ -16,7 +16,7 @@ namespace 恒温测试机
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormSafeTest());
+            Application.Run(new FormPressureTest());
         }
     }
 }
