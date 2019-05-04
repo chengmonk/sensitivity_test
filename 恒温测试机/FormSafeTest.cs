@@ -122,7 +122,24 @@ namespace 恒温测试机
             set_bit(ref doData[2], 5, true);//vm
             set_bit(ref doData[2], 6, false);//v5
             control.InstantDo_Write(doData);
-
+            //达到初始压力以后再进行5s的数据收集
+            for(;true ; )
+            {
+                if (Math.Abs(Pm - orgPm) <= 0.5) break;
+            }
+            try
+            {
+                Invoke(mes, "[压力恢复到初始压力，开始记录 5s 的数据]\n");
+            }
+            catch { }
+            startFlag = true;
+            System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
+            startFlag = false;
+            try
+            {
+                Invoke(mes, "[ 5s 的数据记录完毕]\n");
+            }
+            catch { }
             System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
             set_bit(ref doData[2], 4, false);//vh
             set_bit(ref doData[2], 5, false);//vm
@@ -154,6 +171,25 @@ namespace 恒温测试机
             set_bit(ref doData[2], 5, true);//vm
             set_bit(ref doData[2], 6, false);//v5
             control.InstantDo_Write(doData);
+            //达到初始压力以后再进行5s的数据收集
+            for (; true;)
+            {
+                if (Math.Abs(Pm - orgPm) <= 0.5) break;
+            }
+            try
+            {
+                Invoke(mes, "[压力恢复到初始压力，开始记录 5s 的数据]\n");
+            }
+            catch { }
+            startFlag = true;
+            System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
+            startFlag = false;
+            try
+            {
+                Invoke(mes, "[ 5s 的数据记录完毕]\n");
+            }
+            catch { }
+
             try
             {
                 Invoke(mes, "[安全性测试结束，请注意保存数据！]");

@@ -239,7 +239,7 @@
             this.hslButton4.Name = "hslButton4";
             this.hslButton4.Size = new System.Drawing.Size(89, 44);
             this.hslButton4.TabIndex = 4;
-            this.hslButton4.Text = "模拟测试开始";
+            this.hslButton4.Text = "自动测试运行";
             this.hslButton4.Click += new System.EventHandler(this.HslButton4_Click);
             // 
             // hslButton5
@@ -287,7 +287,7 @@
             this.hslButton2.Name = "hslButton2";
             this.hslButton2.Size = new System.Drawing.Size(88, 44);
             this.hslButton2.TabIndex = 2;
-            this.hslButton2.Text = "设置上下限";
+            this.hslButton2.Text = "设置系统参数";
             this.hslButton2.Click += new System.EventHandler(this.HslButton2_Click);
             // 
             // groupBox1
