@@ -29,6 +29,12 @@ namespace 恒温测试机
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            BaseLinePressureSet.Value = Properties.Settings.Default.BaseLinePressureSet;
+            PumpCoolHighPressureSet.Value = Properties.Settings.Default.PumpCoolHigh;
+            PumpCoolLowPressureSet.Value = Properties.Settings.Default.PumpCoolLow;
+            PumpHotHighPressureSet.Value = Properties.Settings.Default.PumpHotHigh;
+            PumpHotLowPressureSet.Value = Properties.Settings.Default.PumpHotLow;
+
             t1Set.Value = Properties.Settings.Default.t1;
             t2Set.Value = Properties.Settings.Default.t2;
             t3Set.Value = Properties.Settings.Default.t3;

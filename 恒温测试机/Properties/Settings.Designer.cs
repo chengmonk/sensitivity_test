@@ -394,5 +394,65 @@ namespace 恒温测试机.Properties {
                 this["t3"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal PumpHotLow {
+            get {
+                return ((decimal)(this["PumpHotLow"]));
+            }
+            set {
+                this["PumpHotLow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal PumpHotHigh {
+            get {
+                return ((decimal)(this["PumpHotHigh"]));
+            }
+            set {
+                this["PumpHotHigh"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal PumpCoolLow {
+            get {
+                return ((decimal)(this["PumpCoolLow"]));
+            }
+            set {
+                this["PumpCoolLow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal PumpCoolHigh {
+            get {
+                return ((decimal)(this["PumpCoolHigh"]));
+            }
+            set {
+                this["PumpCoolHigh"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal BaseLinePressureSet {
+            get {
+                return ((decimal)(this["BaseLinePressureSet"]));
+            }
+            set {
+                this["BaseLinePressureSet"] = value;
+            }
+        }
     }
 }

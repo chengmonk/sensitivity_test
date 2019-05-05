@@ -91,7 +91,7 @@ namespace 恒温测试机
             set_bit(ref doData[2], 5, true);//vm
             control.InstantDo_Write(doData);
             safetyDelegate mes = new safetyDelegate(systemInfoactive);
-            try { Invoke(mes, "[初始化系统]\n"); }
+            try { Invoke(mes, "[初始化系统...]\n"); }
             catch { }
 
             System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
