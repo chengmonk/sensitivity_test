@@ -59,7 +59,27 @@ namespace 恒温测试机
         void monitoractive(byte[] data)
         {
             //在这里写一些控制阀的状态监控代码
+            if (get_bit(doData[0], 0) == 1)
+                Temp1Status.ForeColor = Color.Red;
+            else
+                Temp1Status.ForeColor = Color.Black;
 
+            if (get_bit(doData[0], 1) == 1)
+                Temp2Status.ForeColor = Color.Red;
+            else
+                Temp2Status.ForeColor = Color.Black;
+            if (get_bit(doData[0], 2) == 1)
+                Temp3Status.ForeColor = Color.Red;
+            else
+                Temp3Status.ForeColor = Color.Black;
+            if (get_bit(doData[0], 3) == 1)
+                Temp4Status.ForeColor = Color.Red;
+            else
+                Temp4Status.ForeColor = Color.Black;
+            if (get_bit(doData[0], 4) == 1)
+                Temp5Status.ForeColor = Color.Red;
+            else
+                Temp5Status.ForeColor = Color.Black;
 
         }
         void t3TimerAction(object source, System.Timers.ElapsedEventArgs e)

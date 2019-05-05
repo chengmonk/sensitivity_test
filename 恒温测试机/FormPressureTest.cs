@@ -13,7 +13,7 @@ namespace 恒温测试机
         {
             InitializeComponent();
         }
-        System.Timers.Timer safety;
+        System.Timers.Timer pressure;
         System.Timers.Timer t3Timer;
         System.Timers.Timer monitor;
         DAQ_profile collectData;
@@ -53,17 +53,38 @@ namespace 恒温测试机
         void monitoractive(byte[] data)
         {
             //在这里写一些控制阀的状态监控代码
+            if (get_bit(doData[0], 0) == 1)
+                Temp1Status.ForeColor = Color.Red;
+            else
+                Temp1Status.ForeColor = Color.Black;
 
-
+            if (get_bit(doData[0], 1) == 1)
+                Temp2Status.ForeColor = Color.Red;
+            else
+                Temp2Status.ForeColor = Color.Black;
+            if (get_bit(doData[0], 2) == 1)
+                Temp3Status.ForeColor = Color.Red;
+            else
+                Temp3Status.ForeColor = Color.Black;
+            if (get_bit(doData[0], 3) == 1)
+                Temp4Status.ForeColor = Color.Red;
+            else
+                Temp4Status.ForeColor = Color.Black;
+            if (get_bit(doData[0], 4) == 1)
+                Temp5Status.ForeColor = Color.Red;
+            else
+                Temp5Status.ForeColor = Color.Black;
         }
-        void safetyAction(object source, System.Timers.ElapsedEventArgs e)
+        void PressureAction(object source, System.Timers.ElapsedEventArgs e)
         {
-            //启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭vc vm 打开v5
+            //启动a、c、11、011、12、012、022、021、vc、vh、vm 保持t1时间 然后关闭a 打开b
             set_bit(ref doData[1], 7, true);//a
             set_bit(ref doData[2], 1, true);//c
             set_bit(ref doData[0], 5, true);//11
             set_bit(ref doData[2], 7, true);//011
             set_bit(ref doData[0], 6, true);//12
+            set_bit(ref doData[3], 0, true);//012
+            set_bit(ref doData[3], 2, true);//022
             set_bit(ref doData[3], 1, true);//021
             set_bit(ref doData[2], 3, true);//vc
             set_bit(ref doData[2], 4, true);//vh
@@ -319,10 +340,10 @@ namespace 恒温测试机
             monitor.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
             monitor.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
-            safety = new System.Timers.Timer(2);
-            safety.Elapsed += new System.Timers.ElapsedEventHandler(safetyAction);//到达时间的时候执行事件； 
-            safety.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            safety.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；           
+            pressure = new System.Timers.Timer(2);
+            pressure.Elapsed += new System.Timers.ElapsedEventHandler(PressureAction);//到达时间的时候执行事件； 
+            pressure.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
+            pressure.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；           
 
             dt = new DataTable();
             dt.Clear();
@@ -716,7 +737,7 @@ namespace 恒温测试机
                 && get_bit(doData[0], 2) == 0
                 && get_bit(doData[0], 3) == 0
                 && get_bit(doData[0], 4) == 0)
-                safety.Enabled = true;
+                pressure.Enabled = true;
             else
             {
                 MessageBox.Show("各个水箱温度未达到设定值，请耐心等待...");
