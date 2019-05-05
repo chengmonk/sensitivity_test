@@ -29,11 +29,13 @@ namespace 恒温测试机
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            BaseLinePressureSet.Value = Properties.Settings.Default.BaseLinePressureSet;
-            PumpCoolHighPressureSet.Value = Properties.Settings.Default.PumpCoolHigh;
-            PumpCoolLowPressureSet.Value = Properties.Settings.Default.PumpCoolLow;
-            PumpHotHighPressureSet.Value = Properties.Settings.Default.PumpHotHigh;
-            PumpHotLowPressureSet.Value = Properties.Settings.Default.PumpHotLow;
+            CoolPump.Value = Properties.Settings.Default.CoolPump011;
+            HotPump.Value = Properties.Settings.Default.HotPump021;
+
+            PumpCoolHighPressureSet.Value = Properties.Settings.Default.PumpCoolHigh012;
+            PumpCoolLowPressureSet.Value = Properties.Settings.Default.PumpCoolLow012;
+            PumpHotHighPressureSet.Value = Properties.Settings.Default.PumpHotHigh022;
+            PumpHotLowPressureSet022.Value = Properties.Settings.Default.PumpHotLow022;
             pressureThreshold.Value = Properties.Settings.Default.pressureThreshold;
 
             t1Set.Value = Properties.Settings.Default.t1;
@@ -261,6 +263,48 @@ namespace 恒温测试机
         private void T3Set_ValueChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.t3 = t3Set.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void PumpHotLowPressureSet_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PumpHotLow022 = PumpHotLowPressureSet022.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void PumpHotHighPressureSet_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PumpHotHigh022 = PumpHotHighPressureSet.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void PumpCoolLowPressureSet_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PumpCoolLow012 = PumpCoolLowPressureSet.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void PumpCoolHighPressureSet_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PumpCoolHigh012 = PumpCoolHighPressureSet.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void CoolPump_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.CoolPump011 = CoolPump.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void HotPump_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.HotPump021 = HotPump.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void PressureThreshold_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.pressureThreshold = pressureThreshold.Value;
             Properties.Settings.Default.Save();
         }
     }

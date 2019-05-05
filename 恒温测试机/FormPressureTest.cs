@@ -79,7 +79,9 @@ namespace 恒温测试机
         {
             //启动a、c、11、011、12、012、022、021、vc、vh、vm 保持t1时间 然后关闭a 打开b
             set_bit(ref doData[1], 7, true);//a
+            set_bit(ref doData[2], 0, false);//b  
             set_bit(ref doData[2], 1, true);//c
+            set_bit(ref doData[2], 2, false);//d  
             set_bit(ref doData[0], 5, true);//11
             set_bit(ref doData[2], 7, true);//011
             set_bit(ref doData[0], 6, true);//12
@@ -93,118 +95,468 @@ namespace 恒温测试机
             safetyDelegate mes = new safetyDelegate(systemInfoactive);
             try { Invoke(mes, "[初始化系统...]\n"); }
             catch { }
-
+            //热水降压测试
             System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-            double orgPm = Pm;//在界面上显示初始压力，一次判断过后压力恢复到初始压力以后对温度进行判断
+
             safetyDelegate org = new safetyDelegate(orgPmShowactive);
-            if (IsHandleCreated)//这里会导致访问到已经被释放的窗体界面
-                Invoke(org, Math.Round(orgPm, 2).ToString());
-            set_bit(ref doData[2], 3, false);//vc
-            set_bit(ref doData[2], 5, false);//vm
-            set_bit(ref doData[2], 6, true);//v5
+
+            //022压力切换为低压 用485切换
+            set_bit(ref doData[1], 7, false);//a
+            set_bit(ref doData[2], 0, true);//b            
             control.InstantDo_Write(doData);
 
             try
             {
-                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vc、Vm打开V5，开始冷水失效测试]\n");
+                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水降压测试]\n");
             }
             catch { }
-            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t2));
+            try
+            {
+                Invoke(mes, "[等待压力到达设定值...]\n");
+            }
+            catch { }
+            for (; true;)
+            {
+                if (Math.Abs(Ph - (double)Properties.Settings.Default.PumpHotLow022) <=
+                    (double)Properties.Settings.Default.pressureThreshold)
+                    break;
+                System.Threading.Thread.Sleep((int)(100));
+            }
             //开始收集数据这个过程一共持续t3
             try
             {
-                Invoke(mes, "[t2 = " + Properties.Settings.Default.t2.ToString() + "s 延时结束，开始记录冷水失效数据]\n");
+                Invoke(mes, "[压力达到设定值，开始记录热水降压数据]\n");
             }
             catch { }
             //开始收集数据
+            dt.Rows.Add("开始采集热水降压测试数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
             startFlag = true;
-
+            
             System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
             try
             {
-                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 冷水测试阶段结束，停止记录数据。关闭V5，打开Vc、Vm，压力开始恢复]\n");
+                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 热水降压测试阶段结束，停止记录数据。关闭b，打开a，压力开始恢复，022压力由低压切换为高压]\n");
             }
             catch { }
-            //停止收集数据,持续t3后打开VC Vm同时关闭V5
+            //停止收集数据,持续t3后打开a同时关闭b  022压力切换为高压 用485切换
             startFlag = false;
-            set_bit(ref doData[2], 3, true);//vc
-            set_bit(ref doData[2], 5, true);//vm
-            set_bit(ref doData[2], 6, false);//v5
+            dt.Rows.Add("热水降压测试数据采集完毕",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            set_bit(ref doData[1], 7, true);//a
+            set_bit(ref doData[2], 0, false);//b 
             control.InstantDo_Write(doData);
             //达到初始压力以后再进行5s的数据收集
             for (; true;)
             {
-                if (Math.Abs(Pm - orgPm) <= 0.5) break;
+                if (Math.Abs(Ph - (double)Properties.Settings.Default.HotPump021) <=
+                   (double)Properties.Settings.Default.pressureThreshold) break;
+                System.Threading.Thread.Sleep((int)(100));
             }
             try
             {
-                Invoke(mes, "[压力恢复到初始压力，开始记录 5s 的数据]\n");
+                Invoke(mes, "[热水压力恢复到初始压力，开始记录 5s 的数据]\n");
             }
             catch { }
+            dt.Rows.Add("开始采集热水降压测试压力恢复数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
             startFlag = true;
+            
             System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
             startFlag = false;
+            dt.Rows.Add("热水降压测试压力恢复数据采集完毕",
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0);
             try
             {
                 Invoke(mes, "[ 5s 的数据记录完毕]\n");
             }
             catch { }
+
+            //热水升压测试
             System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-            set_bit(ref doData[2], 4, false);//vh
-            set_bit(ref doData[2], 5, false);//vm
-            set_bit(ref doData[2], 6, true);//v5
+
+            //022压力切换为高压 用485切换
+            set_bit(ref doData[1], 7, false);//a
+            set_bit(ref doData[2], 0, true);//b       
+            //022高压切换
+
             control.InstantDo_Write(doData);
+
             try
             {
-                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vh、Vm打开V5，开始热水失效测试]\n");
+                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水升压测试]\n");
             }
             catch { }
-            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t2));
+            try
+            {
+                Invoke(mes, "[等待压力到达设定值...]\n");
+            }
+            catch { }
+            for (; true;)
+            {
+                if (Math.Abs(Ph - (double)Properties.Settings.Default.PumpHotHigh022) <=
+                    (double)Properties.Settings.Default.pressureThreshold)
+                    break;
+                System.Threading.Thread.Sleep((int)(100));
+            }
             //开始收集数据这个过程一共持续t3
             try
             {
-                Invoke(mes, "[t2 = " + Properties.Settings.Default.t2.ToString() + " s 延时结束，开始记录热水失效数据。]\n");
+                Invoke(mes, "[压力达到设定值，开始记录热水降压数据]\n");
             }
             catch { }
             //开始收集数据
+            
+            dt.Rows.Add("开始采集热水升压测试数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
             startFlag = true;
             System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
             try
             {
-                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 热水测试阶段结束，停止记录数据。关闭V5，打开Vh、Vm，压力开始恢复]\n");
+                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 热水升压测试阶段结束，停止记录数据。关闭b，打开a，压力开始恢复，022压力由低压切换为高压]\n");
             }
             catch { }
-            //停止收集数据,持续t3后打开VC Vm同时关闭V5
+            //停止收集数据,持续t3后打开a同时关闭b  022压力切换为高压 用485切换
             startFlag = false;
-            set_bit(ref doData[2], 3, true);//vc
-            set_bit(ref doData[2], 5, true);//vm
-            set_bit(ref doData[2], 6, false);//v5
+            dt.Rows.Add("热水升压测试数据采集完毕",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            set_bit(ref doData[1], 7, true);//a
+            set_bit(ref doData[2], 0, false);//b 
             control.InstantDo_Write(doData);
             //达到初始压力以后再进行5s的数据收集
             for (; true;)
             {
-                if (Math.Abs(Pm - orgPm) <= 0.5) break;
+                if (Math.Abs(Ph - (double)Properties.Settings.Default.HotPump021) <=
+                   (double)Properties.Settings.Default.pressureThreshold) break;
+                System.Threading.Thread.Sleep((int)(100));
             }
             try
             {
-                Invoke(mes, "[压力恢复到初始压力，开始记录 5s 的数据]\n");
+                Invoke(mes, "[热水压力恢复到初始压力，开始记录 5s 的数据]\n");
             }
             catch { }
+            
+            dt.Rows.Add("开始采集热水升压测试压力恢复数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
             startFlag = true;
             System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
             startFlag = false;
+            dt.Rows.Add("热水升压测试压力恢复数据采集完毕",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
             try
             {
                 Invoke(mes, "[ 5s 的数据记录完毕]\n");
             }
             catch { }
 
+            //冷水降压测试
+            set_bit(ref doData[2], 1, true);//c
+            set_bit(ref doData[2], 2, false);//d 
+            control.InstantDo_Write(doData);
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
+
+            //012压力切换为低压 用485切换
+            set_bit(ref doData[2], 1, false);//c
+            set_bit(ref doData[2], 2, true);//d 
+            //012输出低压 485输出
+
+            control.InstantDo_Write(doData);
+
+
             try
             {
-                Invoke(mes, "[安全性测试结束，请注意保存数据！]");
+                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-冷水降压测试]\n");
             }
             catch { }
-            MessageBox.Show("安全性测试结束，请注意保存数据！");
+            try
+            {
+                Invoke(mes, "[等待压力到达设定值...]\n");
+            }
+            catch { }
+            for (; true;)
+            {
+                if (Math.Abs(Pc - (double)Properties.Settings.Default.PumpCoolLow012) <=
+                    (double)Properties.Settings.Default.pressureThreshold)
+                    break;
+                System.Threading.Thread.Sleep((int)(100));
+            }
+            //开始收集数据这个过程一共持续t3
+            try
+            {
+                Invoke(mes, "[压力达到设定值，开始记录冷水降压数据]\n");
+            }
+            catch { }
+            //开始收集数据 
+            dt.Rows.Add("开始采集冷水降压测试数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            startFlag = true;
+           
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
+            try
+            {
+                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 冷水降压测试阶段结束，停止记录数据。关闭b，打开a，压力开始恢复，022压力由低压切换为高压]\n");
+            }
+            catch { }
+            //停止收集数据,持续t3后
+            startFlag = false;
+            dt.Rows.Add("冷水降压测试数据采集完毕",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            set_bit(ref doData[2], 1, true);//c
+            set_bit(ref doData[2], 2, false);//d 
+            //012输出高压 485输出
+
+            control.InstantDo_Write(doData);
+            //达到初始压力以后再进行5s的数据收集
+            for (; true;)
+            {
+                if (Math.Abs(Pc - (double)Properties.Settings.Default.CoolPump011) <=
+                   (double)Properties.Settings.Default.pressureThreshold) break;
+                System.Threading.Thread.Sleep((int)(100));
+            }
+            try
+            {
+                Invoke(mes, "[冷水压力恢复到初始压力，开始记录 5s 的数据]\n");
+            }
+            catch { }
+            dt.Rows.Add("开始采集冷水降压测试压力恢复数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            startFlag = true;            
+            System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
+            startFlag = false;
+            dt.Rows.Add("冷水降压测试压力恢复数据采集完毕",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            try
+            {
+                Invoke(mes, "[ 5s 的数据记录完毕]\n");
+            }
+            catch { }
+            //冷水升压测试
+            set_bit(ref doData[2], 1, true);//c
+            set_bit(ref doData[2], 2, false);//d 
+            //012输出高压 485输出
+
+            control.InstantDo_Write(doData);
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
+
+            //012压力切换为高压 用485切换
+            set_bit(ref doData[2], 1, false);//c
+            set_bit(ref doData[2], 2, true);//d 
+
+            control.InstantDo_Write(doData);
+            try
+            {
+                Invoke(mes, "[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-冷水升压测试]\n");
+            }
+            catch { }
+            try
+            {
+                Invoke(mes, "[等待压力到达设定值...]\n");
+            }
+            catch { }
+            for (; true;)
+            {
+                if (Math.Abs(Pc - (double)Properties.Settings.Default.PumpCoolHigh012) <=
+                    (double)Properties.Settings.Default.pressureThreshold)
+                    break;
+                System.Threading.Thread.Sleep((int)(100));
+            }
+            //开始收集数据这个过程一共持续t3
+            try
+            {
+                Invoke(mes, "[压力达到设定值，开始记录冷水升压数据]\n");
+            }
+            catch { }
+            //开始收集数据
+            dt.Rows.Add("开始采集冷水升压测试数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            startFlag = true;
+            System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
+            try
+            {
+                Invoke(mes, "[t3 = " + Properties.Settings.Default.t3.ToString() + " s 冷水降压测试阶段结束，停止记录数据。关闭b，打开a，压力开始恢复，022压力由低压切换为高压]\n");
+            }
+            catch { }
+            //停止收集数据,持续t3后
+            startFlag = false;
+            dt.Rows.Add("冷水升压测试数据采集完毕",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            set_bit(ref doData[2], 1, true);//c
+            set_bit(ref doData[2], 2, false);//d            
+            control.InstantDo_Write(doData);
+            //达到初始压力以后再进行5s的数据收集
+            for (; true;)
+            {
+                if (Math.Abs(Pc - (double)Properties.Settings.Default.CoolPump011) <=
+                   (double)Properties.Settings.Default.pressureThreshold) break;
+                System.Threading.Thread.Sleep((int)(100));
+            }
+            try
+            {
+                Invoke(mes, "[冷水压力恢复到初始压力，开始记录 5s 的数据]\n");
+            }
+            catch { }
+            dt.Rows.Add("开始采集冷水升压测试压力恢复数据",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            startFlag = true;
+            System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
+            startFlag = false;
+            dt.Rows.Add("冷水降压测试压力恢复数据采集完毕",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+            try
+            {
+                Invoke(mes, "[ 5s 的数据记录完毕]\n");
+            }
+            catch { }
+            try
+            {
+                Invoke(mes, "[压力变化测试结束，请注意保存数据！]");
+            }
+            catch { }
+            MessageBox.Show("压力变化测试结束，请注意保存数据！");
         }
         void systemInfoactive(string s)
         {
@@ -225,7 +577,7 @@ namespace 恒温测试机
         }
         void orgPmShowactive(string s)
         {
-            orgPmShow.Text = "初始压力:" + s;
+
         }
         /// <summary>
         /// 设置某一位的值

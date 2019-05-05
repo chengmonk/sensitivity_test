@@ -94,7 +94,6 @@
             this.Temp1Status = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.systemInfo = new System.Windows.Forms.TextBox();
-            this.orgPmShow = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.hslButton12 = new HslControls.HslButton();
@@ -893,16 +892,6 @@
             this.systemInfo.Size = new System.Drawing.Size(630, 233);
             this.systemInfo.TabIndex = 21;
             // 
-            // orgPmShow
-            // 
-            this.orgPmShow.AutoSize = true;
-            this.orgPmShow.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.orgPmShow.Location = new System.Drawing.Point(551, 94);
-            this.orgPmShow.Name = "orgPmShow";
-            this.orgPmShow.Size = new System.Drawing.Size(95, 23);
-            this.orgPmShow.TabIndex = 20;
-            this.orgPmShow.Text = "初始压力：";
-            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1066,7 +1055,6 @@
             this.ClientSize = new System.Drawing.Size(1271, 827);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.systemInfo);
-            this.Controls.Add(this.orgPmShow);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox5);
@@ -1163,7 +1151,6 @@
         private System.Windows.Forms.Label Temp1Status;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox systemInfo;
-        private System.Windows.Forms.Label orgPmShow;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private HslControls.HslButton hslButton12;

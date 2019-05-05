@@ -93,18 +93,22 @@
             this.label18 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.label19 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
+            this.PumpHotLowPressureSet022 = new System.Windows.Forms.NumericUpDown();
             this.l2 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.BaseLinePressureSet = new System.Windows.Forms.NumericUpDown();
-            this.PumpHotLowPressureSet = new System.Windows.Forms.NumericUpDown();
             this.PumpHotHighPressureSet = new System.Windows.Forms.NumericUpDown();
+            this.label24 = new System.Windows.Forms.Label();
             this.PumpCoolLowPressureSet = new System.Windows.Forms.NumericUpDown();
+            this.label27 = new System.Windows.Forms.Label();
             this.PumpCoolHighPressureSet = new System.Windows.Forms.NumericUpDown();
-            this.label23 = new System.Windows.Forms.Label();
             this.pressureThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label23 = new System.Windows.Forms.Label();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.HotPump = new System.Windows.Forms.NumericUpDown();
+            this.CoolPump = new System.Windows.Forms.NumericUpDown();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.groupBox4.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ThMin)).BeginInit();
@@ -144,12 +148,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.t1Set)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BaseLinePressureSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PumpHotLowPressureSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PumpHotLowPressureSet022)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpHotHighPressureSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolLowPressureSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolHighPressureSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pressureThreshold)).BeginInit();
+            this.groupBox5.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HotPump)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CoolPump)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox4
@@ -159,7 +166,7 @@
             this.groupBox4.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox4.Location = new System.Drawing.Point(12, 31);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(430, 527);
+            this.groupBox4.Size = new System.Drawing.Size(454, 527);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "设置上下限";
@@ -217,7 +224,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(427, 493);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(434, 493);
             this.tableLayoutPanel4.TabIndex = 11;
             // 
             // ThMin
@@ -228,7 +235,7 @@
             0,
             0,
             65536});
-            this.ThMin.Location = new System.Drawing.Point(287, 446);
+            this.ThMin.Location = new System.Drawing.Point(293, 446);
             this.ThMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -247,7 +254,7 @@
             0,
             0,
             65536});
-            this.ThMax.Location = new System.Drawing.Point(146, 446);
+            this.ThMax.Location = new System.Drawing.Point(149, 446);
             this.ThMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -266,7 +273,7 @@
             0,
             0,
             65536});
-            this.TcMin.Location = new System.Drawing.Point(287, 397);
+            this.TcMin.Location = new System.Drawing.Point(293, 397);
             this.TcMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -285,7 +292,7 @@
             0,
             0,
             65536});
-            this.TcMax.Location = new System.Drawing.Point(146, 397);
+            this.TcMax.Location = new System.Drawing.Point(149, 397);
             this.TcMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -304,7 +311,7 @@
             0,
             0,
             65536});
-            this.TmMin.Location = new System.Drawing.Point(287, 348);
+            this.TmMin.Location = new System.Drawing.Point(293, 348);
             this.TmMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -323,7 +330,7 @@
             0,
             0,
             65536});
-            this.TmMax.Location = new System.Drawing.Point(146, 348);
+            this.TmMax.Location = new System.Drawing.Point(149, 348);
             this.TmMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -342,7 +349,7 @@
             0,
             0,
             65536});
-            this.PhMin.Location = new System.Drawing.Point(287, 299);
+            this.PhMin.Location = new System.Drawing.Point(293, 299);
             this.PhMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -361,7 +368,7 @@
             0,
             0,
             65536});
-            this.PhMax.Location = new System.Drawing.Point(146, 299);
+            this.PhMax.Location = new System.Drawing.Point(149, 299);
             this.PhMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -380,7 +387,7 @@
             0,
             0,
             65536});
-            this.PcMin.Location = new System.Drawing.Point(287, 250);
+            this.PcMin.Location = new System.Drawing.Point(293, 250);
             this.PcMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -399,7 +406,7 @@
             0,
             0,
             65536});
-            this.PcMax.Location = new System.Drawing.Point(146, 250);
+            this.PcMax.Location = new System.Drawing.Point(149, 250);
             this.PcMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -418,7 +425,7 @@
             0,
             0,
             65536});
-            this.PmMin.Location = new System.Drawing.Point(287, 201);
+            this.PmMin.Location = new System.Drawing.Point(293, 201);
             this.PmMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -437,7 +444,7 @@
             0,
             0,
             65536});
-            this.PmMax.Location = new System.Drawing.Point(146, 201);
+            this.PmMax.Location = new System.Drawing.Point(149, 201);
             this.PmMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -456,7 +463,7 @@
             0,
             0,
             65536});
-            this.QhMin.Location = new System.Drawing.Point(287, 152);
+            this.QhMin.Location = new System.Drawing.Point(293, 152);
             this.QhMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -475,7 +482,7 @@
             0,
             0,
             65536});
-            this.QhMax.Location = new System.Drawing.Point(146, 152);
+            this.QhMax.Location = new System.Drawing.Point(149, 152);
             this.QhMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -494,7 +501,7 @@
             0,
             0,
             65536});
-            this.QcMin.Location = new System.Drawing.Point(287, 103);
+            this.QcMin.Location = new System.Drawing.Point(293, 103);
             this.QcMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -513,7 +520,7 @@
             0,
             0,
             65536});
-            this.QcMax.Location = new System.Drawing.Point(146, 103);
+            this.QcMax.Location = new System.Drawing.Point(149, 103);
             this.QcMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -532,7 +539,7 @@
             0,
             0,
             65536});
-            this.QmMin.Location = new System.Drawing.Point(287, 54);
+            this.QmMin.Location = new System.Drawing.Point(293, 54);
             this.QmMin.Minimum = new decimal(new int[] {
             100,
             0,
@@ -550,7 +557,7 @@
             this.label4.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label4.Location = new System.Drawing.Point(5, 51);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(133, 47);
+            this.label4.Size = new System.Drawing.Size(136, 47);
             this.label4.TabIndex = 48;
             this.label4.Text = "出水流量(L/min)：";
             // 
@@ -561,7 +568,7 @@
             this.name.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.name.Location = new System.Drawing.Point(5, 2);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(133, 47);
+            this.name.Size = new System.Drawing.Size(136, 47);
             this.name.TabIndex = 47;
             this.name.Text = "名称";
             // 
@@ -572,7 +579,7 @@
             this.label25.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label25.Location = new System.Drawing.Point(5, 394);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(133, 47);
+            this.label25.Size = new System.Drawing.Size(136, 47);
             this.label25.TabIndex = 44;
             this.label25.Text = "冷水温度(℃)：";
             // 
@@ -583,7 +590,7 @@
             this.label21.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label21.Location = new System.Drawing.Point(5, 345);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(133, 47);
+            this.label21.Size = new System.Drawing.Size(136, 47);
             this.label21.TabIndex = 41;
             this.label21.Text = "出水温度(℃)：";
             // 
@@ -594,7 +601,7 @@
             this.label17.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label17.Location = new System.Drawing.Point(5, 296);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(133, 47);
+            this.label17.Size = new System.Drawing.Size(136, 47);
             this.label17.TabIndex = 38;
             this.label17.Text = "热水压力(Bar)：";
             // 
@@ -605,7 +612,7 @@
             this.label13.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label13.Location = new System.Drawing.Point(5, 247);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(133, 47);
+            this.label13.Size = new System.Drawing.Size(136, 47);
             this.label13.TabIndex = 35;
             this.label13.Text = "冷水压力(Bar)：";
             // 
@@ -616,7 +623,7 @@
             this.label10.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label10.Location = new System.Drawing.Point(5, 198);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(133, 47);
+            this.label10.Size = new System.Drawing.Size(136, 47);
             this.label10.TabIndex = 32;
             this.label10.Text = "出水压力(Bar)：";
             // 
@@ -627,7 +634,7 @@
             this.label7.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label7.Location = new System.Drawing.Point(5, 149);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(133, 47);
+            this.label7.Size = new System.Drawing.Size(136, 47);
             this.label7.TabIndex = 29;
             this.label7.Text = "热水流量(L/min)：";
             // 
@@ -638,7 +645,7 @@
             this.label2.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label2.Location = new System.Drawing.Point(5, 443);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(133, 48);
+            this.label2.Size = new System.Drawing.Size(136, 48);
             this.label2.TabIndex = 24;
             this.label2.Text = "热水温度(℃)：";
             // 
@@ -649,7 +656,7 @@
             this.label999.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label999.Location = new System.Drawing.Point(5, 100);
             this.label999.Name = "label999";
-            this.label999.Size = new System.Drawing.Size(133, 47);
+            this.label999.Size = new System.Drawing.Size(136, 47);
             this.label999.TabIndex = 17;
             this.label999.Text = "冷水流量(L/min)：";
             // 
@@ -658,9 +665,9 @@
             this.MAX.AutoSize = true;
             this.MAX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MAX.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.MAX.Location = new System.Drawing.Point(146, 2);
+            this.MAX.Location = new System.Drawing.Point(149, 2);
             this.MAX.Name = "MAX";
-            this.MAX.Size = new System.Drawing.Size(133, 47);
+            this.MAX.Size = new System.Drawing.Size(136, 47);
             this.MAX.TabIndex = 11;
             this.MAX.Text = "上限";
             // 
@@ -669,9 +676,9 @@
             this.MIN.AutoSize = true;
             this.MIN.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MIN.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.MIN.Location = new System.Drawing.Point(287, 2);
+            this.MIN.Location = new System.Drawing.Point(293, 2);
             this.MIN.Name = "MIN";
-            this.MIN.Size = new System.Drawing.Size(135, 47);
+            this.MIN.Size = new System.Drawing.Size(136, 47);
             this.MIN.TabIndex = 15;
             this.MIN.Text = "下限";
             // 
@@ -683,7 +690,7 @@
             0,
             0,
             65536});
-            this.QmMax.Location = new System.Drawing.Point(146, 54);
+            this.QmMax.Location = new System.Drawing.Point(149, 54);
             this.QmMax.Minimum = new decimal(new int[] {
             100,
             0,
@@ -708,7 +715,7 @@
             // 
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 13F);
-            this.groupBox1.Location = new System.Drawing.Point(448, 31);
+            this.groupBox1.Location = new System.Drawing.Point(472, 31);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(661, 238);
             this.groupBox1.TabIndex = 12;
@@ -1077,7 +1084,7 @@
             0,
             0,
             65536});
-            this.t3Set.Location = new System.Drawing.Point(124, 79);
+            this.t3Set.Location = new System.Drawing.Point(124, 81);
             this.t3Set.Name = "t3Set";
             this.t3Set.Size = new System.Drawing.Size(112, 27);
             this.t3Set.TabIndex = 62;
@@ -1092,7 +1099,7 @@
             0,
             0,
             65536});
-            this.t2Set.Location = new System.Drawing.Point(124, 42);
+            this.t2Set.Location = new System.Drawing.Point(124, 43);
             this.t2Set.Name = "t2Set";
             this.t2Set.Size = new System.Drawing.Size(112, 27);
             this.t2Set.TabIndex = 61;
@@ -1125,7 +1132,7 @@
             // label16
             // 
             this.label16.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label16.Location = new System.Drawing.Point(5, 39);
+            this.label16.Location = new System.Drawing.Point(5, 40);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(70, 23);
             this.label16.TabIndex = 1;
@@ -1134,7 +1141,7 @@
             // label18
             // 
             this.label18.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label18.Location = new System.Drawing.Point(5, 76);
+            this.label18.Location = new System.Drawing.Point(5, 78);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(70, 23);
             this.label18.TabIndex = 2;
@@ -1144,9 +1151,9 @@
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel3);
             this.groupBox3.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox3.Location = new System.Drawing.Point(448, 275);
+            this.groupBox3.Location = new System.Drawing.Point(472, 275);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(661, 242);
+            this.groupBox3.Size = new System.Drawing.Size(661, 193);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "压力变化测试参数设置";
@@ -1157,120 +1164,71 @@
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.Controls.Add(this.pressureThreshold, 1, 5);
-            this.tableLayoutPanel3.Controls.Add(this.PumpCoolHighPressureSet, 1, 4);
-            this.tableLayoutPanel3.Controls.Add(this.PumpCoolLowPressureSet, 1, 3);
-            this.tableLayoutPanel3.Controls.Add(this.PumpHotHighPressureSet, 1, 2);
-            this.tableLayoutPanel3.Controls.Add(this.PumpHotLowPressureSet, 1, 1);
-            this.tableLayoutPanel3.Controls.Add(this.label19, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.label22, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.l2, 0, 2);
-            this.tableLayoutPanel3.Controls.Add(this.label24, 0, 3);
-            this.tableLayoutPanel3.Controls.Add(this.label27, 0, 4);
-            this.tableLayoutPanel3.Controls.Add(this.BaseLinePressureSet, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.label23, 0, 5);
+            this.tableLayoutPanel3.Controls.Add(this.label22, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.PumpHotLowPressureSet022, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.l2, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.PumpHotHighPressureSet, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.label24, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.PumpCoolLowPressureSet, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.label27, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.PumpCoolHighPressureSet, 1, 3);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(6, 26);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 6;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(649, 200);
+            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(622, 151);
             this.tableLayoutPanel3.TabIndex = 0;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(5, 2);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(136, 20);
-            this.label19.TabIndex = 0;
-            this.label19.Text = "设定基准压力(Bar):";
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(5, 35);
+            this.label22.Location = new System.Drawing.Point(5, 2);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(208, 20);
             this.label22.TabIndex = 1;
             this.label22.Text = "设定022热水变压泵低压(Bar):";
             // 
+            // PumpHotLowPressureSet022
+            // 
+            this.PumpHotLowPressureSet022.DecimalPlaces = 2;
+            this.PumpHotLowPressureSet022.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.PumpHotLowPressureSet022.Location = new System.Drawing.Point(469, 5);
+            this.PumpHotLowPressureSet022.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.PumpHotLowPressureSet022.Name = "PumpHotLowPressureSet022";
+            this.PumpHotLowPressureSet022.Size = new System.Drawing.Size(120, 27);
+            this.PumpHotLowPressureSet022.TabIndex = 6;
+            this.PumpHotLowPressureSet022.ValueChanged += new System.EventHandler(this.PumpHotLowPressureSet_ValueChanged);
+            // 
             // l2
             // 
             this.l2.AutoSize = true;
-            this.l2.Location = new System.Drawing.Point(5, 68);
+            this.l2.Location = new System.Drawing.Point(5, 39);
             this.l2.Name = "l2";
             this.l2.Size = new System.Drawing.Size(208, 20);
             this.l2.TabIndex = 2;
             this.l2.Text = "设定022热水变压泵高压(Bar):";
             // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(5, 101);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(208, 20);
-            this.label24.TabIndex = 3;
-            this.label24.Text = "设定012冷水变压泵低压(Bar):";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(5, 134);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(208, 20);
-            this.label27.TabIndex = 4;
-            this.label27.Text = "设定012冷水变压泵高压(Bar):";
-            // 
-            // BaseLinePressureSet
-            // 
-            this.BaseLinePressureSet.DecimalPlaces = 2;
-            this.BaseLinePressureSet.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.BaseLinePressureSet.Location = new System.Drawing.Point(489, 5);
-            this.BaseLinePressureSet.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.BaseLinePressureSet.Name = "BaseLinePressureSet";
-            this.BaseLinePressureSet.Size = new System.Drawing.Size(120, 27);
-            this.BaseLinePressureSet.TabIndex = 5;
-            // 
-            // PumpHotLowPressureSet
-            // 
-            this.PumpHotLowPressureSet.DecimalPlaces = 2;
-            this.PumpHotLowPressureSet.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.PumpHotLowPressureSet.Location = new System.Drawing.Point(489, 38);
-            this.PumpHotLowPressureSet.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.PumpHotLowPressureSet.Name = "PumpHotLowPressureSet";
-            this.PumpHotLowPressureSet.Size = new System.Drawing.Size(120, 27);
-            this.PumpHotLowPressureSet.TabIndex = 6;
-            // 
             // PumpHotHighPressureSet
             // 
+            this.PumpHotHighPressureSet.BackColor = System.Drawing.Color.White;
             this.PumpHotHighPressureSet.DecimalPlaces = 2;
             this.PumpHotHighPressureSet.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.PumpHotHighPressureSet.Location = new System.Drawing.Point(489, 71);
+            this.PumpHotHighPressureSet.Location = new System.Drawing.Point(469, 42);
             this.PumpHotHighPressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1279,6 +1237,16 @@
             this.PumpHotHighPressureSet.Name = "PumpHotHighPressureSet";
             this.PumpHotHighPressureSet.Size = new System.Drawing.Size(120, 27);
             this.PumpHotHighPressureSet.TabIndex = 7;
+            this.PumpHotHighPressureSet.ValueChanged += new System.EventHandler(this.PumpHotHighPressureSet_ValueChanged);
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(5, 76);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(208, 20);
+            this.label24.TabIndex = 3;
+            this.label24.Text = "设定012冷水变压泵低压(Bar):";
             // 
             // PumpCoolLowPressureSet
             // 
@@ -1288,7 +1256,7 @@
             0,
             0,
             65536});
-            this.PumpCoolLowPressureSet.Location = new System.Drawing.Point(489, 104);
+            this.PumpCoolLowPressureSet.Location = new System.Drawing.Point(469, 79);
             this.PumpCoolLowPressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1297,6 +1265,16 @@
             this.PumpCoolLowPressureSet.Name = "PumpCoolLowPressureSet";
             this.PumpCoolLowPressureSet.Size = new System.Drawing.Size(120, 27);
             this.PumpCoolLowPressureSet.TabIndex = 8;
+            this.PumpCoolLowPressureSet.ValueChanged += new System.EventHandler(this.PumpCoolLowPressureSet_ValueChanged);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(5, 113);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(208, 20);
+            this.label27.TabIndex = 4;
+            this.label27.Text = "设定012冷水变压泵高压(Bar):";
             // 
             // PumpCoolHighPressureSet
             // 
@@ -1306,7 +1284,7 @@
             0,
             0,
             65536});
-            this.PumpCoolHighPressureSet.Location = new System.Drawing.Point(489, 137);
+            this.PumpCoolHighPressureSet.Location = new System.Drawing.Point(469, 116);
             this.PumpCoolHighPressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1315,15 +1293,7 @@
             this.PumpCoolHighPressureSet.Name = "PumpCoolHighPressureSet";
             this.PumpCoolHighPressureSet.Size = new System.Drawing.Size(120, 27);
             this.PumpCoolHighPressureSet.TabIndex = 9;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(5, 167);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(103, 20);
-            this.label23.TabIndex = 10;
-            this.label23.Text = "判断压力阈值:";
+            this.PumpCoolHighPressureSet.ValueChanged += new System.EventHandler(this.PumpCoolHighPressureSet_ValueChanged);
             // 
             // pressureThreshold
             // 
@@ -1333,7 +1303,7 @@
             0,
             0,
             65536});
-            this.pressureThreshold.Location = new System.Drawing.Point(489, 170);
+            this.pressureThreshold.Location = new System.Drawing.Point(168, 83);
             this.pressureThreshold.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1342,12 +1312,112 @@
             this.pressureThreshold.Name = "pressureThreshold";
             this.pressureThreshold.Size = new System.Drawing.Size(120, 27);
             this.pressureThreshold.TabIndex = 11;
+            this.pressureThreshold.ValueChanged += new System.EventHandler(this.PressureThreshold_ValueChanged);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(5, 80);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(103, 20);
+            this.label23.TabIndex = 10;
+            this.label23.Text = "判断压力阈值:";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.tableLayoutPanel5);
+            this.groupBox5.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox5.Location = new System.Drawing.Point(472, 478);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(364, 173);
+            this.groupBox5.TabIndex = 15;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "初始压力设置:";
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Controls.Add(this.HotPump, 1, 1);
+            this.tableLayoutPanel5.Controls.Add(this.CoolPump, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.pressureThreshold, 1, 2);
+            this.tableLayoutPanel5.Controls.Add(this.label28, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.label23, 0, 2);
+            this.tableLayoutPanel5.Controls.Add(this.label19, 0, 1);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(15, 26);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 3;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(328, 121);
+            this.tableLayoutPanel5.TabIndex = 0;
+            // 
+            // HotPump
+            // 
+            this.HotPump.DecimalPlaces = 2;
+            this.HotPump.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.HotPump.Location = new System.Drawing.Point(168, 44);
+            this.HotPump.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.HotPump.Name = "HotPump";
+            this.HotPump.Size = new System.Drawing.Size(120, 27);
+            this.HotPump.TabIndex = 14;
+            this.HotPump.ValueChanged += new System.EventHandler(this.HotPump_ValueChanged);
+            // 
+            // CoolPump
+            // 
+            this.CoolPump.DecimalPlaces = 2;
+            this.CoolPump.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.CoolPump.Location = new System.Drawing.Point(168, 5);
+            this.CoolPump.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.CoolPump.Name = "CoolPump";
+            this.CoolPump.Size = new System.Drawing.Size(120, 27);
+            this.CoolPump.TabIndex = 13;
+            this.CoolPump.ValueChanged += new System.EventHandler(this.CoolPump_ValueChanged);
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(5, 2);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(81, 20);
+            this.label28.TabIndex = 0;
+            this.label28.Text = "冷水泵011";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(5, 41);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(85, 20);
+            this.label19.TabIndex = 12;
+            this.label19.Text = "热水泵021:";
             // 
             // FormValueRangeSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1233, 774);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -1398,12 +1468,16 @@
             this.groupBox3.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BaseLinePressureSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PumpHotLowPressureSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PumpHotLowPressureSet022)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpHotHighPressureSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolLowPressureSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolHighPressureSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pressureThreshold)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HotPump)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CoolPump)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1476,17 +1550,21 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.NumericUpDown PumpCoolHighPressureSet;
         private System.Windows.Forms.NumericUpDown PumpCoolLowPressureSet;
         private System.Windows.Forms.NumericUpDown PumpHotHighPressureSet;
-        private System.Windows.Forms.NumericUpDown PumpHotLowPressureSet;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.NumericUpDown PumpHotLowPressureSet022;
         private System.Windows.Forms.Label l2;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.NumericUpDown BaseLinePressureSet;
         private System.Windows.Forms.NumericUpDown pressureThreshold;
         private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NumericUpDown PumpCoolHighPressureSet;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.NumericUpDown HotPump;
+        private System.Windows.Forms.NumericUpDown CoolPump;
+        private System.Windows.Forms.Label label19;
     }
 }

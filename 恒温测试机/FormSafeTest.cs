@@ -143,9 +143,10 @@ namespace 恒温测试机
             set_bit(ref doData[2], 6, false);//v5
             control.InstantDo_Write(doData);
             //达到初始压力以后再进行5s的数据收集
-            for(;true ; )
+            for (; true;)
             {
-                if (Math.Abs(Pm - orgPm) <= 0.5) break;
+                if (Math.Abs(Pc - (double)Properties.Settings.Default.CoolPump011) <=
+                    (double)Properties.Settings.Default.pressureThreshold) break;
             }
             try
             {
@@ -194,7 +195,8 @@ namespace 恒温测试机
             //达到初始压力以后再进行5s的数据收集
             for (; true;)
             {
-                if (Math.Abs(Pm - orgPm) <= 0.5) break;
+                if (Math.Abs(Ph - (double)Properties.Settings.Default.HotPump021)
+                    <= (double)Properties.Settings.Default.pressureThreshold) break;
             }
             try
             {
@@ -232,7 +234,7 @@ namespace 恒温测试机
 
             alarmDelegate md = new alarmDelegate(monitoractive);
             // daq.EventCount_Read();
-            
+
             try { Invoke(md, new object[] { doData }); }
             catch
             { }
@@ -478,7 +480,7 @@ namespace 恒温测试机
             {
                 QmAlarm.LanternBackground = Color.Red;//报警变色
                 DateTime t = DateTime.Now;
-                systemInfo.AppendText("[时间:" + t.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm"+"超出上下限！]");
+                systemInfo.AppendText("[时间:" + t.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm" + "超出上下限！]");
                 systemInfo.AppendText("\n");
             }
             else
@@ -603,10 +605,10 @@ namespace 恒温测试机
 
                 }
             }
-           
+
             control.InstantDo_Write(doData);
         }
-        
+
         /// <summary>
         /// 设置某一位的值
         /// </summary>
@@ -621,7 +623,7 @@ namespace 恒温测试机
             if (index > 8 || index < 1)
                 throw new ArgumentOutOfRangeException();
             int v = index < 2 ? index : (2 << (index - 2));
-            data= flag ? (byte)(data | v) : (byte)(data & ~v);
+            data = flag ? (byte)(data | v) : (byte)(data & ~v);
 
         }
         /// <summary>

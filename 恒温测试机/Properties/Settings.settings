@@ -95,22 +95,28 @@
     <Setting Name="t3" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="PumpHotLow" Type="System.Decimal" Scope="User">
+    <Setting Name="PumpHotLow022" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="PumpHotHigh" Type="System.Decimal" Scope="User">
+    <Setting Name="PumpHotHigh022" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="PumpCoolLow" Type="System.Decimal" Scope="User">
+    <Setting Name="PumpCoolLow012" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="PumpCoolHigh" Type="System.Decimal" Scope="User">
+    <Setting Name="PumpCoolHigh012" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="BaseLinePressureSet" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="pressureThreshold" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CoolPump011" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="HotPump021" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

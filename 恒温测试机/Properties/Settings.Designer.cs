@@ -398,48 +398,48 @@ namespace 恒温测试机.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal PumpHotLow {
+        public decimal PumpHotLow022 {
             get {
-                return ((decimal)(this["PumpHotLow"]));
+                return ((decimal)(this["PumpHotLow022"]));
             }
             set {
-                this["PumpHotLow"] = value;
+                this["PumpHotLow022"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal PumpHotHigh {
+        public decimal PumpHotHigh022 {
             get {
-                return ((decimal)(this["PumpHotHigh"]));
+                return ((decimal)(this["PumpHotHigh022"]));
             }
             set {
-                this["PumpHotHigh"] = value;
+                this["PumpHotHigh022"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal PumpCoolLow {
+        public decimal PumpCoolLow012 {
             get {
-                return ((decimal)(this["PumpCoolLow"]));
+                return ((decimal)(this["PumpCoolLow012"]));
             }
             set {
-                this["PumpCoolLow"] = value;
+                this["PumpCoolLow012"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal PumpCoolHigh {
+        public decimal PumpCoolHigh012 {
             get {
-                return ((decimal)(this["PumpCoolHigh"]));
+                return ((decimal)(this["PumpCoolHigh012"]));
             }
             set {
-                this["PumpCoolHigh"] = value;
+                this["PumpCoolHigh012"] = value;
             }
         }
         
@@ -464,6 +464,30 @@ namespace 恒温测试机.Properties {
             }
             set {
                 this["pressureThreshold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal CoolPump011 {
+            get {
+                return ((decimal)(this["CoolPump011"]));
+            }
+            set {
+                this["CoolPump011"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal HotPump021 {
+            get {
+                return ((decimal)(this["HotPump021"]));
+            }
+            set {
+                this["HotPump021"] = value;
             }
         }
     }
