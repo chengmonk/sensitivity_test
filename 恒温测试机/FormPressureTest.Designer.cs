@@ -144,6 +144,7 @@
             // 
             // tableLayoutPanel3
             // 
+            this.tableLayoutPanel3.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel3.ColumnCount = 5;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23F));
@@ -180,9 +181,9 @@
             this.ThShow.AutoSize = true;
             this.ThShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ThShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.ThShow.Location = new System.Drawing.Point(119, 82);
+            this.ThShow.Location = new System.Drawing.Point(121, 82);
             this.ThShow.Name = "ThShow";
-            this.ThShow.Size = new System.Drawing.Size(110, 41);
+            this.ThShow.Size = new System.Drawing.Size(108, 39);
             this.ThShow.TabIndex = 21;
             this.ThShow.Text = "label2";
             // 
@@ -191,9 +192,9 @@
             this.label6.AutoSize = true;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label6.Location = new System.Drawing.Point(3, 0);
+            this.label6.Location = new System.Drawing.Point(5, 2);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(110, 41);
+            this.label6.Size = new System.Drawing.Size(108, 38);
             this.label6.TabIndex = 10;
             this.label6.Text = "出水温度Tm：";
             // 
@@ -202,9 +203,9 @@
             this.TmShow.AutoSize = true;
             this.TmShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TmShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.TmShow.Location = new System.Drawing.Point(119, 0);
+            this.TmShow.Location = new System.Drawing.Point(121, 2);
             this.TmShow.Name = "TmShow";
-            this.TmShow.Size = new System.Drawing.Size(110, 41);
+            this.TmShow.Size = new System.Drawing.Size(108, 38);
             this.TmShow.TabIndex = 11;
             this.TmShow.Text = "label7";
             // 
@@ -213,9 +214,9 @@
             this.TmMax.AutoSize = true;
             this.TmMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TmMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.TmMax.Location = new System.Drawing.Point(235, 0);
+            this.TmMax.Location = new System.Drawing.Point(237, 2);
             this.TmMax.Name = "TmMax";
-            this.TmMax.Size = new System.Drawing.Size(110, 41);
+            this.TmMax.Size = new System.Drawing.Size(108, 38);
             this.TmMax.TabIndex = 15;
             this.TmMax.Text = "label8";
             // 
@@ -224,9 +225,9 @@
             this.TmMin.AutoSize = true;
             this.TmMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TmMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.TmMin.Location = new System.Drawing.Point(351, 0);
+            this.TmMin.Location = new System.Drawing.Point(353, 2);
             this.TmMin.Name = "TmMin";
-            this.TmMin.Size = new System.Drawing.Size(110, 41);
+            this.TmMin.Size = new System.Drawing.Size(108, 38);
             this.TmMin.TabIndex = 13;
             this.TmMin.Text = "label9";
             // 
@@ -235,9 +236,9 @@
             this.label10.AutoSize = true;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label10.Location = new System.Drawing.Point(3, 41);
+            this.label10.Location = new System.Drawing.Point(5, 42);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(110, 41);
+            this.label10.Size = new System.Drawing.Size(108, 38);
             this.label10.TabIndex = 14;
             this.label10.Text = "冷水温度Tc：";
             // 
@@ -246,9 +247,9 @@
             this.TcShow.AutoSize = true;
             this.TcShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TcShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.TcShow.Location = new System.Drawing.Point(119, 41);
+            this.TcShow.Location = new System.Drawing.Point(121, 42);
             this.TcShow.Name = "TcShow";
-            this.TcShow.Size = new System.Drawing.Size(110, 41);
+            this.TcShow.Size = new System.Drawing.Size(108, 38);
             this.TcShow.TabIndex = 16;
             this.TcShow.Text = "label11";
             // 
@@ -257,9 +258,9 @@
             this.TcMax.AutoSize = true;
             this.TcMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TcMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.TcMax.Location = new System.Drawing.Point(235, 41);
+            this.TcMax.Location = new System.Drawing.Point(237, 42);
             this.TcMax.Name = "TcMax";
-            this.TcMax.Size = new System.Drawing.Size(110, 41);
+            this.TcMax.Size = new System.Drawing.Size(108, 38);
             this.TcMax.TabIndex = 12;
             this.TcMax.Text = "label12";
             // 
@@ -268,34 +269,34 @@
             this.TcMin.AutoSize = true;
             this.TcMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TcMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.TcMin.Location = new System.Drawing.Point(351, 41);
+            this.TcMin.Location = new System.Drawing.Point(353, 42);
             this.TcMin.Name = "TcMin";
-            this.TcMin.Size = new System.Drawing.Size(110, 41);
+            this.TcMin.Size = new System.Drawing.Size(108, 38);
             this.TcMin.TabIndex = 18;
             this.TcMin.Text = "label13";
             // 
             // TmAlarm
             // 
             this.TmAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TmAlarm.Location = new System.Drawing.Point(467, 3);
+            this.TmAlarm.Location = new System.Drawing.Point(469, 5);
             this.TmAlarm.Name = "TmAlarm";
-            this.TmAlarm.Size = new System.Drawing.Size(38, 35);
+            this.TmAlarm.Size = new System.Drawing.Size(34, 32);
             this.TmAlarm.TabIndex = 22;
             // 
             // TcAlarm
             // 
             this.TcAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TcAlarm.Location = new System.Drawing.Point(467, 44);
+            this.TcAlarm.Location = new System.Drawing.Point(469, 45);
             this.TcAlarm.Name = "TcAlarm";
-            this.TcAlarm.Size = new System.Drawing.Size(38, 35);
+            this.TcAlarm.Size = new System.Drawing.Size(34, 32);
             this.TcAlarm.TabIndex = 23;
             // 
             // ThAlarm
             // 
             this.ThAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ThAlarm.Location = new System.Drawing.Point(467, 85);
+            this.ThAlarm.Location = new System.Drawing.Point(469, 85);
             this.ThAlarm.Name = "ThAlarm";
-            this.ThAlarm.Size = new System.Drawing.Size(38, 35);
+            this.ThAlarm.Size = new System.Drawing.Size(34, 33);
             this.ThAlarm.TabIndex = 24;
             // 
             // label3
@@ -303,9 +304,9 @@
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label3.Location = new System.Drawing.Point(3, 82);
+            this.label3.Location = new System.Drawing.Point(5, 82);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 41);
+            this.label3.Size = new System.Drawing.Size(108, 39);
             this.label3.TabIndex = 20;
             this.label3.Text = "热水温度Th：";
             // 
@@ -314,9 +315,9 @@
             this.ThMin.AutoSize = true;
             this.ThMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ThMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.ThMin.Location = new System.Drawing.Point(351, 82);
+            this.ThMin.Location = new System.Drawing.Point(353, 82);
             this.ThMin.Name = "ThMin";
-            this.ThMin.Size = new System.Drawing.Size(110, 41);
+            this.ThMin.Size = new System.Drawing.Size(108, 39);
             this.ThMin.TabIndex = 19;
             this.ThMin.Text = "label4";
             // 
@@ -325,9 +326,9 @@
             this.ThMax.AutoSize = true;
             this.ThMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ThMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.ThMax.Location = new System.Drawing.Point(235, 82);
+            this.ThMax.Location = new System.Drawing.Point(237, 82);
             this.ThMax.Name = "ThMax";
-            this.ThMax.Size = new System.Drawing.Size(110, 41);
+            this.ThMax.Size = new System.Drawing.Size(108, 39);
             this.ThMax.TabIndex = 17;
             this.ThMax.Text = "label5";
             // 
@@ -345,6 +346,7 @@
             // 
             // tableLayoutPanel5
             // 
+            this.tableLayoutPanel5.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel5.ColumnCount = 5;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23F));
@@ -378,17 +380,17 @@
             // QhAlarm
             // 
             this.QhAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.QhAlarm.Location = new System.Drawing.Point(467, 85);
+            this.QhAlarm.Location = new System.Drawing.Point(465, 85);
             this.QhAlarm.Name = "QhAlarm";
-            this.QhAlarm.Size = new System.Drawing.Size(35, 35);
+            this.QhAlarm.Size = new System.Drawing.Size(35, 33);
             this.QhAlarm.TabIndex = 23;
             // 
             // QcAlarm
             // 
             this.QcAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.QcAlarm.Location = new System.Drawing.Point(467, 44);
+            this.QcAlarm.Location = new System.Drawing.Point(465, 45);
             this.QcAlarm.Name = "QcAlarm";
-            this.QcAlarm.Size = new System.Drawing.Size(35, 35);
+            this.QcAlarm.Size = new System.Drawing.Size(35, 32);
             this.QcAlarm.TabIndex = 14;
             // 
             // label30
@@ -396,9 +398,9 @@
             this.label30.AutoSize = true;
             this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label30.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label30.Location = new System.Drawing.Point(3, 0);
+            this.label30.Location = new System.Drawing.Point(5, 2);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(110, 41);
+            this.label30.Size = new System.Drawing.Size(107, 38);
             this.label30.TabIndex = 10;
             this.label30.Text = "出水流量Qm：";
             // 
@@ -407,9 +409,9 @@
             this.QmShow.AutoSize = true;
             this.QmShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QmShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QmShow.Location = new System.Drawing.Point(119, 0);
+            this.QmShow.Location = new System.Drawing.Point(120, 2);
             this.QmShow.Name = "QmShow";
-            this.QmShow.Size = new System.Drawing.Size(110, 41);
+            this.QmShow.Size = new System.Drawing.Size(107, 38);
             this.QmShow.TabIndex = 11;
             this.QmShow.Text = "label31";
             // 
@@ -418,9 +420,9 @@
             this.QmMax.AutoSize = true;
             this.QmMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QmMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QmMax.Location = new System.Drawing.Point(235, 0);
+            this.QmMax.Location = new System.Drawing.Point(235, 2);
             this.QmMax.Name = "QmMax";
-            this.QmMax.Size = new System.Drawing.Size(110, 41);
+            this.QmMax.Size = new System.Drawing.Size(107, 38);
             this.QmMax.TabIndex = 15;
             this.QmMax.Text = "label32";
             // 
@@ -429,9 +431,9 @@
             this.QmMin.AutoSize = true;
             this.QmMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QmMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QmMin.Location = new System.Drawing.Point(351, 0);
+            this.QmMin.Location = new System.Drawing.Point(350, 2);
             this.QmMin.Name = "QmMin";
-            this.QmMin.Size = new System.Drawing.Size(110, 41);
+            this.QmMin.Size = new System.Drawing.Size(107, 38);
             this.QmMin.TabIndex = 13;
             this.QmMin.Text = "label33";
             // 
@@ -440,9 +442,9 @@
             this.label34.AutoSize = true;
             this.label34.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label34.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label34.Location = new System.Drawing.Point(3, 41);
+            this.label34.Location = new System.Drawing.Point(5, 42);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(110, 41);
+            this.label34.Size = new System.Drawing.Size(107, 38);
             this.label34.TabIndex = 14;
             this.label34.Text = "冷水流量Qc：";
             // 
@@ -451,9 +453,9 @@
             this.QcShow.AutoSize = true;
             this.QcShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QcShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QcShow.Location = new System.Drawing.Point(119, 41);
+            this.QcShow.Location = new System.Drawing.Point(120, 42);
             this.QcShow.Name = "QcShow";
-            this.QcShow.Size = new System.Drawing.Size(110, 41);
+            this.QcShow.Size = new System.Drawing.Size(107, 38);
             this.QcShow.TabIndex = 16;
             this.QcShow.Text = "label35";
             // 
@@ -462,9 +464,9 @@
             this.QcMax.AutoSize = true;
             this.QcMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QcMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QcMax.Location = new System.Drawing.Point(235, 41);
+            this.QcMax.Location = new System.Drawing.Point(235, 42);
             this.QcMax.Name = "QcMax";
-            this.QcMax.Size = new System.Drawing.Size(110, 41);
+            this.QcMax.Size = new System.Drawing.Size(107, 38);
             this.QcMax.TabIndex = 12;
             this.QcMax.Text = "label36";
             // 
@@ -473,18 +475,18 @@
             this.QcMin.AutoSize = true;
             this.QcMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QcMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QcMin.Location = new System.Drawing.Point(351, 41);
+            this.QcMin.Location = new System.Drawing.Point(350, 42);
             this.QcMin.Name = "QcMin";
-            this.QcMin.Size = new System.Drawing.Size(110, 41);
+            this.QcMin.Size = new System.Drawing.Size(107, 38);
             this.QcMin.TabIndex = 18;
             this.QcMin.Text = "label37";
             // 
             // QmAlarm
             // 
             this.QmAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.QmAlarm.Location = new System.Drawing.Point(467, 3);
+            this.QmAlarm.Location = new System.Drawing.Point(465, 5);
             this.QmAlarm.Name = "QmAlarm";
-            this.QmAlarm.Size = new System.Drawing.Size(35, 35);
+            this.QmAlarm.Size = new System.Drawing.Size(35, 32);
             this.QmAlarm.TabIndex = 22;
             // 
             // label27
@@ -492,9 +494,9 @@
             this.label27.AutoSize = true;
             this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label27.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label27.Location = new System.Drawing.Point(3, 82);
+            this.label27.Location = new System.Drawing.Point(5, 82);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(110, 41);
+            this.label27.Size = new System.Drawing.Size(107, 39);
             this.label27.TabIndex = 20;
             this.label27.Text = "热水流量Qh：";
             // 
@@ -503,9 +505,9 @@
             this.QhShow.AutoSize = true;
             this.QhShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QhShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QhShow.Location = new System.Drawing.Point(119, 82);
+            this.QhShow.Location = new System.Drawing.Point(120, 82);
             this.QhShow.Name = "QhShow";
-            this.QhShow.Size = new System.Drawing.Size(110, 41);
+            this.QhShow.Size = new System.Drawing.Size(107, 39);
             this.QhShow.TabIndex = 21;
             this.QhShow.Text = "label26";
             // 
@@ -514,9 +516,9 @@
             this.QhMin.AutoSize = true;
             this.QhMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.QhMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.QhMin.Location = new System.Drawing.Point(351, 82);
+            this.QhMin.Location = new System.Drawing.Point(350, 82);
             this.QhMin.Name = "QhMin";
-            this.QhMin.Size = new System.Drawing.Size(110, 41);
+            this.QhMin.Size = new System.Drawing.Size(107, 39);
             this.QhMin.TabIndex = 19;
             this.QhMin.Text = "label28";
             // 
@@ -527,7 +529,7 @@
             this.QhMax.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.QhMax.Location = new System.Drawing.Point(235, 82);
             this.QhMax.Name = "QhMax";
-            this.QhMax.Size = new System.Drawing.Size(110, 41);
+            this.QhMax.Size = new System.Drawing.Size(107, 39);
             this.QhMax.TabIndex = 17;
             this.QhMax.Text = "label29";
             // 
@@ -545,6 +547,7 @@
             // 
             // tableLayoutPanel4
             // 
+            this.tableLayoutPanel4.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel4.ColumnCount = 5;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23F));
@@ -581,9 +584,9 @@
             this.PhShow.AutoSize = true;
             this.PhShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PhShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PhShow.Location = new System.Drawing.Point(119, 82);
+            this.PhShow.Location = new System.Drawing.Point(121, 82);
             this.PhShow.Name = "PhShow";
-            this.PhShow.Size = new System.Drawing.Size(110, 41);
+            this.PhShow.Size = new System.Drawing.Size(108, 39);
             this.PhShow.TabIndex = 21;
             this.PhShow.Text = "label14";
             // 
@@ -592,9 +595,9 @@
             this.label18.AutoSize = true;
             this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label18.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label18.Location = new System.Drawing.Point(3, 0);
+            this.label18.Location = new System.Drawing.Point(5, 2);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(110, 41);
+            this.label18.Size = new System.Drawing.Size(108, 38);
             this.label18.TabIndex = 10;
             this.label18.Text = "出水压力Pm：";
             // 
@@ -603,9 +606,9 @@
             this.PmShow.AutoSize = true;
             this.PmShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PmShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PmShow.Location = new System.Drawing.Point(119, 0);
+            this.PmShow.Location = new System.Drawing.Point(121, 2);
             this.PmShow.Name = "PmShow";
-            this.PmShow.Size = new System.Drawing.Size(110, 41);
+            this.PmShow.Size = new System.Drawing.Size(108, 38);
             this.PmShow.TabIndex = 11;
             this.PmShow.Text = "label19";
             // 
@@ -614,9 +617,9 @@
             this.PmMax.AutoSize = true;
             this.PmMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PmMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PmMax.Location = new System.Drawing.Point(235, 0);
+            this.PmMax.Location = new System.Drawing.Point(237, 2);
             this.PmMax.Name = "PmMax";
-            this.PmMax.Size = new System.Drawing.Size(110, 41);
+            this.PmMax.Size = new System.Drawing.Size(108, 38);
             this.PmMax.TabIndex = 15;
             this.PmMax.Text = "label20";
             // 
@@ -625,9 +628,9 @@
             this.PmMin.AutoSize = true;
             this.PmMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PmMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PmMin.Location = new System.Drawing.Point(351, 0);
+            this.PmMin.Location = new System.Drawing.Point(353, 2);
             this.PmMin.Name = "PmMin";
-            this.PmMin.Size = new System.Drawing.Size(110, 41);
+            this.PmMin.Size = new System.Drawing.Size(108, 38);
             this.PmMin.TabIndex = 13;
             this.PmMin.Text = "label21";
             // 
@@ -636,9 +639,9 @@
             this.label22.AutoSize = true;
             this.label22.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label22.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label22.Location = new System.Drawing.Point(3, 41);
+            this.label22.Location = new System.Drawing.Point(5, 42);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(110, 41);
+            this.label22.Size = new System.Drawing.Size(108, 38);
             this.label22.TabIndex = 14;
             this.label22.Text = "冷水压力Pc：";
             // 
@@ -647,9 +650,9 @@
             this.PcShow.AutoSize = true;
             this.PcShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PcShow.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PcShow.Location = new System.Drawing.Point(119, 41);
+            this.PcShow.Location = new System.Drawing.Point(121, 42);
             this.PcShow.Name = "PcShow";
-            this.PcShow.Size = new System.Drawing.Size(110, 41);
+            this.PcShow.Size = new System.Drawing.Size(108, 38);
             this.PcShow.TabIndex = 16;
             this.PcShow.Text = "label23";
             // 
@@ -658,9 +661,9 @@
             this.PcMax.AutoSize = true;
             this.PcMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PcMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PcMax.Location = new System.Drawing.Point(235, 41);
+            this.PcMax.Location = new System.Drawing.Point(237, 42);
             this.PcMax.Name = "PcMax";
-            this.PcMax.Size = new System.Drawing.Size(110, 41);
+            this.PcMax.Size = new System.Drawing.Size(108, 38);
             this.PcMax.TabIndex = 12;
             this.PcMax.Text = "label24";
             // 
@@ -669,34 +672,34 @@
             this.PcMin.AutoSize = true;
             this.PcMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PcMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PcMin.Location = new System.Drawing.Point(351, 41);
+            this.PcMin.Location = new System.Drawing.Point(353, 42);
             this.PcMin.Name = "PcMin";
-            this.PcMin.Size = new System.Drawing.Size(110, 41);
+            this.PcMin.Size = new System.Drawing.Size(108, 38);
             this.PcMin.TabIndex = 18;
             this.PcMin.Text = "label25";
             // 
             // PmAlarm
             // 
             this.PmAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PmAlarm.Location = new System.Drawing.Point(467, 3);
+            this.PmAlarm.Location = new System.Drawing.Point(469, 5);
             this.PmAlarm.Name = "PmAlarm";
-            this.PmAlarm.Size = new System.Drawing.Size(38, 35);
+            this.PmAlarm.Size = new System.Drawing.Size(34, 32);
             this.PmAlarm.TabIndex = 22;
             // 
             // PcAlarm
             // 
             this.PcAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PcAlarm.Location = new System.Drawing.Point(467, 44);
+            this.PcAlarm.Location = new System.Drawing.Point(469, 45);
             this.PcAlarm.Name = "PcAlarm";
-            this.PcAlarm.Size = new System.Drawing.Size(38, 35);
+            this.PcAlarm.Size = new System.Drawing.Size(34, 32);
             this.PcAlarm.TabIndex = 23;
             // 
             // PhAlarm
             // 
             this.PhAlarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PhAlarm.Location = new System.Drawing.Point(467, 85);
+            this.PhAlarm.Location = new System.Drawing.Point(469, 85);
             this.PhAlarm.Name = "PhAlarm";
-            this.PhAlarm.Size = new System.Drawing.Size(38, 35);
+            this.PhAlarm.Size = new System.Drawing.Size(34, 33);
             this.PhAlarm.TabIndex = 24;
             // 
             // label15
@@ -704,9 +707,9 @@
             this.label15.AutoSize = true;
             this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label15.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.label15.Location = new System.Drawing.Point(3, 82);
+            this.label15.Location = new System.Drawing.Point(5, 82);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(110, 41);
+            this.label15.Size = new System.Drawing.Size(108, 39);
             this.label15.TabIndex = 20;
             this.label15.Text = "热水压力Ph：";
             // 
@@ -715,9 +718,9 @@
             this.PhMin.AutoSize = true;
             this.PhMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PhMin.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PhMin.Location = new System.Drawing.Point(351, 82);
+            this.PhMin.Location = new System.Drawing.Point(353, 82);
             this.PhMin.Name = "PhMin";
-            this.PhMin.Size = new System.Drawing.Size(110, 41);
+            this.PhMin.Size = new System.Drawing.Size(108, 39);
             this.PhMin.TabIndex = 19;
             this.PhMin.Text = "label16";
             // 
@@ -726,9 +729,9 @@
             this.PhMax.AutoSize = true;
             this.PhMax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PhMax.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.PhMax.Location = new System.Drawing.Point(235, 82);
+            this.PhMax.Location = new System.Drawing.Point(237, 82);
             this.PhMax.Name = "PhMax";
-            this.PhMax.Size = new System.Drawing.Size(110, 41);
+            this.PhMax.Size = new System.Drawing.Size(108, 39);
             this.PhMax.TabIndex = 17;
             this.PhMax.Text = "label17";
             // 
