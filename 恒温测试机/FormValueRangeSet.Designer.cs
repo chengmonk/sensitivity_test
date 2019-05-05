@@ -103,6 +103,8 @@
             this.PumpHotHighPressureSet = new System.Windows.Forms.NumericUpDown();
             this.PumpCoolLowPressureSet = new System.Windows.Forms.NumericUpDown();
             this.PumpCoolHighPressureSet = new System.Windows.Forms.NumericUpDown();
+            this.label23 = new System.Windows.Forms.Label();
+            this.pressureThreshold = new System.Windows.Forms.NumericUpDown();
             this.groupBox4.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ThMin)).BeginInit();
@@ -147,6 +149,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PumpHotHighPressureSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolLowPressureSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolHighPressureSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pressureThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox4
@@ -154,7 +157,7 @@
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox4.Controls.Add(this.tableLayoutPanel4);
             this.groupBox4.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox4.Location = new System.Drawing.Point(51, 73);
+            this.groupBox4.Location = new System.Drawing.Point(12, 31);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(430, 527);
             this.groupBox4.TabIndex = 9;
@@ -199,7 +202,7 @@
             this.tableLayoutPanel4.Controls.Add(this.MAX, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.MIN, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.QmMax, 1, 1);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 26);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 29);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 10;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
@@ -213,7 +216,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(427, 496);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(427, 493);
             this.tableLayoutPanel4.TabIndex = 11;
             // 
             // ThMin
@@ -634,7 +637,7 @@
             this.label2.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label2.Location = new System.Drawing.Point(3, 441);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(136, 55);
+            this.label2.Size = new System.Drawing.Size(136, 52);
             this.label2.TabIndex = 24;
             this.label2.Text = "热水温度(℃)：";
             // 
@@ -694,7 +697,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(58, 38);
+            this.label1.Location = new System.Drawing.Point(46, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(236, 17);
             this.label1.TabIndex = 11;
@@ -704,7 +707,7 @@
             // 
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 13F);
-            this.groupBox1.Location = new System.Drawing.Point(487, 73);
+            this.groupBox1.Location = new System.Drawing.Point(448, 31);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(661, 238);
             this.groupBox1.TabIndex = 12;
@@ -1035,9 +1038,9 @@
             // 
             this.groupBox2.Controls.Add(this.tableLayoutPanel2);
             this.groupBox2.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox2.Location = new System.Drawing.Point(487, 326);
+            this.groupBox2.Location = new System.Drawing.Point(12, 559);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(661, 160);
+            this.groupBox2.Size = new System.Drawing.Size(210, 138);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "测试时间设置(s)";
@@ -1045,67 +1048,71 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.125F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.875F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.t3Set, 1, 2);
             this.tableLayoutPanel2.Controls.Add(this.t2Set, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.t1Set, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label14, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label16, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.label18, 0, 2);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(52, 39);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(20, 29);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(549, 110);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(190, 94);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // t3Set
             // 
             this.t3Set.DecimalPlaces = 2;
+            this.t3Set.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.t3Set.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.t3Set.Location = new System.Drawing.Point(431, 75);
+            this.t3Set.Location = new System.Drawing.Point(98, 65);
             this.t3Set.Name = "t3Set";
-            this.t3Set.Size = new System.Drawing.Size(115, 30);
+            this.t3Set.Size = new System.Drawing.Size(89, 27);
             this.t3Set.TabIndex = 62;
             this.t3Set.ValueChanged += new System.EventHandler(this.T3Set_ValueChanged);
             // 
             // t2Set
             // 
             this.t2Set.DecimalPlaces = 2;
+            this.t2Set.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.t2Set.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.t2Set.Location = new System.Drawing.Point(431, 39);
+            this.t2Set.Location = new System.Drawing.Point(98, 34);
             this.t2Set.Name = "t2Set";
-            this.t2Set.Size = new System.Drawing.Size(115, 30);
+            this.t2Set.Size = new System.Drawing.Size(89, 27);
             this.t2Set.TabIndex = 61;
             this.t2Set.ValueChanged += new System.EventHandler(this.T2Set_ValueChanged);
             // 
             // t1Set
             // 
             this.t1Set.DecimalPlaces = 2;
+            this.t1Set.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.t1Set.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.t1Set.Location = new System.Drawing.Point(431, 3);
+            this.t1Set.Location = new System.Drawing.Point(98, 3);
             this.t1Set.Name = "t1Set";
-            this.t1Set.Size = new System.Drawing.Size(115, 30);
+            this.t1Set.Size = new System.Drawing.Size(89, 27);
             this.t1Set.TabIndex = 60;
             this.t1Set.ValueChanged += new System.EventHandler(this.T1Set_ValueChanged);
             // 
             // label14
             // 
+            this.label14.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.label14.Location = new System.Drawing.Point(3, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(70, 23);
@@ -1114,7 +1121,8 @@
             // 
             // label16
             // 
-            this.label16.Location = new System.Drawing.Point(3, 36);
+            this.label16.Font = new System.Drawing.Font("微软雅黑", 11F);
+            this.label16.Location = new System.Drawing.Point(3, 31);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(70, 23);
             this.label16.TabIndex = 1;
@@ -1122,7 +1130,8 @@
             // 
             // label18
             // 
-            this.label18.Location = new System.Drawing.Point(3, 72);
+            this.label18.Font = new System.Drawing.Font("微软雅黑", 11F);
+            this.label18.Location = new System.Drawing.Point(3, 62);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(70, 23);
             this.label18.TabIndex = 2;
@@ -1132,7 +1141,7 @@
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel3);
             this.groupBox3.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox3.Location = new System.Drawing.Point(487, 502);
+            this.groupBox3.Location = new System.Drawing.Point(448, 275);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(661, 226);
             this.groupBox3.TabIndex = 14;
@@ -1144,6 +1153,7 @@
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.Controls.Add(this.pressureThreshold, 1, 5);
             this.tableLayoutPanel3.Controls.Add(this.PumpCoolHighPressureSet, 1, 4);
             this.tableLayoutPanel3.Controls.Add(this.PumpCoolLowPressureSet, 1, 3);
             this.tableLayoutPanel3.Controls.Add(this.PumpHotHighPressureSet, 1, 2);
@@ -1154,15 +1164,17 @@
             this.tableLayoutPanel3.Controls.Add(this.label24, 0, 3);
             this.tableLayoutPanel3.Controls.Add(this.label27, 0, 4);
             this.tableLayoutPanel3.Controls.Add(this.BaseLinePressureSet, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label23, 0, 5);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(6, 26);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 5;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(636, 178);
+            this.tableLayoutPanel3.RowCount = 6;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(649, 200);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // label19
@@ -1177,7 +1189,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(3, 35);
+            this.label22.Location = new System.Drawing.Point(3, 33);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(175, 20);
             this.label22.TabIndex = 1;
@@ -1186,7 +1198,7 @@
             // l2
             // 
             this.l2.AutoSize = true;
-            this.l2.Location = new System.Drawing.Point(3, 70);
+            this.l2.Location = new System.Drawing.Point(3, 66);
             this.l2.Name = "l2";
             this.l2.Size = new System.Drawing.Size(175, 20);
             this.l2.TabIndex = 2;
@@ -1195,7 +1207,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(3, 105);
+            this.label24.Location = new System.Drawing.Point(3, 99);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(175, 20);
             this.label24.TabIndex = 3;
@@ -1204,7 +1216,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(3, 140);
+            this.label27.Location = new System.Drawing.Point(3, 132);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(175, 20);
             this.label27.TabIndex = 4;
@@ -1218,7 +1230,7 @@
             0,
             0,
             65536});
-            this.BaseLinePressureSet.Location = new System.Drawing.Point(480, 3);
+            this.BaseLinePressureSet.Location = new System.Drawing.Point(489, 3);
             this.BaseLinePressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1236,7 +1248,7 @@
             0,
             0,
             65536});
-            this.PumpHotLowPressureSet.Location = new System.Drawing.Point(480, 38);
+            this.PumpHotLowPressureSet.Location = new System.Drawing.Point(489, 36);
             this.PumpHotLowPressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1254,7 +1266,7 @@
             0,
             0,
             65536});
-            this.PumpHotHighPressureSet.Location = new System.Drawing.Point(480, 73);
+            this.PumpHotHighPressureSet.Location = new System.Drawing.Point(489, 69);
             this.PumpHotHighPressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1272,7 +1284,7 @@
             0,
             0,
             65536});
-            this.PumpCoolLowPressureSet.Location = new System.Drawing.Point(480, 108);
+            this.PumpCoolLowPressureSet.Location = new System.Drawing.Point(489, 102);
             this.PumpCoolLowPressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1290,7 +1302,7 @@
             0,
             0,
             65536});
-            this.PumpCoolHighPressureSet.Location = new System.Drawing.Point(480, 143);
+            this.PumpCoolHighPressureSet.Location = new System.Drawing.Point(489, 135);
             this.PumpCoolHighPressureSet.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1299,6 +1311,33 @@
             this.PumpCoolHighPressureSet.Name = "PumpCoolHighPressureSet";
             this.PumpCoolHighPressureSet.Size = new System.Drawing.Size(120, 27);
             this.PumpCoolHighPressureSet.TabIndex = 9;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(3, 165);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(103, 20);
+            this.label23.TabIndex = 10;
+            this.label23.Text = "判断压力阈值:";
+            // 
+            // pressureThreshold
+            // 
+            this.pressureThreshold.DecimalPlaces = 2;
+            this.pressureThreshold.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.pressureThreshold.Location = new System.Drawing.Point(489, 168);
+            this.pressureThreshold.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.pressureThreshold.Name = "pressureThreshold";
+            this.pressureThreshold.Size = new System.Drawing.Size(120, 27);
+            this.pressureThreshold.TabIndex = 11;
             // 
             // FormValueRangeSet
             // 
@@ -1360,6 +1399,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PumpHotHighPressureSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolLowPressureSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PumpCoolHighPressureSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pressureThreshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1442,5 +1482,7 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.NumericUpDown BaseLinePressureSet;
+        private System.Windows.Forms.NumericUpDown pressureThreshold;
+        private System.Windows.Forms.Label label23;
     }
 }

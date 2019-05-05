@@ -34,6 +34,7 @@ namespace 恒温测试机
             PumpCoolLowPressureSet.Value = Properties.Settings.Default.PumpCoolLow;
             PumpHotHighPressureSet.Value = Properties.Settings.Default.PumpHotHigh;
             PumpHotLowPressureSet.Value = Properties.Settings.Default.PumpHotLow;
+            pressureThreshold.Value = Properties.Settings.Default.pressureThreshold;
 
             t1Set.Value = Properties.Settings.Default.t1;
             t2Set.Value = Properties.Settings.Default.t2;

@@ -454,5 +454,17 @@ namespace 恒温测试机.Properties {
                 this["BaseLinePressureSet"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal pressureThreshold {
+            get {
+                return ((decimal)(this["pressureThreshold"]));
+            }
+            set {
+                this["pressureThreshold"] = value;
+            }
+        }
     }
 }
