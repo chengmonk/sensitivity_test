@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPressureTest));
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -108,6 +110,10 @@
             this.hslButton7 = new HslControls.HslButton();
             this.hslButton8 = new HslControls.HslButton();
             this.hslButton2 = new HslControls.HslButton();
+            this.instantDoCtrl1 = new Automation.BDaq.InstantDoCtrl(this.components);
+            this.instantDiCtrl1 = new Automation.BDaq.InstantDiCtrl(this.components);
+            this.instantAiCtrl1 = new Automation.BDaq.InstantAiCtrl(this.components);
+            this.m_instantAoCtrl = new Automation.BDaq.InstantAoCtrl(this.components);
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -946,7 +952,8 @@
             this.hslButton12.Name = "hslButton12";
             this.hslButton12.Size = new System.Drawing.Size(88, 44);
             this.hslButton12.TabIndex = 12;
-            this.hslButton12.Text = "hslButton12";
+            this.hslButton12.Text = "绘制曲线";
+            this.hslButton12.Click += new System.EventHandler(this.HslButton12_Click);
             // 
             // hslButton11
             // 
@@ -1050,6 +1057,22 @@
             this.hslButton2.TabIndex = 2;
             this.hslButton2.Text = "设置系统参数";
             this.hslButton2.Click += new System.EventHandler(this.HslButton2_Click);
+            // 
+            // instantDoCtrl1
+            // 
+            this.instantDoCtrl1._StateStream = ((Automation.BDaq.DeviceStateStreamer)(resources.GetObject("instantDoCtrl1._StateStream")));
+            // 
+            // instantDiCtrl1
+            // 
+            this.instantDiCtrl1._StateStream = ((Automation.BDaq.DeviceStateStreamer)(resources.GetObject("instantDiCtrl1._StateStream")));
+            // 
+            // instantAiCtrl1
+            // 
+            this.instantAiCtrl1._StateStream = ((Automation.BDaq.DeviceStateStreamer)(resources.GetObject("instantAiCtrl1._StateStream")));
+            // 
+            // m_instantAoCtrl
+            // 
+            this.m_instantAoCtrl._StateStream = ((Automation.BDaq.DeviceStateStreamer)(resources.GetObject("m_instantAoCtrl._StateStream")));
             // 
             // FormPressureTest
             // 
@@ -1168,5 +1191,9 @@
         private HslControls.HslButton hslButton7;
         private HslControls.HslButton hslButton8;
         private HslControls.HslButton hslButton2;
+        private Automation.BDaq.InstantDoCtrl instantDoCtrl1;
+        private Automation.BDaq.InstantDiCtrl instantDiCtrl1;
+        private Automation.BDaq.InstantAiCtrl instantAiCtrl1;
+        private Automation.BDaq.InstantAoCtrl m_instantAoCtrl;
     }
 }

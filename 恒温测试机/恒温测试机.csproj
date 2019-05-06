@@ -62,6 +62,12 @@
   <ItemGroup>
     <Compile Include="DAQ_profile.cs" />
     <Compile Include="DemoUtils.cs" />
+    <Compile Include="FormPressureCurve.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPressureCurve.Designer.cs">
+      <DependentUpon>FormPressureCurve.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormPressureTest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     <Compile Include="M_485Rtu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormPressureCurve.resx">
+      <DependentUpon>FormPressureCurve.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormPressureTest.resx">
       <DependentUpon>FormPressureTest.cs</DependentUpon>
     </EmbeddedResource>

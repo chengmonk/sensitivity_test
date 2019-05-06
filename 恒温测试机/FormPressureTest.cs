@@ -45,7 +45,7 @@ namespace 恒温测试机
         double Qh;
         double Qm5;
 
-        private DataTable dt;
+        public static  DataTable dt;
         private delegate void myDelegate();//声明委托  
         private delegate void safetyDelegate(string s);//声明委托  
         private delegate void alarmDelegate(byte[] data);//声明委托   
@@ -1100,6 +1100,20 @@ namespace 恒温测试机
         {
             systemInfo.Text = "";
             dt.Clear();
+        }
+
+        private void HslButton12_Click(object sender, EventArgs e)
+        {
+            Hide();
+            if (dt.Rows.Count > 1)
+            {
+                using (FormPressureCurve form = new FormPressureCurve())
+                {
+                    form.ShowDialog();
+                }
+                System.Threading.Thread.Sleep(10);
+                Show();
+            }
         }
     }
 }
