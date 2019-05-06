@@ -121,7 +121,8 @@ namespace 恒温测试机
                     //hslCurveHistory1.SetCurveVisible("步序", false);   // 步序不是曲线信息，不用显示出来
                     hslCurveHistory1.ValueMaxLeft = 10;
                     hslCurveHistory1.ValueMinLeft = 0;
-                    hslCurveHistory1.SetScaleByXAxis(7);
+                    
+                    hslCurveHistory1.SetScaleByXAxis(xAxis);
                     hslCurveHistory1.RenderCurveUI();
 
                 }
@@ -130,6 +131,31 @@ namespace 恒温测试机
 
             }
             ));
+        }
+
+        private void HslButton1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "图片|*.png";
+            fileDialog.InitialDirectory = Application.StartupPath;
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                hslCurveHistory1.SaveToBitmap().Save(fileDialog.FileName);
+                MessageBox.Show("保存成功!");
+            }
+            fileDialog.Dispose();
+        }
+        float xAxis = 7;
+        private void HslButton4_Click(object sender, EventArgs e)
+        {
+            hslCurveHistory1.SetScaleByXAxis(--xAxis > 0 ? xAxis : (xAxis = 1));
+            hslCurveHistory1.RenderCurveUI();
+        }
+
+        private void HslButton3_Click(object sender, EventArgs e)
+        {
+            hslCurveHistory1.SetScaleByXAxis(++xAxis > 0 ? xAxis : (xAxis = 1));
+            hslCurveHistory1.RenderCurveUI();
         }
     }
 }
