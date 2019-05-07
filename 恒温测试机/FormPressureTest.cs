@@ -860,8 +860,11 @@ namespace 恒温测试机
 
                 DateTime t = DateTime.Now;
                 //
-                //t = t.AddSeconds(-);
+                t = t.AddSeconds(-1.0);//采集到的是一秒钟之前的数据，因此需要对当前的时间减去1s
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
+                safetyDelegate mes = new safetyDelegate(systemInfoactive);
+                try { Invoke(mes, t.ToString("yyyy-MM-dd hh:mm:ss:fff")); }
+                catch { }
                 //Console.WriteLine("time:" + t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
                 for (int i = 0; i < m_dataScaled.Length; i += 15)
                 {
