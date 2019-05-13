@@ -1118,5 +1118,10 @@ namespace 恒温测试机
                 Show();
             }
         }
+
+        private void QmShow_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

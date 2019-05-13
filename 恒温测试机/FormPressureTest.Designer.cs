@@ -420,6 +420,7 @@
             this.QmShow.Size = new System.Drawing.Size(107, 38);
             this.QmShow.TabIndex = 11;
             this.QmShow.Text = "label31";
+            this.QmShow.Click += new System.EventHandler(this.QmShow_Click);
             // 
             // QmMax
             // 

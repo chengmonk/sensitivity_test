@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="instantAiCtrl1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>227, 33</value>
+    <value>580, 21</value>
   </metadata>
   <data name="instantAiCtrl1._StateStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
@@ -141,38 +141,8 @@
         AAkLAAAACQsAAAAJCwAAAAkLAAAACQsAAAAL
 </value>
   </data>
-  <metadata name="instantDiCtrl1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>398, 31</value>
-  </metadata>
-  <data name="instantDiCtrl1._StateStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFNBdXRvbWF0aW9uLkJEYXE0LCBWZXJzaW9uPTQuMC4wLjAsIEN1
-        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49NDYzZjU5MjhkNjAxODNhMAUBAAAAI0F1dG9tYXRp
-        b24uQkRhcS5EZXZpY2VTdGF0ZVN0cmVhbWVyCgAAAAxEZXZpY2VOdW1iZXILRGVzY3JpcHRpb24KRGV2
-        aWNlTW9kZQtNb2R1bGVJbmRleAlQcm9kdWN0SUQHcG9ydERpcg1kaUludmVyc2VQb3J0CHRyaWdFZGdl
-        B2ludEdhdGUFaW50RW4AAQAABAcHBwcHCAgIGUF1dG9tYXRpb24uQkRhcS5Qcm9kdWN0SWQCAAAAAgIC
-        AgECAAAAAQAAAAYDAAAADlBDSS0xNzU2LEJJRCMwAQAAAAAAAAAF/P///xlBdXRvbWF0aW9uLkJEYXEu
-        UHJvZHVjdElkAQAAAAd2YWx1ZV9fAAgCAAAAfQAAAAkFAAAACQYAAAAJBwAAAAkIAAAACQkAAAAPBQAA
-        AAQAAAACAAAAAA8GAAAABAAAAAIAAAAADwcAAAACAAAAAgEBDwgAAAACAAAAAgAADwkAAAACAAAAAQAA
-        Cw==
-</value>
-  </data>
-  <metadata name="instantDoCtrl1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>531, 31</value>
-  </metadata>
-  <data name="instantDoCtrl1._StateStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFNBdXRvbWF0aW9uLkJEYXE0LCBWZXJzaW9uPTQuMC4wLjAsIEN1
-        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49NDYzZjU5MjhkNjAxODNhMAUBAAAAI0F1dG9tYXRp
-        b24uQkRhcS5EZXZpY2VTdGF0ZVN0cmVhbWVyBwAAAAxEZXZpY2VOdW1iZXILRGVzY3JpcHRpb24KRGV2
-        aWNlTW9kZQtNb2R1bGVJbmRleAlQcm9kdWN0SUQHcG9ydERpcg1kaUludmVyc2VQb3J0AAEAAAQHBwgI
-        CBlBdXRvbWF0aW9uLkJEYXEuUHJvZHVjdElkAgAAAAICAgAAAAEAAAAGAwAAAA5QQ0ktMTc1NixCSUQj
-        MAEAAAAAAAAABfz///8ZQXV0b21hdGlvbi5CRGFxLlByb2R1Y3RJZAEAAAAHdmFsdWVfXwAIAgAAAH0A
-        AAAJBQAAAAkGAAAADwUAAAAEAAAAAv////8PBgAAAAQAAAACAAAAAAs=
-</value>
-  </data>
   <metadata name="m_instantAoCtrl.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>37, 25</value>
+    <value>712, 21</value>
   </metadata>
   <data name="m_instantAoCtrl._StateStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
@@ -184,6 +154,34 @@
         BgMAAAAQUENJLTE3MTBIRyxCSUQjMAEAAAAAAAAABfz///8ZQXV0b21hdGlvbi5CRGFxLlByb2R1Y3RJ
         ZAEAAAAHdmFsdWVfXwAIAgAAAGcAAAAJBQAAAAkGAAAACQcAAAAPBQAAAAIAAAAIBwAAAAcAAAAPBgAA
         AAIAAAAGAAAAAAAAAAAAAAAAAAAAAA8HAAAAAgAAAAYAAAAAAAAkQAAAAAAAACRACw==
+</value>
+  </data>
+  <metadata name="instantDiCtrl1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>858, 21</value>
+  </metadata>
+  <data name="instantDiCtrl1._StateStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNBdXRvbWF0aW9uLkJEYXE0LCBWZXJzaW9uPTQuMC4wLjAsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49NDYzZjU5MjhkNjAxODNhMAUBAAAAI0F1dG9tYXRp
+        b24uQkRhcS5EZXZpY2VTdGF0ZVN0cmVhbWVyBwAAAAxEZXZpY2VOdW1iZXILRGVzY3JpcHRpb24KRGV2
+        aWNlTW9kZQtNb2R1bGVJbmRleAlQcm9kdWN0SUQHcG9ydERpcg1kaUludmVyc2VQb3J0AAEAAAQHBwgI
+        CBlBdXRvbWF0aW9uLkJEYXEuUHJvZHVjdElkAgAAAAICAgAAAAEAAAAGAwAAAA5QQ0ktMTc1NixCSUQj
+        MAEAAAAAAAAABfz///8ZQXV0b21hdGlvbi5CRGFxLlByb2R1Y3RJZAEAAAAHdmFsdWVfXwAIAgAAAH0A
+        AAAJBQAAAAkGAAAADwUAAAAEAAAAAgAAAAAPBgAAAAQAAAACAAAAAAs=
+</value>
+  </data>
+  <metadata name="instantDoCtrl1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>991, 21</value>
+  </metadata>
+  <data name="instantDoCtrl1._StateStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNBdXRvbWF0aW9uLkJEYXE0LCBWZXJzaW9uPTQuMC4wLjAsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49NDYzZjU5MjhkNjAxODNhMAUBAAAAI0F1dG9tYXRp
+        b24uQkRhcS5EZXZpY2VTdGF0ZVN0cmVhbWVyBwAAAAxEZXZpY2VOdW1iZXILRGVzY3JpcHRpb24KRGV2
+        aWNlTW9kZQtNb2R1bGVJbmRleAlQcm9kdWN0SUQHcG9ydERpcg1kaUludmVyc2VQb3J0AAEAAAQHBwgI
+        CBlBdXRvbWF0aW9uLkJEYXEuUHJvZHVjdElkAgAAAAICAgAAAAEAAAAGAwAAAA5QQ0ktMTc1NixCSUQj
+        MAEAAAAAAAAABfz///8ZQXV0b21hdGlvbi5CRGFxLlByb2R1Y3RJZAEAAAAHdmFsdWVfXwAIAgAAAH0A
+        AAAJBQAAAAkGAAAADwUAAAAEAAAAAv////8PBgAAAAQAAAACAAAAAAs=
 </value>
   </data>
 </root>
