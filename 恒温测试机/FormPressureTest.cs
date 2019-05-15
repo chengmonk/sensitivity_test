@@ -685,8 +685,25 @@ namespace 恒温测试机
             reader.Close();
             return dt;
         }
+        M_485Rtu bpq_1;
+        M_485Rtu bpq_2;
+        M_485Rtu bpq_3;
+        M_485Rtu bpq_4;
+        COMconfig bpq_conf_1;
+        COMconfig bpq_conf_2;
+        COMconfig bpq_conf_3;
+        COMconfig bpq_conf_4;
+        M_485Rtu e_motor_1;
+        M_485Rtu e_motor_2;
+        M_485Rtu e_motor_3;
+        COMconfig em_conf_1;
+        COMconfig em_conf_2;
+        COMconfig em_conf_3;
         private void FormPressureTest_Load(object sender, EventArgs e)
         {
+            initialModbusConfig();
+            modbusConnect();
+            
             monitor = new System.Timers.Timer(50);
             monitor.Elapsed += new System.Timers.ElapsedEventHandler(monitorAction);//到达时间的时候执行事件； 
             monitor.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
@@ -746,6 +763,101 @@ namespace 恒温测试机
             waveformAiCtrl1_Start();//开始高速读取模拟量数据
 
             loadData();
+        }
+        void modbusConnect()
+        {
+            bpq_1 = new M_485Rtu(bpq_conf_1);
+            bpq_1.connect();
+
+            bpq_2 = new M_485Rtu(bpq_conf_2);
+            bpq_2.connect();
+
+            bpq_3 = new M_485Rtu(bpq_conf_3);
+            bpq_3.connect();
+
+            bpq_4 = new M_485Rtu(bpq_conf_4);
+            bpq_4.connect();
+
+            e_motor_1 = new M_485Rtu(em_conf_1);
+            e_motor_1.connect();
+
+            e_motor_2 = new M_485Rtu(em_conf_2);
+            e_motor_2.connect();
+
+            e_motor_3 = new M_485Rtu(em_conf_3);
+            e_motor_3.connect();
+        }
+        void initialModbusConfig()
+        {
+            bpq_conf_1.botelv = "38400";
+            bpq_conf_1.zhanhao = "1";//站号
+            bpq_conf_1.shujuwei = "8";
+            bpq_conf_1.tingzhiwei = "2";
+            bpq_conf_1.dataFromZero = true;
+            bpq_conf_1.stringReverse = false;
+            bpq_conf_1.COM_Name = "COM3";
+            bpq_conf_1.checkInfo = 2;
+            bpq_conf_1.dataFrame = 2;
+
+            bpq_conf_2.botelv = "38400";
+            bpq_conf_2.zhanhao = "1";//站号
+            bpq_conf_2.shujuwei = "8";
+            bpq_conf_2.tingzhiwei = "2";
+            bpq_conf_2.dataFromZero = true;
+            bpq_conf_2.stringReverse = false;
+            bpq_conf_2.COM_Name = "COM3";
+            bpq_conf_2.checkInfo = 2;
+            bpq_conf_2.dataFrame = 2;
+
+            bpq_conf_3.botelv = "38400";
+            bpq_conf_3.zhanhao = "1";//站号
+            bpq_conf_3.shujuwei = "8";
+            bpq_conf_3.tingzhiwei = "2";
+            bpq_conf_3.dataFromZero = true;
+            bpq_conf_3.stringReverse = false;
+            bpq_conf_3.COM_Name = "COM3";
+            bpq_conf_3.checkInfo = 2;
+            bpq_conf_3.dataFrame = 2;
+
+            bpq_conf_4.botelv = "38400";
+            bpq_conf_4.zhanhao = "1";//站号
+            bpq_conf_4.shujuwei = "8";
+            bpq_conf_4.tingzhiwei = "2";
+            bpq_conf_4.dataFromZero = true;
+            bpq_conf_4.stringReverse = false;
+            bpq_conf_4.COM_Name = "COM3";
+            bpq_conf_4.checkInfo = 2;
+            bpq_conf_4.dataFrame = 2;
+
+            em_conf_1.botelv = "38400";
+            em_conf_1.zhanhao = "1";//站号
+            em_conf_1.shujuwei = "8";
+            em_conf_1.tingzhiwei = "2";
+            em_conf_1.dataFromZero = true;
+            em_conf_1.stringReverse = false;
+            em_conf_1.COM_Name = "COM3";
+            em_conf_1.checkInfo = 2;
+            em_conf_1.dataFrame = 2;
+
+            em_conf_2.botelv = "38400";
+            em_conf_2.zhanhao = "1";//站号
+            em_conf_2.shujuwei = "8";
+            em_conf_2.tingzhiwei = "2";
+            em_conf_2.dataFromZero = true;
+            em_conf_2.stringReverse = false;
+            em_conf_2.COM_Name = "COM3";
+            em_conf_2.checkInfo = 2;
+            em_conf_2.dataFrame = 2;
+
+            em_conf_3.botelv = "38400";
+            em_conf_3.zhanhao = "1";//站号
+            em_conf_3.shujuwei = "8";
+            em_conf_3.tingzhiwei = "2";
+            em_conf_3.dataFromZero = true;
+            em_conf_3.stringReverse = false;
+            em_conf_3.COM_Name = "COM3";
+            em_conf_3.checkInfo = 2;
+            em_conf_3.dataFrame = 2;
         }
         void loadData()
         {
