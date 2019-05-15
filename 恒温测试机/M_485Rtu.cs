@@ -32,6 +32,12 @@ namespace 恒温测试机
         //奇偶校验: 0:无校验 1:奇校验 2:偶校验
         public int checkInfo;
         
+        //0:ABCD 
+        //1:BADC
+        //2:CDAB  这里的int类型用这个
+        //3:DCBA 
+        public int dataFrame;
+        
     }
     public struct readRtuDataCMD
     {
@@ -152,7 +158,14 @@ namespace 恒温测试机
             busRtuClient.AddressStartWithZero = config.dataFromZero;
 
             busRtuClient.IsStringReverse = config.stringReverse;
-
+            switch (config.dataFrame)
+            {
+                case 0: busRtuClient.DataFormat = HslCommunication.Core.DataFormat.ABCD; break;
+                case 1: busRtuClient.DataFormat = HslCommunication.Core.DataFormat.BADC; break;
+                case 2: busRtuClient.DataFormat = HslCommunication.Core.DataFormat.CDAB; break;
+                case 3: busRtuClient.DataFormat = HslCommunication.Core.DataFormat.DCBA; break;
+                default: busRtuClient.DataFormat = HslCommunication.Core.DataFormat.CDAB; break;//默认是CDAB 读取int
+            }
             try
             {
                 busRtuClient.SerialPortInni(sp =>
