@@ -106,6 +106,13 @@ namespace 恒温测试机
             OperateResult result= busRtuClient.Write(adreess,val);
             if (!result.IsSuccess) MessageBox.Show("short写入失败");
         }
+
+        public void write_int(string adreess, int val)
+        {
+            //int写入
+            OperateResult result = busRtuClient.Write(adreess, val);
+            if (!result.IsSuccess) MessageBox.Show("int写入失败");
+        }
         public void write_coil(string adreess,bool val)
         {   //写入线圈
             OperateResult result= busRtuClient.WriteCoil(adreess, val);
@@ -118,6 +125,14 @@ namespace 恒温测试机
             if (result.IsSuccess) return result.Content;
             else return (float)-999.0;
         }
+        //读取int类型变量
+        public int read_int(string adreess)
+        {
+            OperateResult<int> result = busRtuClient.ReadInt32(adreess);
+            if (result.IsSuccess) return result.Content;
+            else return (int)-999.0;
+        }
+
 
         public double read_double(string adress)
         {
