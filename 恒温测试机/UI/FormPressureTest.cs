@@ -701,15 +701,15 @@ namespace 恒温测试机
         COMconfig em_conf_3;
         private void FormPressureTest_Load(object sender, EventArgs e)
         {
-            initialModbusConfig();
-            modbusConnect();
+            //initialModbusConfig();
+            //modbusConnect();
             
             monitor = new System.Timers.Timer(50);
             monitor.Elapsed += new System.Timers.ElapsedEventHandler(monitorAction);//到达时间的时候执行事件； 
             monitor.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
             monitor.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
-            pressure = new System.Timers.Timer(2);
+            pressure = new System.Timers.Timer(2);//87/4
             pressure.Elapsed += new System.Timers.ElapsedEventHandler(PressureAction);//到达时间的时候执行事件； 
             pressure.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
             pressure.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；           
@@ -735,13 +735,13 @@ namespace 恒温测试机
             collectConfig = new config();
             collectConfig.channelCount = 15;
             collectConfig.convertClkRate = 100;
-            collectConfig.deviceDescription = "PCI-1710HG,BID#0";//选择设备以这个为准，不用考虑设备序号            
+            collectConfig.deviceDescription = "DemoDevice,BID#0";// "PCI-1710HG,BID#0";//选择设备以这个为准，不用考虑设备序号            
             collectConfig.sectionCount = 0;//The 0 means setting 'streaming' mode.
             collectConfig.sectionLength = 100;
             collectConfig.startChannel = 0;
 
             controlConfig = new config();
-            controlConfig.deviceDescription = "PCI-1756,BID#0";
+            controlConfig.deviceDescription = "DemoDevice,BID#0";//"PCI-1756,BID#0";
             controlConfig.sectionCount = 0;//The 0 means setting 'streaming' mode.
 
             collectData = new DAQ_profile(0, collectConfig);
@@ -1021,7 +1021,7 @@ namespace 恒温测试机
                     HandleError(err);
                     return;
                 }
-                // System.Diagnostics.Debug.WriteLine("读取数据长度"+args.Count.ToString());
+                 System.Diagnostics.Debug.WriteLine("读取数据长度"+args.Count.ToString());
 
             }
             catch (System.Exception) { HandleError(err); }

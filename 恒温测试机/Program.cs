@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using 恒温测试机.UI;
 
 namespace 恒温测试机
 {
@@ -16,7 +17,7 @@ namespace 恒温测试机
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormPressureTest());
+            Application.Run(new FormMain());
         }
     }
 }

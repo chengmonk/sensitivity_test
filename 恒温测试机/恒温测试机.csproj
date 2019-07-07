@@ -60,64 +60,82 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAQ_profile.cs" />
-    <Compile Include="DemoUtils.cs" />
-    <Compile Include="FormCoolingTest.cs">
+    <Compile Include="App\AnalyseData.cs" />
+    <Compile Include="App\DAQ_profile.cs" />
+    <Compile Include="App\DataReportApp.cs" />
+    <Compile Include="Model\Enum\LogicTypeEnum.cs" />
+    <Compile Include="Model\Enum\TestStandardEnum.cs" />
+    <Compile Include="UI\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCoolingTest.Designer.cs">
+    <Compile Include="UI\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\DataTableUtils.cs" />
+    <Compile Include="Utils\DemoUtils.cs" />
+    <Compile Include="UI\FormCoolingTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormCoolingTest.Designer.cs">
       <DependentUpon>FormCoolingTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormPressureCurve.cs">
+    <Compile Include="UI\FormPressureCurve.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormPressureCurve.Designer.cs">
+    <Compile Include="UI\FormPressureCurve.Designer.cs">
       <DependentUpon>FormPressureCurve.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormPressureTest.cs">
+    <Compile Include="UI\FormPressureTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormPressureTest.Designer.cs">
+    <Compile Include="UI\FormPressureTest.Designer.cs">
       <DependentUpon>FormPressureTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSafeTest.cs">
+    <Compile Include="UI\FormSafeTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSafeTest.Designer.cs">
+    <Compile Include="UI\FormSafeTest.Designer.cs">
       <DependentUpon>FormSafeTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSelectFunction.cs">
+    <Compile Include="UI\FormSelectFunction.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSelectFunction.Designer.cs">
+    <Compile Include="UI\FormSelectFunction.Designer.cs">
       <DependentUpon>FormSelectFunction.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormValueRangeSet.cs">
+    <Compile Include="UI\FormValueRangeSet.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormValueRangeSet.Designer.cs">
+    <Compile Include="UI\FormValueRangeSet.Designer.cs">
       <DependentUpon>FormValueRangeSet.cs</DependentUpon>
     </Compile>
-    <Compile Include="M_485Ascii.cs" />
-    <Compile Include="M_485Rtu.cs" />
+    <Compile Include="App\M_485Ascii.cs" />
+    <Compile Include="App\M_485Rtu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormCoolingTest.resx">
+    <Compile Include="Utils\EnumUtils.cs" />
+    <Compile Include="Utils\ExtendUtils.cs" />
+    <Compile Include="Utils\FormUtils.cs" />
+    <Compile Include="Utils\LogUtils.cs" />
+    <EmbeddedResource Include="UI\FormCoolingTest.resx">
       <DependentUpon>FormCoolingTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormPressureCurve.resx">
+    <EmbeddedResource Include="UI\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormPressureCurve.resx">
       <DependentUpon>FormPressureCurve.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormPressureTest.resx">
+    <EmbeddedResource Include="UI\FormPressureTest.resx">
       <DependentUpon>FormPressureTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSafeTest.resx">
+    <EmbeddedResource Include="UI\FormSafeTest.resx">
       <DependentUpon>FormSafeTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSelectFunction.resx">
+    <EmbeddedResource Include="UI\FormSelectFunction.resx">
       <DependentUpon>FormSelectFunction.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormValueRangeSet.resx">
+    <EmbeddedResource Include="UI\FormValueRangeSet.resx">
       <DependentUpon>FormValueRangeSet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -129,6 +147,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -149,6 +170,9 @@
     </PackageReference>
     <PackageReference Include="HslControls">
       <Version>2.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="log4net">
+      <Version>2.0.8</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>
