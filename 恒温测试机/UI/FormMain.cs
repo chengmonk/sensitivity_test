@@ -418,7 +418,7 @@ namespace 恒温测试机.UI
             dt.Columns.Add("出水重量Qm5", typeof(double));   //9
             dt.Columns.Add("索引", typeof(int));
             collectConfig = new config();
-            collectConfig.channelCount = 15;
+            collectConfig.channelCount = 16;
             collectConfig.convertClkRate = 100;
             collectConfig.deviceDescription = "DemoDevice,BID#0";//"PCI-1710HG,BID#0";//选择设备以这个为准，不用考虑设备序号            
             collectConfig.sectionCount = 0;//The 0 means setting 'streaming' mode.
@@ -1746,7 +1746,7 @@ namespace 恒温测试机.UI
                 t = t.AddSeconds(-1.0);//采集到的是一秒钟之前的数据，因此需要对当前的时间减去1s
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
                 //Log.Info(t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
-                for (int i = 0; i < m_dataScaled.Length; i += 15)
+                for (int i = 0; i < m_dataScaled.Length; i += 16)
                 {
                     Qc = Math.Round(m_dataScaled[i + 0], 2);
                     Qh = Math.Round(m_dataScaled[i + 1], 2);
