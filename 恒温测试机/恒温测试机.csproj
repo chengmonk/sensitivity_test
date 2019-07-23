@@ -63,8 +63,21 @@
     <Compile Include="App\AnalyseData.cs" />
     <Compile Include="App\DAQ_profile.cs" />
     <Compile Include="App\DataReportApp.cs" />
+    <Compile Include="Model\Enum\ElectricalMachineryType.cs" />
     <Compile Include="Model\Enum\LogicTypeEnum.cs" />
     <Compile Include="Model\Enum\TestStandardEnum.cs" />
+    <Compile Include="UI\FormConnectValueSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormConnectValueSetting.Designer.cs">
+      <DependentUpon>FormConnectValueSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormDOControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormDOControl.Designer.cs">
+      <DependentUpon>FormDOControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,8 +130,14 @@
     <Compile Include="Utils\ExtendUtils.cs" />
     <Compile Include="Utils\FormUtils.cs" />
     <Compile Include="Utils\LogUtils.cs" />
+    <EmbeddedResource Include="UI\FormConnectValueSetting.resx">
+      <DependentUpon>FormConnectValueSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FormCoolingTest.resx">
       <DependentUpon>FormCoolingTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormDOControl.resx">
+      <DependentUpon>FormDOControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

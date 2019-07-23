@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using 恒温测试机.Utils;
 
 namespace 恒温测试机
 {
@@ -18,6 +19,14 @@ namespace 恒温测试机
         {
             InitializeComponent();
         }
+
+        public FormPressureCurve(DataTable dt)
+        {
+            InitializeComponent();
+            this.graphDt = dt;
+        }
+
+        private DataTable graphDt;
 
         private void FormPressureCurve_Load(object sender, EventArgs e)
         {
@@ -32,42 +41,44 @@ namespace 恒温测试机
 
         private void ThreadReadExample1()
         {
-
-            DataTable dt = FormPressureTest.dt;
-            float[] Qc = new float[dt.Rows.Count];
-            float[] Qh = new float[dt.Rows.Count];
-            float[] Qm = new float[dt.Rows.Count];
-            float[] Tc = new float[dt.Rows.Count];
-            float[] Th = new float[dt.Rows.Count];
-            float[] Tm = new float[dt.Rows.Count];
-            float[] Pc = new float[dt.Rows.Count];
-            float[] Ph = new float[dt.Rows.Count];
-            float[] Pm = new float[dt.Rows.Count];
-            float[] Qm5 = new float[dt.Rows.Count];
-            DateTime[] dateTime = new DateTime[dt.Rows.Count];
+            float[] Qc = new float[graphDt.Rows.Count];
+            float[] Qh = new float[graphDt.Rows.Count];
+            float[] Qm = new float[graphDt.Rows.Count];
+            float[] Tc = new float[graphDt.Rows.Count];
+            float[] Th = new float[graphDt.Rows.Count];
+            float[] Tm = new float[graphDt.Rows.Count];
+            float[] Pc = new float[graphDt.Rows.Count];
+            float[] Ph = new float[graphDt.Rows.Count];
+            float[] Pm = new float[graphDt.Rows.Count];
+            float[] Qm5 = new float[graphDt.Rows.Count];
+            float[] Wh = new float[graphDt.Rows.Count];
+            DateTime[] dateTime = new DateTime[graphDt.Rows.Count];
             DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
             dtFormat.ShortDatePattern = "yyyy-MM-dd hh:mm:ss:fff";
             //加载流量数据
-            for (int i = 0; i < dt.Rows.Count; i++)
+            for (int i = 0; i < graphDt.Rows.Count; i++)
             {
                 try
                 {
-                    Qc[i] = (float)Convert.ToDouble(dt.Rows[i][1]);
-                    Qh[i] = (float)Convert.ToDouble(dt.Rows[i][2]);
-                    Qm[i] = (float)Convert.ToDouble(dt.Rows[i][3]);
-                    Tc[i] = (float)Convert.ToDouble(dt.Rows[i][4]);
-                    Th[i] = (float)Convert.ToDouble(dt.Rows[i][5]);
-                    Tm[i] = (float)Convert.ToDouble(dt.Rows[i][6]);
-                    Pc[i] = (float)Convert.ToDouble(dt.Rows[i][7]);
-                    Ph[i] = (float)Convert.ToDouble(dt.Rows[i][8]);
-                    Pm[i] = (float)Convert.ToDouble(dt.Rows[i][9]);
-                    Qm5[i] = (float)Convert.ToDouble(dt.Rows[i][10]);
+                    Qc[i] = (float)Convert.ToDouble(graphDt.Rows[i][1]);
+                    Qh[i] = (float)Convert.ToDouble(graphDt.Rows[i][2]);
+                    Qm[i] = (float)Convert.ToDouble(graphDt.Rows[i][3]);
+                    Tc[i] = (float)Convert.ToDouble(graphDt.Rows[i][4]);
+                    Th[i] = (float)Convert.ToDouble(graphDt.Rows[i][5]);
+                    Tm[i] = (float)Convert.ToDouble(graphDt.Rows[i][6]);
+                    Pc[i] = (float)Convert.ToDouble(graphDt.Rows[i][7]);
+                    Ph[i] = (float)Convert.ToDouble(graphDt.Rows[i][8]);
+                    Pm[i] = (float)Convert.ToDouble(graphDt.Rows[i][9]);
+                    Qm5[i] = (float)Convert.ToDouble(graphDt.Rows[i][10]);
+                    Wh[i] = (float)Convert.ToDouble(graphDt.Rows[i][11]);
                     // dateTime[i] = Convert.ToDateTime(dt.Rows[i][0],dtFormat);
 
-                    dateTime[i] = DateTime.ParseExact((string)dt.Rows[i][0], "yyyy-MM-dd hh:mm:ss:fff", dtFormat);
+                    dateTime[i] = DateTime.ParseExact((string)graphDt.Rows[i][0], "yyyy-MM-dd hh:mm:ss:fff", dtFormat);
                 }
-                catch { }
-                //Console.WriteLine((array[i, 0]));
+                catch(Exception ex){
+                    Log.Error(ex.ToString());
+                    return;
+                }
             }
 
 
@@ -100,6 +111,7 @@ namespace 恒温测试机
                     hslCurveHistory1.SetRightCurve("出水温度Tm", Tm, Color.Green, true, "{0:F2} ℃");
                     hslCurveHistory1.SetRightCurve("热水温度Th", Th, Color.Honeydew, true, "{0:F2} ℃");
                     hslCurveHistory1.SetRightCurve("冷水温度Tc", Tc, Color.Pink, true, "{0:F2} ℃");
+                    hslCurveHistory1.SetRightCurve("液面高度Wh", Tc, Color.Blue, true, "{0:F2} mm");
 
                     hslCurveHistory1.SetDateTimes(dateTime);
 

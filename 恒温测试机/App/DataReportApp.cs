@@ -16,7 +16,8 @@ namespace 恒温测试机.App
         private AnalyseData analyseData = new AnalyseData();
         private LogicTypeEnum logicType;
         private Dictionary<string, DataTable> analyseDataDic;
-        private double DefaultTemp;
+        private double DefaultTemp=(double)Properties.Settings.Default.TmDefault;     //默认的出水温度
+        private decimal t1 = Properties.Settings.Default.t1;
 
         public DataReportAnalyseApp(LogicTypeEnum logicType,Dictionary<string,DataTable> analyseDataDic)
         {
@@ -161,13 +162,23 @@ namespace 恒温测试机.App
         public string AnalyseSteadyTest()
         {
             var result = "温度稳定性测试报告：\n";
-            result += "";
+            
             return result;
         }
         public string AnalyseFlowTest()
         {
             var result = "流量减少测试报告：\n";
-            result += "";
+            result += "1、时间t1:" + t1 + "到电机转动，开始收集收据\n";
+            var isFlow = analyseData.QmBelowHalf(analyseDataDic["流量减少测试数据"]);
+            result += isFlow ? "5-6秒内降低50%流量：合格\n" : "5-6秒内降低50%流量：不合格\n";
+
+            result += "2、T30秒后温度稳定后，开始收集收据\n";
+            var isBetween = analyseData.TmDeviationIsBetweenFlagRegion(30, DefaultTemp, 2, analyseDataDic["温度稳定的测试数据"]);
+            result += isBetween ? "T30秒后温度稳定后与所设定的温度偏差≤2℃：合格\n" : "T5秒后出水温度与所设定的温度偏差≤2℃：不合格\n";
+
+            isBetween = analyseData.TmDeviationIsBetween(30, 1, analyseDataDic["温度稳定的测试数据"]);
+            result += isBetween ? "T30秒后温度稳定后的波动≤1℃：合格\n" : "T30秒后温度稳定后的波动≤1℃：不合格\n";
+
             return result;
         }
     }

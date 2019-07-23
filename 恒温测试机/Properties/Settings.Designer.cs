@@ -490,5 +490,41 @@ namespace 恒温测试机.Properties {
                 this["HotPump021"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal WhMax {
+            get {
+                return ((decimal)(this["WhMax"]));
+            }
+            set {
+                this["WhMax"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal WhMin {
+            get {
+                return ((decimal)(this["WhMin"]));
+            }
+            set {
+                this["WhMin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal TmDefault {
+            get {
+                return ((decimal)(this["TmDefault"]));
+            }
+            set {
+                this["TmDefault"] = value;
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace 恒温测试机
         public FormPressureTest()
         {
             InitializeComponent();
+            InitializeComponent();
         }
         System.Timers.Timer pressure;
         System.Timers.Timer t3Timer;
@@ -746,6 +747,7 @@ namespace 恒温测试机
 
             collectData = new DAQ_profile(0, collectConfig);
             collectData.InstantAo();
+            aoData[0] = 1.1;
             collectData.InstantAo_Write(aoData);//输出模拟量函数
 
             control = new DAQ_profile(0, controlConfig);

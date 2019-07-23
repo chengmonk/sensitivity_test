@@ -26,7 +26,8 @@ namespace 恒温测试机.App
             {
                 return false;
             }
-            var startTime = data.Rows[1]["时间"].AsDateTime();
+            data.Rows.RemoveAt(data.Rows.Count - 1);//移除末尾
+            var startTime = data.Rows[1]["分析时间"].AsDateTime();
             var isFirstRow = true;
             foreach(DataRow row in data.Rows)
             {
@@ -35,7 +36,7 @@ namespace 恒温测试机.App
                     isFirstRow = false;
                     continue;
                 }
-                var currentTime = row["时间"].AsDateTime();
+                var currentTime = row["分析时间"].AsDateTime();
                 var diffSeconds = (currentTime - startTime).TotalSeconds;
                 if (diffSeconds <= second) {
                     var tmVal = row["出水温度Tm"].AsDouble();
@@ -65,7 +66,9 @@ namespace 恒温测试机.App
             {
                 return 0;
             }
-            var startTime = data.Rows[1]["时间"].AsDateTime();
+            data.Rows.RemoveAt(data.Rows.Count-1);//移除末尾
+            //Log.Info("Test Log:"+data.Rows[1]["时间"].AsString());
+            var startTime = data.Rows[1]["分析时间"].AsDateTime();
             var isFirstRow = true;
             foreach (DataRow row in data.Rows)
             {
@@ -74,7 +77,7 @@ namespace 恒温测试机.App
                     isFirstRow = false;
                     continue;
                 }
-                var currentTime = row["时间"].AsDateTime();
+                var currentTime = row["分析时间"].AsDateTime();
                 var diffSeconds = (currentTime - startTime).TotalSeconds;
                 if (diffSeconds <= second)
                 {
@@ -106,6 +109,7 @@ namespace 恒温测试机.App
             {
                 return false;
             }
+            data.Rows.RemoveAt(data.Rows.Count - 1);//移除末尾
             var isFirstRow = true;
             foreach (DataRow row in data.Rows)
             {
@@ -136,9 +140,10 @@ namespace 恒温测试机.App
             {
                 return false;
             }
+            data.Rows.RemoveAt(data.Rows.Count - 1);//移除末尾
             var isFirstRow = true;
             var isAfterSecond = false;
-            var startTime = data.Rows[1]["时间"].AsDateTime();
+            var startTime = data.Rows[1]["分析时间"].AsDateTime();
             double maxTm = 0;
             double minTm = 0;
             foreach(DataRow row in data.Rows)
@@ -148,7 +153,7 @@ namespace 恒温测试机.App
                     isFirstRow = false;
                     continue;
                 }
-                var currentTime = row["时间"].AsDateTime();
+                var currentTime = row["分析时间"].AsDateTime();
                 var diffSeconds = (currentTime - startTime).TotalSeconds;
                 if (diffSeconds <= second)
                 {
@@ -187,8 +192,9 @@ namespace 恒温测试机.App
             {
                 return false;
             }
+            data.Rows.RemoveAt(data.Rows.Count - 1);//移除末尾
             var isFirstRow = true;
-            var startTime = data.Rows[1]["时间"].AsDateTime();
+            var startTime = data.Rows[1]["分析时间"].AsDateTime();
             foreach (DataRow row in data.Rows)
             {
                 if (isFirstRow)
@@ -196,7 +202,7 @@ namespace 恒温测试机.App
                     isFirstRow = false;
                     continue;
                 }
-                var currentTime = row["时间"].AsDateTime();
+                var currentTime = row["分析时间"].AsDateTime();
                 var diffSeconds = (currentTime - startTime).TotalSeconds;
                 if (diffSeconds <= second)
                 {
@@ -227,9 +233,10 @@ namespace 恒温测试机.App
             {
                 return false;
             }
+            data.Rows.RemoveAt(data.Rows.Count - 1);//移除末尾
             var isFirstRow = true;
             var isOverFlag = false;
-            var startTime = data.Rows[1]["时间"].AsDateTime();
+            var startTime = data.Rows[1]["分析时间"].AsDateTime();
             var lastOverTime = new DateTime();
             double overSec = 0;
             foreach (DataRow row in data.Rows)
@@ -239,7 +246,7 @@ namespace 恒温测试机.App
                     isFirstRow = false;
                     continue;
                 }
-                var currentTime = row["时间"].AsDateTime();
+                var currentTime = row["分析时间"].AsDateTime();
                 var diffSeconds = (currentTime - startTime).TotalSeconds;
                 if (diffSeconds <= second)
                 {
@@ -287,9 +294,10 @@ namespace 恒温测试机.App
             {
                 return false;
             }
+            data.Rows.RemoveAt(data.Rows.Count - 1);//移除末尾
             var isFirstRow = true;
             var isBelowFlag = false;
-            var startTime = data.Rows[1]["时间"].AsDateTime();
+            var startTime = data.Rows[1]["分析时间"].AsDateTime();
             var lastBelowTime = new DateTime();
             double belowSec = 0;
             foreach (DataRow row in data.Rows)
@@ -299,7 +307,7 @@ namespace 恒温测试机.App
                     isFirstRow = false;
                     continue;
                 }
-                var currentTime = row["时间"].AsDateTime();
+                var currentTime = row["分析时间"].AsDateTime();
                 var diffSeconds = (currentTime - startTime).TotalSeconds;
                 if (diffSeconds <= second)
                 {
@@ -332,6 +340,30 @@ namespace 恒温测试机.App
             }
 
             return belowSec <= regionSec ? true : false;
+        }
+
+        /// <summary>
+        /// 出水流量是否降低50%
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool QmBelowHalf(DataTable data)
+        {
+            if (data == null)
+            {
+                return false;
+            }
+            //data.Rows.RemoveAt(data.Rows.Count-1);//移除末尾
+            var startQm = data.Rows[1]["出水流量"].AsDouble();
+            var endQm = data.Rows[data.Rows.Count-2]["出水流量"].AsDouble();
+            if (endQm * 2 <= startQm)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

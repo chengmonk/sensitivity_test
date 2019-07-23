@@ -46,9 +46,8 @@
             this.hslCurveHistory1.Location = new System.Drawing.Point(21, 23);
             this.hslCurveHistory1.MarkTextColor = System.Drawing.Color.Yellow;
             this.hslCurveHistory1.Name = "hslCurveHistory1";
-            this.hslCurveHistory1.Size = new System.Drawing.Size(1536, 653);
+            this.hslCurveHistory1.Size = new System.Drawing.Size(995, 653);
             this.hslCurveHistory1.TabIndex = 3;
-            this.hslCurveHistory1.Text = "hslCurveHistory1";
             this.hslCurveHistory1.ValueMaxLeft = 10F;
             this.hslCurveHistory1.ValueMaxRight = 10F;
             this.hslCurveHistory1.ValueSegment = 20;
@@ -99,13 +98,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1569, 748);
+            this.ClientSize = new System.Drawing.Size(1028, 748);
             this.Controls.Add(this.hslButton3);
             this.Controls.Add(this.hslButton4);
             this.Controls.Add(this.hslButton1);
             this.Controls.Add(this.hslCurveHistory1);
             this.Name = "FormPressureCurve";
-            this.Text = "FormPressureCurve";
+            this.ShowIcon = false;
             this.Load += new System.EventHandler(this.FormPressureCurve_Load);
             this.ResumeLayout(false);
 

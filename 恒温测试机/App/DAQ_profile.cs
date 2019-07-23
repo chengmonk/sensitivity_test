@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Automation.BDaq;
 namespace 恒温测试机
 {
-    internal struct config
+    public struct config
     {
         public string deviceDescription;
         public string profilePath;
@@ -18,7 +18,7 @@ namespace 恒温测试机
         public int sectionCount;
         public double convertClkRate;
     }
-    internal class DAQ_profile
+    public class DAQ_profile
     {
         private Automation.BDaq.WaveformAiCtrl waveformAiCtrl1;
         private Automation.BDaq.InstantAiCtrl instantAiCtrl1;
@@ -28,7 +28,7 @@ namespace 恒温测试机
         private Automation.BDaq.InstantDoCtrl instantDoCtrl1;
         private System.ComponentModel.ComponentResourceManager resources;
         private int deviceNumber;
-        config conf;
+        public config conf;
         public const int CHANNEL_COUNT_MAX = 16;
         private double[] m_dataScaled = new double[CHANNEL_COUNT_MAX];
         private byte[] portData = new byte[10];
@@ -155,7 +155,7 @@ namespace 恒温测试机
         }
 
         public void InstantAo_Write(double[] dataAO)
-        {
+        {//pci1710 一共只有两个模拟量输出通道
             ErrorCode err = m_instantAoCtrl.Write(0, 1, dataAO);
             if (err != ErrorCode.Success)
             {

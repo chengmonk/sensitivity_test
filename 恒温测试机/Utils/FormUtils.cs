@@ -27,24 +27,25 @@ namespace 恒温测试机.Utils
             set { _Flag = value; }
         }
 
-        private Dictionary<string, controlRect> oldCtrl;
+        private Dictionary<int, controlRect> oldCtrl;
 
         public void Initialize(Form mForm)
         {
-            oldCtrl = new Dictionary<string, controlRect>();
+            oldCtrl = new Dictionary<int, controlRect>();
             controlRect cR;
 
             cR.Left = mForm.Left;
             cR.Top = mForm.Top;
             cR.Width = mForm.Width;
             cR.Height = mForm.Height;
-            oldCtrl.Add("mainForm", cR);
+            oldCtrl.Add(0, cR);
             AddControl(mForm);
             Flag = true;
         }
 
         private void AddControl(Control ctl)
         {
+
             foreach (Control c in ctl.Controls)
             {
                 controlRect objCtrl;
@@ -52,20 +53,21 @@ namespace 恒温测试机.Utils
                 objCtrl.Top = c.Top;
                 objCtrl.Width = c.Width;
                 objCtrl.Height = c.Height;
-                oldCtrl.Add(c.Name, objCtrl);
+                oldCtrl.Add(c.GetHashCode(), objCtrl);
                 if (c.Controls.Count > 0)
                 {
                     AddControl(c);
                 }
             }
+
         }
 
         public void ReSize(Form mForm)
         {
             if (!Flag) return;
 
-            float wScale = (float)mForm.Width / (float)oldCtrl["mainForm"].Width;
-            float hScale = (float)mForm.Height / (float)oldCtrl["mainForm"].Height;
+            float wScale = (float)mForm.Width / (float)oldCtrl[0].Width;
+            float hScale = (float)mForm.Height / (float)oldCtrl[0].Height;
 
             try
             {
@@ -83,10 +85,10 @@ namespace 恒温测试机.Utils
             int ctrLeft0, ctrTop0, ctrWidth0, ctrHeight0;
             foreach (Control c in ctl.Controls)
             {
-                ctrLeft0 = oldCtrl[c.Name].Left;
-                ctrTop0 = oldCtrl[c.Name].Top;
-                ctrWidth0 = oldCtrl[c.Name].Width;
-                ctrHeight0 = oldCtrl[c.Name].Height;
+                ctrLeft0 = oldCtrl[c.GetHashCode()].Left;
+                ctrTop0 = oldCtrl[c.GetHashCode()].Top;
+                ctrWidth0 = oldCtrl[c.GetHashCode()].Width;
+                ctrHeight0 = oldCtrl[c.GetHashCode()].Height;
 
                 c.Left = (int)(ctrLeft0 * wScale);
                 c.Top = (int)(ctrTop0 * hScale);

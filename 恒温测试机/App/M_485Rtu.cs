@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace 恒温测试机
-{   
-   /// <summary>
-   /// 用于初始化串口的各种参数
-   /// </summary>
-   /// 
-   public struct COMconfig
+{
+    /// <summary>
+    /// 用于初始化串口的各种参数
+    /// </summary>
+    /// 
+    public struct COMconfig
     {
         //波特率
         public string botelv;
@@ -22,7 +22,7 @@ namespace 恒温测试机
         //数据位个数
         public string shujuwei;
         //停止位个数 
-        public string tingzhiwei; 
+        public string tingzhiwei;
         //数据位从零开始读      
         public bool dataFromZero;
         //字符串反转
@@ -31,13 +31,14 @@ namespace 恒温测试机
         public string COM_Name;
         //奇偶校验: 0:无校验 1:奇校验 2:偶校验
         public int checkInfo;
-        
+
+
         //0:ABCD 
         //1:BADC
         //2:CDAB  这里的int类型用这个
         //3:DCBA 
         public int dataFrame;
-        
+
     }
     public struct readRtuDataCMD
     {
@@ -47,11 +48,11 @@ namespace 恒温测试机
         public string readNum;//读取数量 2B
         public string CRC;// 2B
     }
-   public class M_485Rtu
+    public class M_485Rtu
     {
-        private  ModbusRtu busRtuClient = null;
-        public  COMconfig config;
-       public M_485Rtu(COMconfig c)
+        private ModbusRtu busRtuClient = null;
+        public COMconfig config;
+        public M_485Rtu(COMconfig c)
         {
             config = c;
         }
@@ -65,7 +66,7 @@ namespace 恒温测试机
             }
             return ans;
         }
-        public short bytes2Dec(byte h,byte l)
+        public short bytes2Dec(byte h, byte l)
         {
             short s = 0;   //一个16位整形变量，初值为 0000 0000 0000 0000            
             s = (short)(s ^ h);  //将b1赋给s的低8位
@@ -76,7 +77,7 @@ namespace 恒温测试机
         //报文读取
         public string ReadFrame(string cmd)
         {
-            string info="";
+            string info = "";
             OperateResult<byte[]> read = busRtuClient.ReadBase(HslCommunication.Serial.SoftCRC16.CRC16(HslCommunication.BasicFramework.SoftBasic.HexStringToBytes(cmd)));
             if (read.IsSuccess)
             {
@@ -91,57 +92,89 @@ namespace 恒温测试机
         public void disConnect()
         {
             busRtuClient.Close();
-            MessageBox.Show("串口已关闭");
+
+            //MessageBox.Show("串口已关闭");
         }
-        public short read_short(string adreess)
+        public short read_short(string adreess, byte station)
         {
+            busRtuClient.Station = station;
             // short读取
             OperateResult<short> result = busRtuClient.ReadInt16(adreess);
             if (result.IsSuccess) return result.Content;
             else return (short)-999;
         }
-        public void write_short(string adreess, short val)
+        public void write_short(string adreess, short val, byte station)
         {
+            busRtuClient.Station = station;
             // short写入
-            OperateResult result= busRtuClient.Write(adreess,val);
+            OperateResult result = busRtuClient.Write(adreess, val);
             if (!result.IsSuccess) MessageBox.Show("short写入失败");
         }
-
-        public void write_int(string adreess, int val)
+        public bool read_coil(string address, byte station)
         {
-            //int写入
-            OperateResult result = busRtuClient.Write(adreess, val);
-            if (!result.IsSuccess) MessageBox.Show("int写入失败");
+            busRtuClient.Station = station;
+            //线圈读取
+            OperateResult<bool> result = busRtuClient.ReadCoil(address);
+            if (result.IsSuccess)
+                return result.Content;
+            else
+                return false;
         }
-        public void write_coil(string adreess,bool val)
-        {   //写入线圈
-            OperateResult result= busRtuClient.WriteCoil(adreess, val);
-             if (!result.IsSuccess) MessageBox.Show("线圈写入失败"); 
+        public void write_coil(string adreess, bool val, byte station)
+        {
+            busRtuClient.Station = station;
+            //写入线圈
+            OperateResult result = busRtuClient.WriteCoil(adreess, val);
+            if (!result.IsSuccess) MessageBox.Show("线圈写入失败");
         }
         // 读取float变量
-       public  float read_float(string adreess)
+        public float read_float(string adreess, byte station)
         {
+            busRtuClient.Station = station;
             OperateResult<float> result = busRtuClient.ReadFloat(adreess);
             if (result.IsSuccess) return result.Content;
             else return (float)-999.0;
         }
-        //读取int类型变量
-        public int read_int(string adreess)
+        public void write_int(string adreess, int val, byte station)
         {
+            //int写入
+            busRtuClient.Station = station;
+            OperateResult result = busRtuClient.Write(adreess, val);
+            if (!result.IsSuccess) MessageBox.Show("int写入失败");
+        }
+        //读取int类型变量
+        public int read_int(string adreess, byte station)
+        {
+            busRtuClient.Station = station;
             OperateResult<int> result = busRtuClient.ReadInt32(adreess);
             if (result.IsSuccess) return result.Content;
             else return (int)-999.0;
         }
 
-
-        public double read_double(string adress)
+        public void write_uint(string adreess, uint val, byte station)
         {
+            //uint写入
+            busRtuClient.Station = station;
+            OperateResult result = busRtuClient.Write(adreess, val);
+            if (!result.IsSuccess) MessageBox.Show("uint写入失败");
+        }
+        //读取uint类型变量
+        public uint read_uint(string adreess, byte station)
+        {
+            busRtuClient.Station = station;
+            OperateResult<uint> result = busRtuClient.ReadUInt32(adreess);
+            if (result.IsSuccess) return result.Content;
+            else return 0;
+        }
+        public double read_double(string adress, byte station)
+        {
+            busRtuClient.Station = station;
             // 读取double变量
-            OperateResult<double> result= busRtuClient.ReadDouble(adress);
+            OperateResult<double> result = busRtuClient.ReadDouble(adress);
             if (result.IsSuccess) return result.Content;
             else return -999.0;
         }
-        public  void connect()
+        public void connect()
         {
             if (!int.TryParse(config.botelv, out int baudRate))
             {
@@ -170,6 +203,7 @@ namespace 恒温测试机
 
             busRtuClient?.Close();
             busRtuClient = new ModbusRtu(station);
+
             busRtuClient.AddressStartWithZero = config.dataFromZero;
 
             busRtuClient.IsStringReverse = config.stringReverse;
@@ -192,7 +226,7 @@ namespace 恒温测试机
                     sp.Parity = config.checkInfo == 0 ? System.IO.Ports.Parity.None : (config.checkInfo == 1 ? System.IO.Ports.Parity.Odd : System.IO.Ports.Parity.Even);
                 });
                 busRtuClient.Open();
-                
+
                 // button2.Enabled = true;
                 // button1.Enabled = false;
                 //panel2.Enabled = true;

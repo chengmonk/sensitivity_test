@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using 恒温测试机.Utils;
 
 namespace 恒温测试机
 {
@@ -15,19 +16,13 @@ namespace 恒温测试机
         public FormValueRangeSet()
         {
             InitializeComponent();
-        }
-
-        private void Label1_Click(object sender, EventArgs e)
-        {
+            InitControl();
 
         }
 
-        private void HslButton1_Click(object sender, EventArgs e)
-        {
+        #region UI相关
 
-        }
-
-        private void Form2_Load(object sender, EventArgs e)
+        private void InitControl()
         {
             CoolPump.Value = Properties.Settings.Default.CoolPump011;
             HotPump.Value = Properties.Settings.Default.HotPump021;
@@ -78,7 +73,20 @@ namespace 恒温测试机
             Temp4Range.Value = Properties.Settings.Default.Temp4Range;
             Temp5Range.Value = Properties.Settings.Default.Temp5Range;
 
+            WhMax.Value = Properties.Settings.Default.WhMax;
+            WhMin.Value = Properties.Settings.Default.WhMin;
         }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void FormValueRangeSet_SizeChanged(object sender, EventArgs e)
+        {
+        }
+        #endregion
+
+
 
         private void QmMax_ValueChanged(object sender, EventArgs e)
         {
@@ -305,6 +313,18 @@ namespace 恒温测试机
         private void PressureThreshold_ValueChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.pressureThreshold = pressureThreshold.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void WhMax_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.WhMax = WhMax.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void WhMin_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.WhMin = WhMin.Value;
             Properties.Settings.Default.Save();
         }
     }

@@ -22,7 +22,7 @@ namespace 恒温测试机.Utils
         /// <param name="index">要设置的位， 值从低到高为 0-7</param>
         /// <param name="flag">要设置的值 true / false</param>
         /// <returns></returns>
-        public static void set_bit(this byte data, int index, bool flag)
+        public static void set_bit(ref this byte data, int index, bool flag)
         {
             index++;
             if (index > 8 || index < 1)
