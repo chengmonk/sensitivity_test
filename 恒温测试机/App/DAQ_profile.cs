@@ -65,20 +65,18 @@ namespace 恒温测试机
         }
         public byte InstantDi_Read()
         {
-            byte data = 0;
-            int m_startPort = 0;
-            ErrorCode err = ErrorCode.Success;
-            for (int i = 0; (i + m_startPort) < instantDiCtrl1.Features.PortCount; ++i)
+            int startPort = 0;
+            int portCount = 1;
+            byte[] data = new byte[4];
+            ErrorCode errorCode = ErrorCode.Success;
+            errorCode = instantDiCtrl1.Read(startPort, portCount, data);
+            if (errorCode == ErrorCode.Success)
+                return data[0];
+            else
             {
-                err = instantDiCtrl1.Read(i + m_startPort, out data);
-                if (err != ErrorCode.Success)
-                {
-
-                    HandleError(err);
-                    return 0;
-                }
+                Console.WriteLine("error");
+                return 0;
             }
-            return data;
         }
 
         public void InstantDi(System.ComponentModel.IContainer components)

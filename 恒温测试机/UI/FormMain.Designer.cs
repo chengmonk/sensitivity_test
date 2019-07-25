@@ -33,6 +33,13 @@
             this.leftPanel = new System.Windows.Forms.Panel();
             this.left3 = new System.Windows.Forms.Panel();
             this.waterBoxGbx = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.hslWaterBox5 = new HslControls.HslWaterBox();
             this.Temp5Status = new System.Windows.Forms.Label();
             this.Temp4Status = new System.Windows.Forms.Label();
@@ -72,10 +79,10 @@
             this.right4 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.hslButton3 = new HslControls.HslButton();
+            this.hslButton6 = new HslControls.HslButton();
+            this.hslButton5 = new HslControls.HslButton();
+            this.hslButton4 = new HslControls.HslButton();
             this.setParamBtn = new HslControls.HslButton();
-            this.hslButton12 = new HslControls.HslButton();
-            this.hslButton11 = new HslControls.HslButton();
             this.autoRunBtn = new HslControls.HslButton();
             this.stopBtn = new HslControls.HslButton();
             this.clearDataBtn = new HslControls.HslButton();
@@ -83,10 +90,10 @@
             this.hslButton8 = new HslControls.HslButton();
             this.saveDataBtn = new HslControls.HslButton();
             this.startBtn = new HslControls.HslButton();
-            this.hslButton10 = new HslControls.HslButton();
-            this.hslButton9 = new HslControls.HslButton();
-            this.hslButton2 = new HslControls.HslButton();
+            this.hslButton11 = new HslControls.HslButton();
+            this.hslButton3 = new HslControls.HslButton();
             this.hslButton1 = new HslControls.HslButton();
+            this.hslButton2 = new HslControls.HslButton();
             this.right1 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.FlowTestRbt = new System.Windows.Forms.RadioButton();
@@ -136,15 +143,22 @@
             // 
             this.left3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.left3.Controls.Add(this.waterBoxGbx);
-            this.left3.Location = new System.Drawing.Point(0, 353);
+            this.left3.Location = new System.Drawing.Point(0, 318);
             this.left3.Margin = new System.Windows.Forms.Padding(0);
             this.left3.Name = "left3";
-            this.left3.Size = new System.Drawing.Size(322, 196);
+            this.left3.Size = new System.Drawing.Size(322, 231);
             this.left3.TabIndex = 4;
             // 
             // waterBoxGbx
             // 
             this.waterBoxGbx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.waterBoxGbx.Controls.Add(this.label5);
+            this.waterBoxGbx.Controls.Add(this.label1);
+            this.waterBoxGbx.Controls.Add(this.button5);
+            this.waterBoxGbx.Controls.Add(this.button4);
+            this.waterBoxGbx.Controls.Add(this.button3);
+            this.waterBoxGbx.Controls.Add(this.button2);
+            this.waterBoxGbx.Controls.Add(this.button1);
             this.waterBoxGbx.Controls.Add(this.hslWaterBox5);
             this.waterBoxGbx.Controls.Add(this.Temp5Status);
             this.waterBoxGbx.Controls.Add(this.Temp4Status);
@@ -156,21 +170,101 @@
             this.waterBoxGbx.Controls.Add(this.hslWaterBox2);
             this.waterBoxGbx.Controls.Add(this.hslWaterBox1);
             this.waterBoxGbx.Font = new System.Drawing.Font("微软雅黑", 13F);
-            this.waterBoxGbx.Location = new System.Drawing.Point(3, -3);
+            this.waterBoxGbx.Location = new System.Drawing.Point(6, 3);
             this.waterBoxGbx.Name = "waterBoxGbx";
-            this.waterBoxGbx.Size = new System.Drawing.Size(310, 196);
+            this.waterBoxGbx.Size = new System.Drawing.Size(310, 224);
             this.waterBoxGbx.TabIndex = 7;
             this.waterBoxGbx.TabStop = false;
             this.waterBoxGbx.Text = "水箱状态";
+            // 
+            // label5
+            // 
+            this.label5.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.Location = new System.Drawing.Point(63, 141);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 18);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "0mm";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(2, 141);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(61, 18);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "0mm";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.Color.LightGray;
+            this.button5.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button5.Location = new System.Drawing.Point(248, 172);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(43, 47);
+            this.button5.TabIndex = 21;
+            this.button5.Text = "常温制冷";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.doData04_Click);
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.LightGray;
+            this.button4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button4.Location = new System.Drawing.Point(189, 172);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(43, 47);
+            this.button4.TabIndex = 20;
+            this.button4.Text = "中温加热";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.doData03_Click);
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.LightGray;
+            this.button3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button3.Location = new System.Drawing.Point(128, 172);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(43, 47);
+            this.button3.TabIndex = 19;
+            this.button3.Text = "高温加热";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.doData02_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.LightGray;
+            this.button2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button2.Location = new System.Drawing.Point(69, 172);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(43, 47);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "热水加热";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.doData01_Click);
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.LightGray;
+            this.button1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button1.Location = new System.Drawing.Point(9, 172);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(43, 47);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "冷水制冷";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.doData00_Click);
             // 
             // hslWaterBox5
             // 
             this.hslWaterBox5.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox5.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox5.Location = new System.Drawing.Point(243, 21);
+            this.hslWaterBox5.Location = new System.Drawing.Point(243, 52);
             this.hslWaterBox5.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox5.Name = "hslWaterBox5";
-            this.hslWaterBox5.Size = new System.Drawing.Size(60, 121);
+            this.hslWaterBox5.Size = new System.Drawing.Size(60, 87);
             this.hslWaterBox5.TabIndex = 10;
             this.hslWaterBox5.Text = "常温   水箱";
             this.hslWaterBox5.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(235)))), ((int)(((byte)(246)))));
@@ -178,56 +272,61 @@
             // Temp5Status
             // 
             this.Temp5Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp5Status.Location = new System.Drawing.Point(243, 143);
+            this.Temp5Status.Location = new System.Drawing.Point(245, 26);
             this.Temp5Status.Name = "Temp5Status";
-            this.Temp5Status.Size = new System.Drawing.Size(56, 42);
+            this.Temp5Status.Size = new System.Drawing.Size(56, 18);
             this.Temp5Status.TabIndex = 16;
             this.Temp5Status.Text = "10℃";
+            this.Temp5Status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Temp4Status
             // 
             this.Temp4Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp4Status.Location = new System.Drawing.Point(186, 143);
+            this.Temp4Status.Location = new System.Drawing.Point(188, 26);
             this.Temp4Status.Name = "Temp4Status";
-            this.Temp4Status.Size = new System.Drawing.Size(56, 42);
+            this.Temp4Status.Size = new System.Drawing.Size(56, 18);
             this.Temp4Status.TabIndex = 15;
             this.Temp4Status.Text = "10℃";
+            this.Temp4Status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Temp3Status
             // 
             this.Temp3Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp3Status.Location = new System.Drawing.Point(127, 143);
+            this.Temp3Status.Location = new System.Drawing.Point(129, 26);
             this.Temp3Status.Name = "Temp3Status";
-            this.Temp3Status.Size = new System.Drawing.Size(56, 42);
+            this.Temp3Status.Size = new System.Drawing.Size(56, 18);
             this.Temp3Status.TabIndex = 14;
             this.Temp3Status.Text = "10℃";
+            this.Temp3Status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Temp2Status
             // 
             this.Temp2Status.Font = new System.Drawing.Font("微软雅黑", 9F);
-            this.Temp2Status.Location = new System.Drawing.Point(66, 143);
+            this.Temp2Status.Location = new System.Drawing.Point(68, 26);
             this.Temp2Status.Name = "Temp2Status";
-            this.Temp2Status.Size = new System.Drawing.Size(61, 42);
+            this.Temp2Status.Size = new System.Drawing.Size(61, 18);
             this.Temp2Status.TabIndex = 13;
             this.Temp2Status.Text = "10℃";
+            this.Temp2Status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Temp1Status
             // 
             this.Temp1Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp1Status.Location = new System.Drawing.Point(6, 143);
+            this.Temp1Status.Location = new System.Drawing.Point(8, 26);
             this.Temp1Status.Name = "Temp1Status";
-            this.Temp1Status.Size = new System.Drawing.Size(61, 42);
+            this.Temp1Status.Size = new System.Drawing.Size(61, 18);
             this.Temp1Status.TabIndex = 11;
             this.Temp1Status.Text = "10℃";
+            this.Temp1Status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // hslWaterBox3
             // 
             this.hslWaterBox3.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox3.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox3.Location = new System.Drawing.Point(123, 21);
+            this.hslWaterBox3.Location = new System.Drawing.Point(123, 52);
             this.hslWaterBox3.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox3.Name = "hslWaterBox3";
-            this.hslWaterBox3.Size = new System.Drawing.Size(60, 121);
+            this.hslWaterBox3.Size = new System.Drawing.Size(60, 87);
             this.hslWaterBox3.TabIndex = 8;
             this.hslWaterBox3.Text = "高温    水箱";
             this.hslWaterBox3.WaterColor = System.Drawing.Color.Salmon;
@@ -236,10 +335,10 @@
             // 
             this.hslWaterBox4.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox4.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox4.Location = new System.Drawing.Point(183, 21);
+            this.hslWaterBox4.Location = new System.Drawing.Point(183, 52);
             this.hslWaterBox4.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox4.Name = "hslWaterBox4";
-            this.hslWaterBox4.Size = new System.Drawing.Size(60, 121);
+            this.hslWaterBox4.Size = new System.Drawing.Size(60, 87);
             this.hslWaterBox4.TabIndex = 9;
             this.hslWaterBox4.Text = "中温    水箱";
             this.hslWaterBox4.WaterColor = System.Drawing.Color.MistyRose;
@@ -248,24 +347,24 @@
             // 
             this.hslWaterBox2.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox2.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox2.Location = new System.Drawing.Point(63, 21);
+            this.hslWaterBox2.Location = new System.Drawing.Point(63, 52);
             this.hslWaterBox2.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox2.Name = "hslWaterBox2";
-            this.hslWaterBox2.Size = new System.Drawing.Size(60, 121);
+            this.hslWaterBox2.Size = new System.Drawing.Size(60, 87);
             this.hslWaterBox2.TabIndex = 5;
-            this.hslWaterBox2.Text = "热水箱";
+            this.hslWaterBox2.Text = "热     水箱";
             this.hslWaterBox2.WaterColor = System.Drawing.Color.Tomato;
             // 
             // hslWaterBox1
             // 
             this.hslWaterBox1.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox1.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox1.Location = new System.Drawing.Point(3, 21);
+            this.hslWaterBox1.Location = new System.Drawing.Point(3, 52);
             this.hslWaterBox1.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox1.Name = "hslWaterBox1";
-            this.hslWaterBox1.Size = new System.Drawing.Size(60, 121);
+            this.hslWaterBox1.Size = new System.Drawing.Size(60, 87);
             this.hslWaterBox1.TabIndex = 4;
-            this.hslWaterBox1.Text = "冷水箱";
+            this.hslWaterBox1.Text = "冷      水箱";
             this.hslWaterBox1.WaterColor = System.Drawing.Color.DeepSkyBlue;
             // 
             // left2
@@ -275,7 +374,7 @@
             this.left2.Location = new System.Drawing.Point(0, 117);
             this.left2.Margin = new System.Windows.Forms.Padding(0);
             this.left2.Name = "left2";
-            this.left2.Size = new System.Drawing.Size(322, 236);
+            this.left2.Size = new System.Drawing.Size(322, 201);
             this.left2.TabIndex = 3;
             // 
             // dataGbx
@@ -298,9 +397,9 @@
             this.dataGbx.Controls.Add(this.label3);
             this.dataGbx.Controls.Add(this.label2);
             this.dataGbx.Font = new System.Drawing.Font("微软雅黑", 13F);
-            this.dataGbx.Location = new System.Drawing.Point(9, 6);
+            this.dataGbx.Location = new System.Drawing.Point(6, 1);
             this.dataGbx.Name = "dataGbx";
-            this.dataGbx.Size = new System.Drawing.Size(304, 214);
+            this.dataGbx.Size = new System.Drawing.Size(304, 190);
             this.dataGbx.TabIndex = 13;
             this.dataGbx.TabStop = false;
             this.dataGbx.Text = "数据监控区";
@@ -309,10 +408,10 @@
             // 
             this.label14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label14.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label14.Location = new System.Drawing.Point(201, 36);
+            this.label14.Location = new System.Drawing.Point(215, 36);
             this.label14.Margin = new System.Windows.Forms.Padding(0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(70, 40);
+            this.label14.Size = new System.Drawing.Size(70, 26);
             this.label14.TabIndex = 15;
             this.label14.Text = "流量";
             // 
@@ -320,10 +419,10 @@
             // 
             this.label15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label15.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(131, 36);
+            this.label15.Location = new System.Drawing.Point(145, 36);
             this.label15.Margin = new System.Windows.Forms.Padding(0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(70, 40);
+            this.label15.Size = new System.Drawing.Size(70, 26);
             this.label15.TabIndex = 14;
             this.label15.Text = "压力";
             // 
@@ -331,10 +430,10 @@
             // 
             this.label16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label16.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label16.Location = new System.Drawing.Point(61, 36);
+            this.label16.Location = new System.Drawing.Point(75, 36);
             this.label16.Margin = new System.Windows.Forms.Padding(0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(70, 40);
+            this.label16.Size = new System.Drawing.Size(70, 26);
             this.label16.TabIndex = 13;
             this.label16.Text = "温度";
             // 
@@ -342,17 +441,17 @@
             // 
             this.label17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label17.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label17.Location = new System.Drawing.Point(1, 36);
+            this.label17.Location = new System.Drawing.Point(15, 36);
             this.label17.Margin = new System.Windows.Forms.Padding(0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(60, 40);
+            this.label17.Size = new System.Drawing.Size(60, 26);
             this.label17.TabIndex = 12;
             // 
             // QhShow
             // 
             this.QhShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.QhShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.QhShow.Location = new System.Drawing.Point(201, 156);
+            this.QhShow.Location = new System.Drawing.Point(215, 142);
             this.QhShow.Margin = new System.Windows.Forms.Padding(0);
             this.QhShow.Name = "QhShow";
             this.QhShow.Size = new System.Drawing.Size(70, 40);
@@ -363,7 +462,7 @@
             // 
             this.QcShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.QcShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.QcShow.Location = new System.Drawing.Point(201, 116);
+            this.QcShow.Location = new System.Drawing.Point(215, 102);
             this.QcShow.Margin = new System.Windows.Forms.Padding(0);
             this.QcShow.Name = "QcShow";
             this.QcShow.Size = new System.Drawing.Size(70, 40);
@@ -374,7 +473,7 @@
             // 
             this.QmShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.QmShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.QmShow.Location = new System.Drawing.Point(201, 76);
+            this.QmShow.Location = new System.Drawing.Point(215, 62);
             this.QmShow.Margin = new System.Windows.Forms.Padding(0);
             this.QmShow.Name = "QmShow";
             this.QmShow.Size = new System.Drawing.Size(70, 40);
@@ -385,7 +484,7 @@
             // 
             this.PhShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PhShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PhShow.Location = new System.Drawing.Point(131, 156);
+            this.PhShow.Location = new System.Drawing.Point(145, 142);
             this.PhShow.Margin = new System.Windows.Forms.Padding(0);
             this.PhShow.Name = "PhShow";
             this.PhShow.Size = new System.Drawing.Size(70, 40);
@@ -396,7 +495,7 @@
             // 
             this.PcShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PcShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PcShow.Location = new System.Drawing.Point(131, 116);
+            this.PcShow.Location = new System.Drawing.Point(145, 102);
             this.PcShow.Margin = new System.Windows.Forms.Padding(0);
             this.PcShow.Name = "PcShow";
             this.PcShow.Size = new System.Drawing.Size(70, 40);
@@ -407,7 +506,7 @@
             // 
             this.PmShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PmShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PmShow.Location = new System.Drawing.Point(131, 76);
+            this.PmShow.Location = new System.Drawing.Point(145, 62);
             this.PmShow.Margin = new System.Windows.Forms.Padding(0);
             this.PmShow.Name = "PmShow";
             this.PmShow.Size = new System.Drawing.Size(70, 40);
@@ -418,7 +517,7 @@
             // 
             this.ThShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ThShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ThShow.Location = new System.Drawing.Point(61, 156);
+            this.ThShow.Location = new System.Drawing.Point(75, 142);
             this.ThShow.Margin = new System.Windows.Forms.Padding(0);
             this.ThShow.Name = "ThShow";
             this.ThShow.Size = new System.Drawing.Size(70, 40);
@@ -429,7 +528,7 @@
             // 
             this.TcShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TcShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.TcShow.Location = new System.Drawing.Point(61, 116);
+            this.TcShow.Location = new System.Drawing.Point(75, 102);
             this.TcShow.Margin = new System.Windows.Forms.Padding(0);
             this.TcShow.Name = "TcShow";
             this.TcShow.Size = new System.Drawing.Size(70, 40);
@@ -440,7 +539,7 @@
             // 
             this.TmShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TmShow.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.TmShow.Location = new System.Drawing.Point(61, 76);
+            this.TmShow.Location = new System.Drawing.Point(75, 62);
             this.TmShow.Margin = new System.Windows.Forms.Padding(0);
             this.TmShow.Name = "TmShow";
             this.TmShow.Size = new System.Drawing.Size(70, 40);
@@ -451,7 +550,7 @@
             // 
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label4.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(1, 156);
+            this.label4.Location = new System.Drawing.Point(15, 142);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 40);
@@ -462,7 +561,7 @@
             // 
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label3.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(1, 116);
+            this.label3.Location = new System.Drawing.Point(15, 102);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 40);
@@ -473,7 +572,7 @@
             // 
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label2.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(1, 76);
+            this.label2.Location = new System.Drawing.Point(15, 62);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 40);
@@ -598,10 +697,10 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.hslButton3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.hslButton6, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.hslButton5, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.hslButton4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.setParamBtn, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.hslButton12, 3, 2);
-            this.tableLayoutPanel1.Controls.Add(this.hslButton11, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.autoRunBtn, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.stopBtn, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.clearDataBtn, 1, 1);
@@ -609,10 +708,10 @@
             this.tableLayoutPanel1.Controls.Add(this.hslButton8, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.saveDataBtn, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.startBtn, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.hslButton10, 4, 0);
-            this.tableLayoutPanel1.Controls.Add(this.hslButton9, 4, 1);
-            this.tableLayoutPanel1.Controls.Add(this.hslButton2, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.hslButton1, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.hslButton11, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.hslButton3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.hslButton1, 4, 1);
+            this.tableLayoutPanel1.Controls.Add(this.hslButton2, 1, 2);
             this.tableLayoutPanel1.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(9, 26);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -623,16 +722,32 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(291, 153);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // hslButton3
+            // hslButton6
             // 
-            this.hslButton3.CustomerInformation = null;
-            this.hslButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hslButton3.Location = new System.Drawing.Point(61, 105);
-            this.hslButton3.Name = "hslButton3";
-            this.hslButton3.Size = new System.Drawing.Size(52, 44);
-            this.hslButton3.TabIndex = 15;
-            this.hslButton3.Text = "紧急停止";
-            this.hslButton3.Click += new System.EventHandler(this.ShutDownBtn_Click);
+            this.hslButton6.CustomerInformation = null;
+            this.hslButton6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.hslButton6.Location = new System.Drawing.Point(177, 105);
+            this.hslButton6.Name = "hslButton6";
+            this.hslButton6.Size = new System.Drawing.Size(52, 44);
+            this.hslButton6.TabIndex = 18;
+            // 
+            // hslButton5
+            // 
+            this.hslButton5.CustomerInformation = null;
+            this.hslButton5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.hslButton5.Location = new System.Drawing.Point(61, 105);
+            this.hslButton5.Name = "hslButton5";
+            this.hslButton5.Size = new System.Drawing.Size(52, 44);
+            this.hslButton5.TabIndex = 17;
+            // 
+            // hslButton4
+            // 
+            this.hslButton4.CustomerInformation = null;
+            this.hslButton4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.hslButton4.Location = new System.Drawing.Point(119, 105);
+            this.hslButton4.Name = "hslButton4";
+            this.hslButton4.Size = new System.Drawing.Size(52, 44);
+            this.hslButton4.TabIndex = 16;
             // 
             // setParamBtn
             // 
@@ -644,26 +759,6 @@
             this.setParamBtn.TabIndex = 2;
             this.setParamBtn.Text = "设置参数";
             this.setParamBtn.Click += new System.EventHandler(this.SetParamBtn_Click);
-            // 
-            // hslButton12
-            // 
-            this.hslButton12.CustomerInformation = null;
-            this.hslButton12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hslButton12.Location = new System.Drawing.Point(235, 105);
-            this.hslButton12.Name = "hslButton12";
-            this.hslButton12.Size = new System.Drawing.Size(52, 44);
-            this.hslButton12.TabIndex = 12;
-            // 
-            // hslButton11
-            // 
-            this.hslButton11.CustomerInformation = null;
-            this.hslButton11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hslButton11.Location = new System.Drawing.Point(3, 105);
-            this.hslButton11.Name = "hslButton11";
-            this.hslButton11.Size = new System.Drawing.Size(52, 44);
-            this.hslButton11.TabIndex = 11;
-            this.hslButton11.Text = "通讯控制";
-            this.hslButton11.Click += new System.EventHandler(this.ElectControlBtn_Click);
             // 
             // autoRunBtn
             // 
@@ -741,47 +836,47 @@
             this.startBtn.Text = "开始";
             this.startBtn.Click += new System.EventHandler(this.StartBtn_Click);
             // 
-            // hslButton10
+            // hslButton11
             // 
-            this.hslButton10.CustomerInformation = null;
-            this.hslButton10.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hslButton10.Location = new System.Drawing.Point(235, 3);
-            this.hslButton10.Name = "hslButton10";
-            this.hslButton10.Size = new System.Drawing.Size(53, 44);
-            this.hslButton10.TabIndex = 10;
-            this.hslButton10.Text = "加热";
-            this.hslButton10.Click += new System.EventHandler(this.HeatingBtn_Click);
+            this.hslButton11.CustomerInformation = null;
+            this.hslButton11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.hslButton11.Location = new System.Drawing.Point(235, 3);
+            this.hslButton11.Name = "hslButton11";
+            this.hslButton11.Size = new System.Drawing.Size(52, 44);
+            this.hslButton11.TabIndex = 11;
+            this.hslButton11.Text = "通讯控制";
+            this.hslButton11.Click += new System.EventHandler(this.ElectControlBtn_Click);
             // 
-            // hslButton9
+            // hslButton3
             // 
-            this.hslButton9.CustomerInformation = null;
-            this.hslButton9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hslButton9.Location = new System.Drawing.Point(235, 54);
-            this.hslButton9.Name = "hslButton9";
-            this.hslButton9.Size = new System.Drawing.Size(53, 44);
-            this.hslButton9.TabIndex = 9;
-            this.hslButton9.Text = "制冷";
-            this.hslButton9.Click += new System.EventHandler(this.CoolingBtn_Click);
-            // 
-            // hslButton2
-            // 
-            this.hslButton2.CustomerInformation = null;
-            this.hslButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hslButton2.Location = new System.Drawing.Point(177, 105);
-            this.hslButton2.Name = "hslButton2";
-            this.hslButton2.Size = new System.Drawing.Size(52, 44);
-            this.hslButton2.TabIndex = 14;
+            this.hslButton3.CustomerInformation = null;
+            this.hslButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.hslButton3.Location = new System.Drawing.Point(3, 105);
+            this.hslButton3.Name = "hslButton3";
+            this.hslButton3.Size = new System.Drawing.Size(52, 44);
+            this.hslButton3.TabIndex = 15;
+            this.hslButton3.Text = "停止电机";
+            this.hslButton3.Click += new System.EventHandler(this.ShutDownBtn_Click);
             // 
             // hslButton1
             // 
             this.hslButton1.CustomerInformation = null;
             this.hslButton1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hslButton1.Location = new System.Drawing.Point(119, 105);
+            this.hslButton1.Location = new System.Drawing.Point(235, 54);
             this.hslButton1.Name = "hslButton1";
             this.hslButton1.Size = new System.Drawing.Size(52, 44);
             this.hslButton1.TabIndex = 13;
             this.hslButton1.Text = "输出控制";
             this.hslButton1.Click += new System.EventHandler(this.DOControlBtn_Click);
+            // 
+            // hslButton2
+            // 
+            this.hslButton2.CustomerInformation = null;
+            this.hslButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.hslButton2.Location = new System.Drawing.Point(235, 105);
+            this.hslButton2.Name = "hslButton2";
+            this.hslButton2.Size = new System.Drawing.Size(52, 44);
+            this.hslButton2.TabIndex = 14;
             // 
             // right1
             // 
@@ -996,10 +1091,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private HslControls.HslButton hslButton12;
         private HslControls.HslButton hslButton11;
-        private HslControls.HslButton hslButton10;
-        private HslControls.HslButton hslButton9;
         private HslControls.HslButton startBtn;
         private HslControls.HslButton saveDataBtn;
         private HslControls.HslButton autoRunBtn;
@@ -1039,5 +1131,15 @@
         private HslControls.HslButton hslButton1;
         private HslControls.HslButton hslButton2;
         private HslControls.HslButton hslButton3;
+        private HslControls.HslButton hslButton6;
+        private HslControls.HslButton hslButton5;
+        private HslControls.HslButton hslButton4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label1;
     }
 }

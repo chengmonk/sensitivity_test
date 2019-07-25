@@ -37,7 +37,7 @@ namespace 恒温测试机.UI
         System.Timers.Timer flowTimer;               //流量减少测试 定时器
 
         System.Timers.Timer monitorWhTimer;          //监控液面高度定时器
-        System.Timers.Timer monitorTimer;            //监控阀门定时器
+        //System.Timers.Timer monitorTimer;            //监控阀门定时器
         System.Timers.Timer monitorDiTimer;          //监控数字量定时器
         COMconfig bpq_conf;
         public  M_485Rtu bpq;
@@ -54,8 +54,7 @@ namespace 恒温测试机.UI
 
         bool collectDataFlag = false;
         bool runFlag = false;
-        bool heatFlag = false;
-        bool coolFlag = false;
+
         bool graphFlag = true;
         bool whFlag = true;// ture表示 当前为热水箱液面 flase表示 当前为冷水箱液面 
         bool autoRunFlag = false;
@@ -63,11 +62,11 @@ namespace 恒温测试机.UI
         public static DataTable dt;
         public static DataTable GraphDt;
         public static DataTable ElectDt;
-        double Temp1;
-        double Temp2;
-        double Temp3;
-        double Temp4;
-        double Temp5;
+        public double Temp1;
+        public double Temp2;
+        public double Temp3;
+        public double Temp4;
+        public double Temp5;
         double Pm;
         double Pc;
         double Ph;
@@ -151,17 +150,20 @@ namespace 恒温测试机.UI
                 {
                     //冷水箱进水阀 28 - 4
                     //热水箱进水阀 29 - 5
-                    if (Wh< (double)Properties.Settings.Default.WhMin)  //液面高度小于下限时，关闭加热功能，关闭对应泵
+                    if (Wh< (double)Properties.Settings.Default.WhMin)  //液面高度小于下限时，关闭加热、制冷功能，关闭对应泵
                     {
-                        set_bit(ref doData[0], 1, false);       //热水加热
-                        set_bit(ref doData[0], 2, false);       //高温加热
-                        set_bit(ref doData[0], 3, false);       //中温加热
-                        set_bit(ref doData[3], 1, false);       //热水泵
-                        set_bit(ref doData[2], 7, false);       //冷水泵
                         if (whFlag)
-                            set_bit(ref doData[3],5, true);
+                        {
+                            set_bit(ref doData[0], 1, false);       //热水加热
+                            set_bit(ref doData[3], 1, false);       //热水泵
+                            set_bit(ref doData[1], 3, false);       //热循环泵
+                        }
                         else
-                            set_bit(ref doData[3],4, true);
+                        {
+                            set_bit(ref doData[0], 0, false);       //冷水制冷
+                            set_bit(ref doData[2], 7, false);       //冷水泵
+                            set_bit(ref doData[1], 2, false);       //冷循环泵
+                        }
                     }
 
                     if (Wh > (double)Properties.Settings.Default.WhMax) //液面高度大于上限时，关闭加水
@@ -175,15 +177,14 @@ namespace 恒温测试机.UI
                     {
                         WhHeat = Wh;
                         set_bit(ref doData[3],3, false);//wh
-                        control.InstantDo_Write(doData);
                     }
                     else
                     {
                         WhCool = Wh;
                         set_bit(ref doData[3],3, true);//wh
-                        control.InstantDo_Write(doData);
                     }
                     whFlag = !whFlag;
+                    control.InstantDo_Write(doData);
                 }
             }
             catch (Exception ex)
@@ -193,7 +194,12 @@ namespace 恒温测试机.UI
             }
         }
 
-        private bool isAlarm = false;
+        public bool isAlarm011 = false;//冷水泵
+        public bool isAlarm012 = false;//冷水变压泵
+        public bool isAlarm021 = false;//热水泵
+        public bool isAlarm022 = false;//热水变压泵
+        public bool isAlarmA = false;//伺服电机A
+        //public bool isAlarmM = false;//伺服电机M
         private delegate void MonitorDiActiveDelegate();//数字量输入，进行对应行为逻辑
         private void MonitorDiActive()
         {
@@ -208,54 +214,92 @@ namespace 恒温测试机.UI
                 {
                     diData[0] = control.InstantDi_Read();//读取数字量函数
                     //监控数字量
-                    if ((diData[0].get_bit(3) == 0))
+                    if (diData[0].get_bit(3) == 0)
                     {
-                        Console.WriteLine("冷水泵报警");
                         set_bit(ref doData[2], 7, false);
                         control.InstantDo_Write(doData);
+                        isAlarm011 = true;
                     }
-                    if ((diData[0].get_bit(4) == 0))
+                    else
                     {
-                        Console.WriteLine("冷水变压泵报警");
-                        set_bit(ref doData[3], 0, false);
-                        control.InstantDo_Write(doData);
-                    }
-                    if ((diData[0].get_bit(5) == 0))
-                    {
-                        Console.WriteLine("热水泵报警");
-                        set_bit(ref doData[3], 1, false);
-                        control.InstantDo_Write(doData);
-                    }
-                    if ((diData[0].get_bit(6) == 0))
-                    {
-                        Console.WriteLine("热水变压泵报警");
-                        set_bit(ref doData[3], 2, false);
-                        control.InstantDo_Write(doData);
+                        isAlarm011 = false;
                     }
 
+                    if ((diData[0].get_bit(4) == 0))
+                    {
+                        set_bit(ref doData[3], 0, false);
+                        control.InstantDo_Write(doData);
+                        isAlarm012 = true;
+                    }
+                    else
+                    {
+                        isAlarm012 = false;
+                    }
+
+                    if ((diData[0].get_bit(5) == 0))
+                    {
+                        set_bit(ref doData[3], 1, false);
+                        control.InstantDo_Write(doData);
+                        isAlarm021 = true;
+                    }
+                    else
+                    {
+                        isAlarm021 = false;
+                    }
+
+                    if ((diData[0].get_bit(6) == 0))
+                    {
+                        set_bit(ref doData[3], 2, false);
+                        control.InstantDo_Write(doData);
+                        isAlarm022 = true;
+                    }
+                    else
+                    {
+                        isAlarm022 = false;
+                    }
                     if ((diData[0].get_bit(0) == 0))
                     {
-                        Console.WriteLine("伺服电机A报警");
-                        bpq.write_coil("2048", true, 5);
-                        bpq.write_coil("2049", true, 5);
-                        bpq.write_coil("2050", true, 5);
-                        bpq.write_coil("2051", true, 5);
-                        bpq.write_coil("2052", true, 5);
+                        bpq.write_coil("2048", false, 5);
+                        bpq.write_coil("2049", false, 5);
+                        bpq.write_coil("2050", false, 5);
+                        bpq.write_coil("2051", false, 5);
+                        bpq.write_coil("2052", false, 5);
+                        isAlarmA = true;
                     }
-                    if ((diData[0].get_bit(1) == 0))
+                    else
                     {
-                        Console.WriteLine("伺服电机L报警");
-                        bpq.write_coil("2058", true, 5);
-                        bpq.write_coil("2059", true, 5);
-                        bpq.write_coil("2060", true, 5);
-                        bpq.write_coil("2061", true, 5);
-                        bpq.write_coil("2062", true, 5);
+                        isAlarmA = false;
                     }
+                    //if ((diData[0].get_bit(1) == 0))
+                    //{
+                    //    bpq.write_coil("2058", false, 5);
+                    //    bpq.write_coil("2059", false, 5);
+                    //    bpq.write_coil("2060", false, 5);
+                    //    bpq.write_coil("2061", false, 5);
+                    //    bpq.write_coil("2062", false, 5);
+                    //    isAlarmM = true;
+                    //}
+                    //else
+                    //{
+                    //    isAlarmM = false;
+                    //}
                     //if ((diData[0].get_bit(2) == 0))
                     //{
                     //    Console.WriteLine("伺服电机M报警");
 
                     //}
+                    if (isAlarm011)
+                        Console.WriteLine("冷水泵报警");
+                    if (isAlarm012)
+                        Console.WriteLine("冷水变压泵报警");
+                    if (isAlarm021)
+                        Console.WriteLine("热水泵报警");
+                    if (isAlarm022)
+                        Console.WriteLine("热水变压泵报警");
+                    if (isAlarmA)
+                        Console.WriteLine("伺服电机A报警");
+                    //if (isAlarmM)
+                    //    Console.WriteLine("伺服电机L报警");
                 }
             }
             catch (Exception ex)
@@ -354,134 +398,172 @@ namespace 恒温测试机.UI
         public bool IsOpenDC = false;
         private void DataReadyToControlTemp()
         {
-            if (!IsOpenDC)
+            //if (!IsOpenDC)
+            //{
+            if (doData[0].get_bit(0) == 0)//制冷控温
             {
-                if (doData[0].get_bit(0) == 0)//制冷控温
-                {
-                    if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set + Properties.Settings.Default.Temp1Range))
-                        Temp1Status.Text = WhCool+"mm\n"+Temp1 + "℃\n" + "保持温度";
-                    else
-                    {
-                        Temp1Status.Text = WhCool + "mm\n" + Temp1 + "℃\n" + "制冷中";
-                        set_bit(ref doData[0], 0, true);
-                    }
-                }
-                else
-                {
-                    if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
-                    {
-                        Temp1Status.Text = WhCool + "mm\n" + Temp1 + "℃\n" + "保持温度";
-                        set_bit(ref doData[0], 0, false);
-                    }
-                    else
-                    {
-                        Temp1Status.Text = WhCool + "mm\n" + Temp1 + "℃\n" + "制冷中";
-                    }
-                }
-
-                if (doData[0].get_bit(1) == 0)//制热控温
-                {
-                    if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set - Properties.Settings.Default.Temp2Range))
-                        Temp2Status.Text = WhHeat + "mm\n" + Temp2 + "℃\n" + "保持温度";
-                    else
-                    {
-                        Temp2Status.Text = WhHeat + "mm\n" + Temp2 + "℃\n" + "加热中";
-                        set_bit(ref doData[0], 1, true);
-                    }
-                }
-                else
-                {
-                    if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
-                    {
-                        Temp2Status.Text = WhHeat + "mm\n" + Temp2 + "℃\n" + "保持温度";
-                        set_bit(ref doData[0], 1, false);
-                    }
-                    else
-                    {
-                        Temp2Status.Text = WhHeat + "mm\n" + Temp2 + "℃\n" + "加热中";
-                    }
-                }
-
-                if (doData[0].get_bit(2) == 0)//制热控温
-                {
-                    if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set - Properties.Settings.Default.Temp3Range))
-                        Temp3Status.Text = Temp3 + "℃\n" + "保持温度";
-                    else
-                    {
-                        Temp3Status.Text = Temp3 + "℃\n" + "加热中";
-                        set_bit(ref doData[0], 2, true);
-                    }
-                }
-                else
-                {
-                    if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
-                    {
-                        Temp3Status.Text = Temp3 + "℃\n" + "保持温度";
-                        set_bit(ref doData[0], 2, false);
-                    }
-                    else
-                    {
-                        Temp3Status.Text = Temp3 + "℃\n" + "加热中";
-                    }
-                }
-
-                if (doData[0].get_bit(3) == 0)//制热控温
-                {
-                    if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set - Properties.Settings.Default.Temp4Range))
-                        Temp4Status.Text = Temp4 + "℃\n" + "保持温度";
-                    else
-                    {
-                        Temp4Status.Text = Temp4 + "℃\n" + "加热中";
-                        set_bit(ref doData[0], 3, true);
-                    }
-                }
-                else
-                {
-                    if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
-                    {
-                        Temp4Status.Text = Temp4 + "℃\n" + "保持温度";
-                        set_bit(ref doData[0], 3, false);
-                    }
-                    else
-                    {
-                        Temp4Status.Text = Temp4 + "℃\n" + "加热中";
-                    }
-                }
-
-                if (doData[0].get_bit(4) == 0)//制冷控温
-                {
-                    if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set + Properties.Settings.Default.Temp5Range))
-                        Temp5Status.Text = Temp5 + "℃\n" + "保持温度";
-                    else
-                    {
-                        Temp5Status.Text = Temp5 + "℃\n" + "制冷中";
-                        set_bit(ref doData[0], 4, true);
-                    }
-                }
-                else
-                {
-                    if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
-                    {
-                        Temp5Status.Text = Temp5 + "℃\n" + "保持温度";
-                        set_bit(ref doData[0], 4, false);
-                    }
-                    else
-                    {
-                        Temp5Status.Text = Temp5 + "℃\n" + "制冷中";
-                    }
-                }
-                control.InstantDo_Write(doData);
+                button1.BackColor = Color.LightGray;
+                //if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set + Properties.Settings.Default.Temp1Range))
+                //    Temp1Status.Text = Temp1 + "℃\n"+ WhCool + "mm\n" + "保持温度";
+                //else
+                //{
+                //    if (WhCool > (double)(Properties.Settings.Default.WhMin))
+                //    {
+                //        Temp1Status.Text = Temp1 + "℃\n"+WhCool + "mm\n" + "制冷中";
+                //        set_bit(ref doData[0], 0, true);
+                //        set_bit(ref doData[1], 2, true);    //冷循环泵
+                //    }
+                //}
             }
             else
             {
-                Temp1Status.Text = WhCool + "mm\n" + Temp1 + "℃\n";
-                Temp2Status.Text = WhHeat + "mm\n" + Temp2 + "℃\n";
-                Temp3Status.Text = Temp3 + "℃\n";
-                Temp4Status.Text = Temp4 + "℃\n";
-                Temp5Status.Text = Temp5 + "℃\n";
+                if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
+                {
+                    button1.BackColor = Color.LightGray;
+                    //Temp1Status.Text = Temp1 + "℃\n" + WhCool + "mm\n";// + "保持温度";
+                    set_bit(ref doData[0], 0, false);
+                    set_bit(ref doData[1], 2, false);    //冷循环泵
+                }
+                else
+                {
+                    button1.BackColor = Color.Green;
+                    //Temp1Status.Text =  Temp1 + "℃\n"+ WhCool + "mm\n" + "制冷中";
+                }
+            }
+            
+            if (doData[0].get_bit(1) == 0)//制热控温
+            {
+                button2.BackColor = Color.LightGray;
+                //if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set - Properties.Settings.Default.Temp2Range))
+                //    Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "保持温度";
+                //else
+                //{
+                //    //加热需热水箱液面高度>下限，同时开启循环泵
+                //    if (WhHeat > (double)(Properties.Settings.Default.WhMin))
+                //    {
+                //        Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "加热中";
+                //        set_bit(ref doData[0], 1, true);
+                //        set_bit(ref doData[1], 3, true);    //热循环泵
+                //    }
+                //}
+            }
+            else
+            {
+                if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
+                {
+                    button2.BackColor = Color.LightGray;
+                    //Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "保持温度";
+                    set_bit(ref doData[0], 1, false);
+                    set_bit(ref doData[1], 3, false);    //热循环泵
+                }
+                else
+                {
+                    button2.BackColor = Color.Green;
+                    //Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "加热中";
+                }
+            }
+            
+            if (doData[0].get_bit(2) == 0)//制热控温
+            {
+                button3.BackColor = Color.LightGray;
+                //if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set - Properties.Settings.Default.Temp3Range))
+                //    Temp3Status.Text = Temp3 + "℃\n" + "保持温度";
+                //else
+                //{
+                //    Temp3Status.Text = Temp3 + "℃\n" + "加热中";
+                //    set_bit(ref doData[0], 2, true);
+                //    set_bit(ref doData[1], 4, true);    //高循环泵
+                //}
+            }
+            else
+            {
+                if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
+                {
+                    button3.BackColor = Color.LightGray;
+                    //Temp3Status.Text = Temp3 + "℃\n" + "保持温度";
+                    set_bit(ref doData[0], 2, false);
+                    set_bit(ref doData[1], 4, false);    //高循环泵
+                }
+                else
+                {
+                    button3.BackColor = Color.Green;
+                    //Temp3Status.Text = Temp3 + "℃\n" + "加热中";
+                }
             }
 
-            
+            if (doData[0].get_bit(3) == 0)//制热控温
+            {
+                button4.BackColor = Color.LightGray;
+                //if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set - Properties.Settings.Default.Temp4Range))
+                //    Temp4Status.Text = Temp4 + "℃\n" + "保持温度";
+                //else
+                //{
+                //    Temp4Status.Text = Temp4 + "℃\n" + "加热中";
+                //    set_bit(ref doData[0], 3, true);
+                //    set_bit(ref doData[1], 5, true);    //中循环泵
+                //}
+            }
+            else
+            {
+                if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
+                {
+                    button4.BackColor = Color.LightGray;
+                    //Temp4Status.Text = Temp4 + "℃\n" + "保持温度";
+                    set_bit(ref doData[0], 3, false);
+                    set_bit(ref doData[1], 5, false);    //中循环泵
+                }
+                else
+                {
+                    button4.BackColor = Color.Green;
+                    //Temp4Status.Text = Temp4 + "℃\n" + "加热中";
+                }
+            }
+
+            if (doData[0].get_bit(4) == 0)//制冷控温
+            {
+                button5.BackColor = Color.LightGray;
+                //if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set + Properties.Settings.Default.Temp5Range))
+                //    Temp5Status.Text = Temp5 + "℃\n" + "保持温度";
+                //else
+                //{
+                //    Temp5Status.Text = Temp5 + "℃\n" + "制冷中";
+                //    set_bit(ref doData[0], 4, true);
+                //    set_bit(ref doData[1], 6, true);    //常循环泵
+                //}
+            }
+            else
+            {
+                if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
+                {
+                    button5.BackColor = Color.LightGray;
+                    //Temp5Status.Text = Temp5 + "℃\n" + "保持温度";
+                    set_bit(ref doData[0], 4, false);
+                    set_bit(ref doData[1], 6, false);    //常循环泵
+                }
+                else
+                {
+                    button5.BackColor = Color.Green;
+                    //Temp5Status.Text = Temp5 + "℃\n" + "制冷中";
+                }
+            }
+            control.InstantDo_Write(doData);
+            //}
+            //else
+            //{
+            //    Temp1Status.Text =  Temp1 + "℃\n"+ WhCool + "mm\n";
+            //    Temp2Status.Text =  Temp2 + "℃\n"+ WhHeat + "mm\n";
+            //    Temp3Status.Text = Temp3 + "℃\n";
+            //    Temp4Status.Text = Temp4 + "℃\n";
+            //    Temp5Status.Text = Temp5 + "℃\n";
+            //}
+            Temp1Status.Text = Temp1 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
+            label1.Text = WhCool + "mm";
+            Temp2Status.Text = Temp2 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
+            label2.Text = WhHeat + "mm";
+            Temp3Status.Text = Temp3 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
+            Temp4Status.Text = Temp4 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
+            Temp5Status.Text = Temp5 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
+
         }
 
         private delegate void DataGraphDelegate();//实时曲线委托
@@ -651,6 +733,11 @@ namespace 恒温测试机.UI
             control.InstantDo_Write(doData);//输出数字量函数
             control.InstantDi();
             diData[0] = control.InstantDi_Read();//读取数字量函数
+            Console.WriteLine("D0" + diData[0].get_bit(0));
+            Console.WriteLine("D3" + diData[0].get_bit(3));
+            Console.WriteLine("D4" + diData[0].get_bit(4));
+            Console.WriteLine("D5" + diData[0].get_bit(5));
+            Console.WriteLine("D6" + diData[0].get_bit(6));
             //Log.Info("diData:" + diData[0]);
             WaveformAi();//
             WaveformAiCtrl1_Start();//开始高速读取模拟量数据
@@ -662,13 +749,13 @@ namespace 恒温测试机.UI
         /// </summary>
         private void InitTimer()
         {
-            monitorTimer = new System.Timers.Timer(100);
-            monitorTimer.Elapsed += (o, a) =>
-            {
-                MonitorActive(doData);
-            };//到达时间的时候执行事件； 
-            monitorTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
-            monitorTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
+            //monitorTimer = new System.Timers.Timer(100);
+            //monitorTimer.Elapsed += (o, a) =>
+            //{
+            //    MonitorActive(doData);
+            //};//到达时间的时候执行事件； 
+            //monitorTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
+            //monitorTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
             monitorDiTimer = new System.Timers.Timer(5000);
             monitorDiTimer.Elapsed += (o, a) =>
@@ -762,8 +849,8 @@ namespace 恒温测试机.UI
             doData[2] = 0;
             doData[3] = 0;
             control.InstantDo_Write(doData);
-            monitorTimer.Enabled = false;
-            monitorTimer.Dispose();
+            //monitorTimer.Enabled = false;
+            //monitorTimer.Dispose();
             monitorWhTimer.Enabled = false;
             monitorWhTimer.Dispose();
             monitorDiTimer.Enabled = false;
@@ -787,7 +874,7 @@ namespace 恒温测试机.UI
             //TODO:
             if (autoRunFlag||(MessageBox.Show("确认切换子操作界面？注意保存数据", "", MessageBoxButtons.YesNo) == DialogResult.Yes))
             {
-                monitorTimer.Enabled = false;
+                //monitorTimer.Enabled = false;
                 safetyTimer.Enabled = false;
                 pressureTimer.Enabled = false;
                 coolTimer.Enabled = false;
@@ -857,49 +944,49 @@ namespace 恒温测试机.UI
             collectDataFlag = false;
         }
 
-        private void HeatingBtn_Click(object sender, EventArgs e)
-        {
-            if (heatFlag)
-            {
-                hslButton10.Text = "加热";
-                set_bit(ref doData[0],1, false);
-                set_bit(ref doData[0],2, false);
-                set_bit(ref doData[0],3, false);
-                heatFlag = false;
-            }
-            else
-            {
-                if(Wh < (double)Properties.Settings.Default.WhMin)
-                {
-                    MessageBox.Show("液面过低，无法加热！");
-                    return;
-                }
-                heatFlag = true;
-                set_bit(ref doData[0],1, true);
-                set_bit(ref doData[0],2, true);
-                set_bit(ref doData[0],3, true);
+        //private void HeatingBtn_Click(object sender, EventArgs e)
+        //{
+        //    //if (heatFlag)
+        //    //{
+        //    //    hslButton10.Text = "加热";
+        //    //    set_bit(ref doData[0],1, false);
+        //    //    set_bit(ref doData[0],2, false);
+        //    //    set_bit(ref doData[0],3, false);
+        //    //    heatFlag = false;
+        //    //}
+        //    //else
+        //    //{
+        //    //    if(Wh < (double)Properties.Settings.Default.WhMin)
+        //    //    {
+        //    //        MessageBox.Show("液面过低，无法加热！");
+        //    //        return;
+        //    //    }
+        //    //    heatFlag = true;
+        //    //    set_bit(ref doData[0],1, true);
+        //    //    set_bit(ref doData[0],2, true);
+        //    //    set_bit(ref doData[0],3, true);
 
-                hslButton10.Text = "停止加热";
-            }
-        }
+        //    //    hslButton10.Text = "停止加热";
+        //    //}
+        //}
 
-        private void CoolingBtn_Click(object sender, EventArgs e)
-        {
-            if (coolFlag)
-            {
-                hslButton9.Text = "制冷";
-                set_bit(ref doData[0],0, false);
-                set_bit(ref doData[0],4, false);
-                coolFlag = false;
-            }
-            else
-            {
-                coolFlag = true;
-                set_bit(ref doData[0],0, true);
-                set_bit(ref doData[0],4, true);
-                hslButton9.Text = "停止制冷";
-            }
-        }
+        //private void CoolingBtn_Click(object sender, EventArgs e)
+        //{
+        //    //if (coolFlag)
+        //    //{
+        //    //    hslButton9.Text = "制冷";
+        //    //    set_bit(ref doData[0],0, false);
+        //    //    set_bit(ref doData[0],4, false);
+        //    //    coolFlag = false;
+        //    //}
+        //    //else
+        //    //{
+        //    //    coolFlag = true;
+        //    //    set_bit(ref doData[0],0, true);
+        //    //    set_bit(ref doData[0],4, true);
+        //    //    hslButton9.Text = "停止制冷";
+        //    //}
+        //}
 
         private void SetParamBtn_Click(object sender, EventArgs e)
         {
@@ -2301,6 +2388,9 @@ namespace 恒温测试机.UI
             Array.Clear(m_dataScaled, 0, m_dataScaled.Length);
         }
 
+        private bool logInfo = true;
+        private string Temp1Str = "";
+        private double[] sourceData = new double[100];
         private void WaveformAiCtrl1_DataReady(object sender, BfdAiEventArgs args)
         {
             ErrorCode err = ErrorCode.Success;
@@ -2325,6 +2415,7 @@ namespace 恒温测试机.UI
                 t = t.AddSeconds(-1.0);//采集到的是一秒钟之前的数据，因此需要对当前的时间减去1s
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
                 //Log.Info(t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
+
                 for (int i = 0; i < m_dataScaled.Length; i += 16)
                 {
                     Qc = Math.Round(m_dataScaled[i + 0], 2, MidpointRounding.AwayFromZero) * 5;
@@ -2343,6 +2434,11 @@ namespace 恒温测试机.UI
                     Temp4 = Math.Round(m_dataScaled[i + 13], 2, MidpointRounding.AwayFromZero) * 10;
                     Temp5 = Math.Round(m_dataScaled[i + 14], 2, MidpointRounding.AwayFromZero) * 10;
                     Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) * 200;
+                    if (logInfo)
+                    {
+                        sourceData[i / 16] = Temp1;
+                        Temp1Str += Temp1 + ",";
+                    }
                     if (collectDataFlag)
                     {
                         dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
@@ -2393,6 +2489,19 @@ namespace 恒温测试机.UI
                     }
 
                     t = t.AddMilliseconds(10.0);
+                }
+                if (logInfo)
+                {
+                    Log.Info(m_dataScaled.Length+"");
+                    Log.Info(Temp1Str);
+                    string atferStr = "";
+                    var resultData = averge(ref sourceData);
+                    for(int i = 0; i < 100; i++)
+                    {
+                        atferStr += resultData[i] + ",";
+                    }
+                    Log.Info(atferStr);
+                    logInfo = false;
                 }
                 DataReadyToUpdateStatus();
                 if (err != ErrorCode.Success && err != ErrorCode.WarningRecordEnd)
@@ -2629,8 +2738,172 @@ namespace 恒温测试机.UI
 
         }
 
+        /// <summary>
+        /// N为7的平均数据处理
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        double[] averge(ref double[] data)
+        {
+            for(int i = 0; i < 93; i++)
+            {
+                List<double> temp = new List<double>();
+                for(int j = 0; j < 7; j++)
+                {
+                    temp.Add(data[i + j]);
+                }
+                double sum = temp.Sum() - temp.Max() - temp.Min();
+                data[i + 3] = Math.Round(sum / 5, 2, MidpointRounding.AwayFromZero);
+            }
+            data[0] = data[3];
+            data[1] = data[3];
+            data[2] = data[3];
+            data[97] = data[96];
+            data[98] = data[96];
+            data[99] = data[96];
+            return data;
+        }
+
         #endregion
 
+        private void doData00_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn.BackColor==Color.Green)
+            {
+                //关闭 冷水制冷
+                btn.BackColor = Color.LightGray;
+                set_bit(ref doData[0], 0, false);
+                set_bit(ref doData[1], 2, false);
+                control.InstantDo_Write(doData);
+            }
+            else
+            {
+                //开启 冷水制冷
+                if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
+                {
+                    MessageBox.Show("冷水箱温度已符合设定温度，无法继续制冷");
+                    return;
+                }
+                if (WhCool < (double)Properties.Settings.Default.WhMin)
+                {
+                    MessageBox.Show("冷水箱液面过低，无法开启");
+                    return;
+                }
+                btn.BackColor = Color.Green;
+                set_bit(ref doData[0], 0, true);
+                set_bit(ref doData[1], 2, true);
+                control.InstantDo_Write(doData);
+            }
+        }
 
+        private void doData01_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn.BackColor==Color.Green)
+            {
+                //关闭 热水加热
+                btn.BackColor = Color.LightGray;
+                set_bit(ref doData[0], 1, false);
+                set_bit(ref doData[1], 3, false);
+                control.InstantDo_Write(doData);
+            }
+            else
+            {
+                //开启 热水加热
+                if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
+                {
+                    MessageBox.Show("热水箱温度已符合设定温度，无法继续加热");
+                    return;
+                }
+                if (WhHeat < (double)Properties.Settings.Default.WhMin)
+                {
+                    MessageBox.Show("热水箱液面过低，无法开启");
+                    return;
+                }
+                btn.BackColor = Color.Green;
+                set_bit(ref doData[0], 1, true);
+                set_bit(ref doData[1], 3, true);
+                control.InstantDo_Write(doData);
+            }
+        }
+
+        private void doData02_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn.BackColor==Color.Green)
+            {
+                //关闭 高温加热
+                btn.BackColor = Color.LightGray;
+                set_bit(ref doData[0], 2, false);
+                set_bit(ref doData[1], 4, false);
+                control.InstantDo_Write(doData);
+            }
+            else
+            {
+                //开启 高温加热
+                if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
+                {
+                    MessageBox.Show("高温水箱温度已符合设定温度，无法继续加热");
+                    return;
+                }
+                btn.BackColor = Color.Green;
+                set_bit(ref doData[0], 2, true);
+                set_bit(ref doData[1], 4, true);
+                control.InstantDo_Write(doData);
+            }
+        }
+
+        private void doData03_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn.BackColor==Color.Green)
+            {
+                //关闭 中温加热
+                btn.BackColor = Color.LightGray;
+                set_bit(ref doData[0], 3, false);
+                set_bit(ref doData[1], 5, false);
+                control.InstantDo_Write(doData);
+            }
+            else
+            {
+                //开启 中温加热
+                if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
+                {
+                    MessageBox.Show("中水箱温度已符合设定温度，无法继续加热");
+                    return;
+                }
+                btn.BackColor = Color.Green;
+                set_bit(ref doData[0], 3, true);
+                set_bit(ref doData[1], 5, true);
+                control.InstantDo_Write(doData);
+            }
+        }
+
+        private void doData04_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn.BackColor==Color.Green)
+            {
+                //关闭 常温制冷
+                btn.BackColor = Color.LightGray;
+                set_bit(ref doData[0], 4, false);
+                set_bit(ref doData[1], 6, false);
+                control.InstantDo_Write(doData);
+            }
+            else
+            {
+                //开启 常温制冷
+                if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
+                {
+                    MessageBox.Show("常温水箱温度已符合设定温度，无法继续制冷");
+                    return;
+                }
+                btn.BackColor = Color.Green;
+                set_bit(ref doData[0], 4, true);
+                set_bit(ref doData[1], 6, true);
+                control.InstantDo_Write(doData);
+            }
+        }
     }
 }
