@@ -1,0 +1,24 @@
+数组长度n
+ 
+判断n》8
+
+ //连续采样N个数据，去掉一个最大值和一个最小值然后计算N - 2个数据的算术平均值N值的选取：3~14
+                //if (l.Count > 8)
+                //{
+
+                //    double sum = 0;
+                //    List<double> temp = new List<double>();
+                //    for (int i = 1; i < 8; i++)
+                //    {
+                //        temp.Add(l[l.Count - i]);
+                //        sum += l[l.Count - i];
+                //    }
+                //    sum = sum - temp.Max() - temp.Min();
+                //    l[l.Count - 4] = (sum / 5);                
+                //}
+
+
+
+接口：
+输入：送长度为7的数据
+输出：返回一个中间下标的平均值。
