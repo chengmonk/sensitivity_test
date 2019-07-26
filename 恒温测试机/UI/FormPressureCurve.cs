@@ -70,7 +70,7 @@ namespace 恒温测试机
                     Ph[i] = (float)Convert.ToDouble(graphDt.Rows[i][8]);
                     Pm[i] = (float)Convert.ToDouble(graphDt.Rows[i][9]);
                     Qm5[i] = (float)Convert.ToDouble(graphDt.Rows[i][10]);
-                    Wh[i] = (float)Convert.ToDouble(graphDt.Rows[i][11]);
+                    //Wh[i] = (float)Convert.ToDouble(graphDt.Rows[i][11]);
                     // dateTime[i] = Convert.ToDateTime(dt.Rows[i][0],dtFormat);
 
                     dateTime[i] = DateTime.ParseExact((string)graphDt.Rows[i][0], "yyyy-MM-dd hh:mm:ss:fff", dtFormat);
@@ -111,7 +111,7 @@ namespace 恒温测试机
                     hslCurveHistory1.SetRightCurve("出水温度Tm", Tm, Color.Green, true, "{0:F2} ℃");
                     hslCurveHistory1.SetRightCurve("热水温度Th", Th, Color.Honeydew, true, "{0:F2} ℃");
                     hslCurveHistory1.SetRightCurve("冷水温度Tc", Tc, Color.Pink, true, "{0:F2} ℃");
-                    hslCurveHistory1.SetRightCurve("液面高度Wh", Tc, Color.Blue, true, "{0:F2} mm");
+                    //hslCurveHistory1.SetRightCurve("液面高度Wh", Tc, Color.Blue, true, "{0:F2} mm");
 
                     hslCurveHistory1.SetDateTimes(dateTime);
 

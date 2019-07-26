@@ -356,22 +356,53 @@ namespace 恒温测试机.UI
                     PhShow.Text = Ph.ToString();
                     //if (graphFlag)
                     //{
+                    for(int i = 3; i < 103; i++)
+                    {
                         hslCurve1.AddCurveData(
                             new string[] {
-                                    "冷水流量Qc", "热水流量Qh", "出水流量Qm",
-                                    "冷水温度Tc", "热水温度Th", "出水温度Tm",
-                                    "冷水压力Pc", "热水压力Ph", "出水压力Pm",
-                                    "出水重量Qm5"
+                                    "冷水箱温度","热水箱温度","高温水箱温度","中温水箱温度","常温水箱温度"
+                                    //"冷水流量Qc", "热水流量Qh", "出水流量Qm",
+                                    //"冷水温度Tc", "热水温度Th", "出水温度Tm",
+                                    //"冷水压力Pc", "热水压力Ph", "出水压力Pm",
+                                    //"出水重量Qm5"
                             },
                             new float[]
                             {
-                                    (float)Qc,(float)Qh,(float)Qm,
-                                    (float)Tc,(float)Th,(float)Tm,
-                                    (float)Pc,(float)Ph,(float)Pm,
-                                    (float)Qm5
+                                (float)sourceDataTemp1[i],(float)sourceDataTemp2[i],(float)sourceDataTemp3[i]
+                                ,(float)sourceDataTemp4[i],(float)sourceDataTemp5[i]
+                                    //(float)Qc,(float)Qh,(float)Qm,
+                                    //(float)Tc,(float)Th,(float)Tm,
+                                    //(float)Pc,(float)Ph,(float)Pm,
+                                    //(float)Qm5
+                                    //(float)sourceDataQc[i],(float)sourceDataQh[i],(float)sourceDataQm[i],
+                                    //(float)sourceDataTc[i],(float)sourceDataTh[i],(float)sourceDataTm[i],
+                                    //(float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
+                                    //(float)sourceDataQm5[i]
                             }
                         );
-                    //}
+                    }
+                    //hslCurve1.AddCurveData(
+                    //        new string[] {
+                    //                "temp1","temp2","temp3","temp4","temp5"
+                    //                //"冷水流量Qc", "热水流量Qh", "出水流量Qm",
+                    //                //"冷水温度Tc", "热水温度Th", "出水温度Tm",
+                    //                //"冷水压力Pc", "热水压力Ph", "出水压力Pm",
+                    //                //"出水重量Qm5"
+                    //        },
+                    //        new float[]
+                    //        {
+                    //            (float)Temp1,(float)Temp2,(float)Temp3,(float)Temp4,(float)Temp5
+                    //                //(float)Qc,(float)Qh,(float)Qm,
+                    //                //(float)Tc,(float)Th,(float)Tm,
+                    //                //(float)Pc,(float)Ph,(float)Pm,
+                    //                //(float)Qm5
+                    //                //(float)sourceDataQc[i],(float)sourceDataQh[i],(float)sourceDataQm[i],
+                    //                //(float)sourceDataTc[i],(float)sourceDataTh[i],(float)sourceDataTm[i],
+                    //                //(float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
+                    //                //(float)sourceDataQm5[i]
+                    //        }
+                    //    );
+                    ////}
                     if (logicType == LogicTypeEnum.safeTest || logicType == LogicTypeEnum.PressureTest)
                     {
                         if (Qm > (double)Properties.Settings.Default.QmMax || Qm < (double)Properties.Settings.Default.QmMin)
@@ -559,7 +590,7 @@ namespace 恒温测试机.UI
             Temp1Status.Text = Temp1 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
             label1.Text = WhCool + "mm";
             Temp2Status.Text = Temp2 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
-            label2.Text = WhHeat + "mm";
+            label5.Text = WhHeat + "mm";
             Temp3Status.Text = Temp3 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
             Temp4Status.Text = Temp4 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
             Temp5Status.Text = Temp5 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
@@ -630,6 +661,11 @@ namespace 恒温测试机.UI
         {
             standardCbx.Text = "EN1111-2017";
             //safeTestRbt.Checked = true;
+            hslCurve1.SetLeftCurve("冷水箱温度", null, Color.OrangeRed);
+            hslCurve1.SetLeftCurve("热水箱温度", null, Color.Orchid);
+            hslCurve1.SetLeftCurve("高温水箱温度", null, Color.White);
+            hslCurve1.SetLeftCurve("中温水箱温度", null, Color.GreenYellow);
+            hslCurve1.SetLeftCurve("常温水箱温度", null, Color.BlueViolet);
             hslCurve1.SetLeftCurve("冷水流量Qc", null, Color.Red);
             hslCurve1.SetLeftCurve("热水流量Qh", null, Color.Orange);
             hslCurve1.SetLeftCurve("出水流量Qm", null, Color.Yellow);
@@ -2387,10 +2423,38 @@ namespace 恒温测试机.UI
             }
             Array.Clear(m_dataScaled, 0, m_dataScaled.Length);
         }
+        private double[] lastTempData = new double[90];
 
-        private bool logInfo = true;
-        private string Temp1Str = "";
-        private double[] sourceData = new double[100];
+        private double[] sourceDataQc = new double[106];
+
+        private double[] sourceDataQh = new double[106];
+
+        private double[] sourceDataQm = new double[106];
+
+        private double[] sourceDataTh = new double[106];
+
+        private double[] sourceDataTm = new double[106];
+
+        private double[] sourceDataTc = new double[106];
+
+        private double[] sourceDataPc = new double[106];
+
+        private double[] sourceDataPh = new double[106];
+
+        private double[] sourceDataPm = new double[106];
+
+        private double[] sourceDataQm5 = new double[106];
+
+        private double[] sourceDataTemp1 = new double[106];
+
+        private double[] sourceDataTemp2 = new double[106];
+
+        private double[] sourceDataTemp3 = new double[106];
+
+        private double[] sourceDataTemp4 = new double[106];
+
+        private double[] sourceDataTemp5 = new double[106];
+        
         private void WaveformAiCtrl1_DataReady(object sender, BfdAiEventArgs args)
         {
             ErrorCode err = ErrorCode.Success;
@@ -2409,13 +2473,13 @@ namespace 恒温测试机.UI
                 int chanCount = waveformAiCtrl1.Conversion.ChannelCount;
                 int sectionLength = waveformAiCtrl1.Record.SectionLength;
                 err = waveformAiCtrl1.GetData(args.Count, m_dataScaled);//读取数据     
-                //Console.WriteLine("length:" + m_dataScaled.Length);
 
                 DateTime t = DateTime.Now;
-                t = t.AddSeconds(-1.0);//采集到的是一秒钟之前的数据，因此需要对当前的时间减去1s
+                t = t.AddSeconds(-1.97);//采集到的是一秒钟之前的数据，因此需要对当前的时间减去1s
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
                 //Log.Info(t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
 
+                int index = 0;
                 for (int i = 0; i < m_dataScaled.Length; i += 16)
                 {
                     Qc = Math.Round(m_dataScaled[i + 0], 2, MidpointRounding.AwayFromZero) * 5;
@@ -2434,76 +2498,127 @@ namespace 恒温测试机.UI
                     Temp4 = Math.Round(m_dataScaled[i + 13], 2, MidpointRounding.AwayFromZero) * 10;
                     Temp5 = Math.Round(m_dataScaled[i + 14], 2, MidpointRounding.AwayFromZero) * 10;
                     Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) * 200;
-                    if (logInfo)
+                    if (index < 6)
                     {
-                        sourceData[i / 16] = Temp1;
-                        Temp1Str += Temp1 + ",";
+                        int typeIndex = 0;
+                        sourceDataQc[index] = isFirstAver ? Qc : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataQh[index] = isFirstAver ? Qh : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataQm[index] = isFirstAver ? Qm : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTc[index] = isFirstAver ? Tc : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTh[index] = isFirstAver ? Th : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTm[index] = isFirstAver ? Tm : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataPc[index] = isFirstAver ? Pc : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataPh[index] = isFirstAver ? Ph : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataPm[index] = isFirstAver ? Pm : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataQm5[index] = isFirstAver ? Qm5 : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTemp1[index] = isFirstAver ? Temp1 : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTemp2[index] = isFirstAver ? Temp2 : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTemp3[index] = isFirstAver ? Temp3 : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTemp4[index] = isFirstAver ? Temp4 : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataTemp5[index] = isFirstAver ? Temp5 : lastTempData[typeIndex * 6 + index]; typeIndex++;
                     }
-                    if (collectDataFlag)
-                    {
-                        dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                            t,
-                            Qc,
-                            Qh,
-                            Qm,
-                            Tc,
-                            Th,
-                            Tm,
-                            Pc,
-                            Ph,
-                            Pm,
-                            Qm5,
-                            Wh,
-                            index);
-                        index++;
-                    }
-                    if (graphFlag)
-                    {
-                        GraphDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                            Qc,
-                            Qh,
-                            Qm,
-                            Tc,
-                            Th,
-                            Tm,
-                            Pc,
-                            Ph,
-                            Pm,
-                            Qm5,
-                            Wh);
-                    }
-                    if (electDataFlag)
-                    {
-                        ElectDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                            Qc,
-                            Qh,
-                            Qm,
-                            Tc,
-                            Th,
-                            Tm,
-                            Pc,
-                            Ph,
-                            Pm,
-                            Qm5,
-                            Wh);
-                    }
-
-                    t = t.AddMilliseconds(10.0);
+                    sourceDataQc[index + 5] = Qc;
+                    sourceDataQh[index + 5] = Qh;
+                    sourceDataQm[index + 5] = Qm;
+                    sourceDataTc[index + 5] = Tc;
+                    sourceDataTh[index + 5] = Th;
+                    sourceDataTm[index + 5] = Tm;
+                    sourceDataPc[index + 5] = Pc;
+                    sourceDataPh[index + 5] = Ph;
+                    sourceDataPm[index + 5] = Pm;
+                    sourceDataQm5[index + 5] = Qm5;
+                    sourceDataTemp1[index + 5] = Temp1;
+                    sourceDataTemp2[index + 5] = Temp2;
+                    sourceDataTemp3[index + 5] = Temp3;
+                    sourceDataTemp4[index + 5] = Temp4;
+                    sourceDataTemp5[index + 5] = Temp5;
+                    index++;
                 }
-                if (logInfo)
+                sourceDataQc = averge(ref sourceDataQc,0);
+                sourceDataQh = averge(ref sourceDataQh,1);
+                sourceDataQm = averge(ref sourceDataQm,2);
+                sourceDataTc = averge(ref sourceDataTc,3);
+                sourceDataTh = averge(ref sourceDataTh,4);
+                sourceDataTm = averge(ref sourceDataTm,5);
+                sourceDataPc = averge(ref sourceDataPc,6);
+                sourceDataPh = averge(ref sourceDataPh,7);
+                sourceDataPm = averge(ref sourceDataPm,8);
+                sourceDataQm5 = averge(ref sourceDataQm5,9);
+                sourceDataTemp1 = averge(ref sourceDataTemp1, 10);
+                sourceDataTemp2 = averge(ref sourceDataTemp2, 11);
+                sourceDataTemp3 = averge(ref sourceDataTemp3, 12);
+                sourceDataTemp4 = averge(ref sourceDataTemp4, 13);
+                sourceDataTemp5 = averge(ref sourceDataTemp5, 14);
+                if (isFirstAver==false)
                 {
-                    Log.Info(m_dataScaled.Length+"");
-                    Log.Info(Temp1Str);
-                    string atferStr = "";
-                    var resultData = averge(ref sourceData);
-                    for(int i = 0; i < 100; i++)
+                    for (int i = 3; i < sourceDataQc.Length-3; i++)
                     {
-                        atferStr += resultData[i] + ",";
+                        //Log.Info(t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
+                        //Log.Info("index:" + i + " Value:" + (float)sourceDataTemp1[i]);
+                        //Console.WriteLine("index:"+i);
+                        if (collectDataFlag)
+                        {
+                            dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
+                                t,
+                                sourceDataQc[i],
+                                sourceDataQh[i],
+                                sourceDataQm[i],
+                                sourceDataTc[i],
+                                sourceDataTh[i],
+                                sourceDataTm[i],
+                                sourceDataPc[i],
+                                sourceDataPh[i],
+                                sourceDataPm[i],
+                                sourceDataQm5[i],
+                                Wh,
+                                index);
+                            index++;
+                        }
+                        if (graphFlag)
+                        {
+                            GraphDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
+                                sourceDataQc[i],
+                                sourceDataQh[i],
+                                sourceDataQm[i],
+                                sourceDataTc[i],
+                                sourceDataTh[i],
+                                sourceDataTm[i],
+                                sourceDataPc[i],
+                                sourceDataPh[i],
+                                sourceDataPm[i],
+                                sourceDataQm5[i],
+                                Wh);
+                        }
+                        if (electDataFlag)
+                        {
+                            ElectDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
+                                sourceDataQc[i],
+                                sourceDataQh[i],
+                                sourceDataQm[i],
+                                sourceDataTc[i],
+                                sourceDataTh[i],
+                                sourceDataTm[i],
+                                sourceDataPc[i],
+                                sourceDataPh[i],
+                                sourceDataPm[i],
+                                sourceDataQm5[i],
+                                Wh);
+                        }
+                        t = t.AddMilliseconds(10.0);
                     }
-                    Log.Info(atferStr);
-                    logInfo = false;
+                    Qc = sourceDataQc[99];
+                    Qh = sourceDataQh[99];
+                    Qm = sourceDataQm[99];
+                    Tc = sourceDataTc[99];
+                    Th = sourceDataTh[99];
+                    Tm = sourceDataTm[99];
+                    Pc = sourceDataPc[99];
+                    Ph = sourceDataPh[99];
+                    Pm = sourceDataPm[99];
+                    Qm5 = sourceDataQm5[99];
+                    DataReadyToUpdateStatus();
                 }
-                DataReadyToUpdateStatus();
+                isFirstAver = false;
                 if (err != ErrorCode.Success && err != ErrorCode.WarningRecordEnd)
                 {
                     HandleError(err);
@@ -2743,24 +2858,43 @@ namespace 恒温测试机.UI
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        double[] averge(ref double[] data)
+        private bool isFirstAver = true;
+        double[] averge(ref double[] data,int type)
         {
-            for(int i = 0; i < 93; i++)
+            if (isFirstAver)        //i=6開始
             {
-                List<double> temp = new List<double>();
-                for(int j = 0; j < 7; j++)
+                for (int i = 6; i < 100; i++)
                 {
-                    temp.Add(data[i + j]);
+                    List<double> temp = new List<double>();
+                    for (int j = 0; j < 7; j++)
+                    {
+                        temp.Add(data[i + j]);
+                    }
+                    double sum = temp.Sum() - temp.Max() - temp.Min();
+                    data[i + 3] = Math.Round(sum / 5, 2, MidpointRounding.AwayFromZero);
                 }
-                double sum = temp.Sum() - temp.Max() - temp.Min();
-                data[i + 3] = Math.Round(sum / 5, 2, MidpointRounding.AwayFromZero);
             }
-            data[0] = data[3];
-            data[1] = data[3];
-            data[2] = data[3];
-            data[97] = data[96];
-            data[98] = data[96];
-            data[99] = data[96];
+            else
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    List<double> temp = new List<double>();
+                    for (int j = 0; j < 7; j++)
+                    {
+                        temp.Add(data[i + j]);
+                    }
+                    double sum = temp.Sum() - temp.Max() - temp.Min();
+                    data[i + 3] = Math.Round(sum / 5, 2, MidpointRounding.AwayFromZero);
+                }
+                
+            }
+            lastTempData[type * 6 + 0] = data[97];
+            lastTempData[type * 6 + 1] = data[98];
+            lastTempData[type * 6 + 2] = data[99];
+
+            lastTempData[type * 6 + 3] = data[100];
+            lastTempData[type * 6 + 4] = data[101];
+            lastTempData[type * 6 + 5] = data[102];
             return data;
         }
 
