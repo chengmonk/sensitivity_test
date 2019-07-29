@@ -30,18 +30,18 @@ namespace 恒温测试机.UI
             //默认按键恒温电机
             electCbx.Text = "按键恒温电机";
             type = ElectricalMachineryType.tempType;
-            powerAddress = "2056";
-            forwardWriteAddress = "2048";
-            forwardReadAddress = "2053";
-            noForwardWriteAddress = "2049";
-            noForwardReadAddress = "2054";
-            orignWriteAddress = "2050";
-            orignReadAddress = "2055";
-            autoRunAddress = "2051";
-            backOrignAddress = "2052";
-            shutdownAddress = "2057";
-            radioAddress = "4296";
-            angleAddress = "5432";
+            powerAddress = "2056";                  //伺服开关
+            forwardWriteAddress = "2048";            //正传写入地址
+            forwardReadAddress = "2053";             //正传读取地址
+            noForwardWriteAddress = "2049";         //反传写入地址
+            noForwardReadAddress = "2054";          //反传读取地址
+            orignWriteAddress = "2050";             //原点写入地址
+            orignReadAddress = "2055";              //原点读取地址
+            autoRunAddress = "2051";                //自动运行地址
+            backOrignAddress = "2052";              //回到原点地址
+            shutdownAddress = "2057";               //紧急停止地址
+            radioAddress = "4296";                  //转速
+            angleAddress = "5432";                  //角度
         }
 
         private void InitTimer()
@@ -172,8 +172,8 @@ namespace 恒温测试机.UI
                     forwardState = formMain.bpq.read_coil(forwardReadAddress, 5);
                     noForwadState = formMain.bpq.read_coil(noForwardReadAddress, 5);
                     orignState = formMain.bpq.read_coil(orignReadAddress, 5);
-                    radioValue = formMain.bpq.read_uint(radioAddress, 5);
-                    angleValue = formMain.bpq.read_int(angleAddress, 5);
+                    //radioValue = formMain.bpq.read_uint(radioAddress, 5);
+                    //angleValue = formMain.bpq.read_int(angleAddress, 5);
 
                     powerBtn.BackColor = powerState ? Color.Green : DefaultBackColor;
                     powerBtn.Text = powerState ? "伺服开" : "伺服关";
@@ -202,8 +202,8 @@ namespace 恒温测试机.UI
                 }
                 else
                 {
-                    radioValue = formMain.bpq.read_uint(radioAddress, 5);
-                    angleValue = formMain.bpq.read_int(angleAddress, 5);
+                    radioValue = formMain.bpq.read_uint(radioAddress, 5);   //转速  读取 uint
+                    angleValue = formMain.bpq.read_int(angleAddress, 5);    //角度  读取 int
 
                     var temp1 = (radioValue * 0.0001);
                     var temp2 = (angleValue * 0.0001);

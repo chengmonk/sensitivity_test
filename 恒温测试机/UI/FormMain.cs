@@ -173,15 +173,18 @@ namespace 恒温测试机.UI
                         else
                             set_bit(ref doData[3],4, false);
                     }
+                    //set_bit(ref doData[3], 3, false);//wh
+                    //WhCool = Wh;
+                    //whFlag = false;
                     if (whFlag) //热水箱->冷水箱
                     {
                         WhHeat = Wh;
-                        set_bit(ref doData[3],3, false);//wh
+                        set_bit(ref doData[3], 3, false);//wh
                     }
                     else
                     {
                         WhCool = Wh;
-                        set_bit(ref doData[3],3, true);//wh
+                        set_bit(ref doData[3], 3, true);//wh
                     }
                     whFlag = !whFlag;
                     control.InstantDo_Write(doData);
@@ -360,23 +363,23 @@ namespace 恒温测试机.UI
                     {
                         hslCurve1.AddCurveData(
                             new string[] {
-                                    "冷水箱温度","热水箱温度","高温水箱温度","中温水箱温度","常温水箱温度"
-                                    //"冷水流量Qc", "热水流量Qh", "出水流量Qm",
-                                    //"冷水温度Tc", "热水温度Th", "出水温度Tm",
-                                    //"冷水压力Pc", "热水压力Ph", "出水压力Pm",
+                                    //"冷水箱温度","热水箱温度","高温水箱温度","中温水箱温度","常温水箱温度"
+                                    "冷水流量Qc", "热水流量Qh", "出水流量Qm",
+                                    "冷水温度Tc", "热水温度Th", "出水温度Tm",
+                                    "冷水压力Pc", "热水压力Ph", "出水压力Pm",
                                     //"出水重量Qm5"
                             },
                             new float[]
                             {
-                                (float)sourceDataTemp1[i],(float)sourceDataTemp2[i],(float)sourceDataTemp3[i]
-                                ,(float)sourceDataTemp4[i],(float)sourceDataTemp5[i]
+                                //(float)sourceDataTemp1[i],(float)sourceDataTemp2[i],(float)sourceDataTemp3[i]
+                                //,(float)sourceDataTemp4[i],(float)sourceDataTemp5[i]
                                     //(float)Qc,(float)Qh,(float)Qm,
                                     //(float)Tc,(float)Th,(float)Tm,
                                     //(float)Pc,(float)Ph,(float)Pm,
                                     //(float)Qm5
-                                    //(float)sourceDataQc[i],(float)sourceDataQh[i],(float)sourceDataQm[i],
-                                    //(float)sourceDataTc[i],(float)sourceDataTh[i],(float)sourceDataTm[i],
-                                    //(float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
+                                    (float)sourceDataQc[i],(float)sourceDataQh[i],(float)sourceDataQm[i],
+                                    (float)sourceDataTc[i],(float)sourceDataTh[i],(float)sourceDataTm[i],
+                                    (float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
                                     //(float)sourceDataQm5[i]
                             }
                         );
@@ -403,19 +406,19 @@ namespace 恒温测试机.UI
                     //        }
                     //    );
                     ////}
-                    if (logicType == LogicTypeEnum.safeTest || logicType == LogicTypeEnum.PressureTest)
-                    {
-                        if (Qm > (double)Properties.Settings.Default.QmMax || Qm < (double)Properties.Settings.Default.QmMin)
-                        {
-                            QmShow.ForeColor = Color.Red;
-                            systemInfoTb.AppendText("[时间:" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm" + "超出上下限！]");
-                            systemInfoTb.AppendText("\n");
-                        }
-                        else
-                        {
-                            QmShow.ForeColor = Color.Black;
-                        }
-                    }
+                    //if (logicType == LogicTypeEnum.safeTest || logicType == LogicTypeEnum.PressureTest)
+                    //{
+                    //    if (Qm > (double)Properties.Settings.Default.QmMax || Qm < (double)Properties.Settings.Default.QmMin)
+                    //    {
+                    //        QmShow.ForeColor = Color.Red;
+                    //        systemInfoTb.AppendText("[时间:" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm" + "超出上下限！]");
+                    //        systemInfoTb.AppendText("\n");
+                    //    }
+                    //    else
+                    //    {
+                    //        QmShow.ForeColor = Color.Black;
+                    //    }
+                    //}
                     DataReadyToControlTemp();
                 }
             }
@@ -661,11 +664,11 @@ namespace 恒温测试机.UI
         {
             standardCbx.Text = "EN1111-2017";
             //safeTestRbt.Checked = true;
-            hslCurve1.SetLeftCurve("冷水箱温度", null, Color.OrangeRed);
-            hslCurve1.SetLeftCurve("热水箱温度", null, Color.Orchid);
-            hslCurve1.SetLeftCurve("高温水箱温度", null, Color.White);
-            hslCurve1.SetLeftCurve("中温水箱温度", null, Color.GreenYellow);
-            hslCurve1.SetLeftCurve("常温水箱温度", null, Color.BlueViolet);
+            //hslCurve1.SetLeftCurve("冷水箱温度", null, Color.OrangeRed);
+            //hslCurve1.SetLeftCurve("热水箱温度", null, Color.Orchid);
+            //hslCurve1.SetLeftCurve("高温水箱温度", null, Color.White);
+            //hslCurve1.SetLeftCurve("中温水箱温度", null, Color.GreenYellow);
+            //hslCurve1.SetLeftCurve("常温水箱温度", null, Color.BlueViolet);
             hslCurve1.SetLeftCurve("冷水流量Qc", null, Color.Red);
             hslCurve1.SetLeftCurve("热水流量Qh", null, Color.Orange);
             hslCurve1.SetLeftCurve("出水流量Qm", null, Color.Yellow);
@@ -675,7 +678,7 @@ namespace 恒温测试机.UI
             hslCurve1.SetLeftCurve("冷水压力Pc", null, Color.White);
             hslCurve1.SetLeftCurve("热水压力Ph", null, Color.DarkOrange);
             hslCurve1.SetLeftCurve("出水压力Pm", null, Color.DodgerBlue);
-            hslCurve1.SetLeftCurve("出水重量Qm5", null, Color.YellowGreen);
+            //hslCurve1.SetLeftCurve("出水重量Qm5", null, Color.YellowGreen);
             hslCurve1.TextAddFormat = "hh:mm:ss:fff";
         }
 
@@ -2497,7 +2500,8 @@ namespace 恒温测试机.UI
                     Temp3 = Math.Round(m_dataScaled[i + 12], 2, MidpointRounding.AwayFromZero) * 10;
                     Temp4 = Math.Round(m_dataScaled[i + 13], 2, MidpointRounding.AwayFromZero) * 10;
                     Temp5 = Math.Round(m_dataScaled[i + 14], 2, MidpointRounding.AwayFromZero) * 10;
-                    Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) * 200;
+                    Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) *200;
+                    
                     if (index < 6)
                     {
                         int typeIndex = 0;
@@ -2534,6 +2538,7 @@ namespace 恒温测试机.UI
                     sourceDataTemp5[index + 5] = Temp5;
                     index++;
                 }
+                //Console.WriteLine("液面高度：" + Wh);
                 sourceDataQc = averge(ref sourceDataQc,0);
                 sourceDataQh = averge(ref sourceDataQh,1);
                 sourceDataQm = averge(ref sourceDataQm,2);
@@ -2606,16 +2611,21 @@ namespace 恒温测试机.UI
                         }
                         t = t.AddMilliseconds(10.0);
                     }
-                    Qc = sourceDataQc[99];
-                    Qh = sourceDataQh[99];
-                    Qm = sourceDataQm[99];
-                    Tc = sourceDataTc[99];
-                    Th = sourceDataTh[99];
-                    Tm = sourceDataTm[99];
-                    Pc = sourceDataPc[99];
-                    Ph = sourceDataPh[99];
-                    Pm = sourceDataPm[99];
-                    Qm5 = sourceDataQm5[99];
+                    Qc = Math.Round((sourceDataQc[3] + sourceDataQc[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Qh = Math.Round((sourceDataQh[3] + sourceDataQh[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Qm = Math.Round((sourceDataQm[3] + sourceDataQm[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Tc = Math.Round((sourceDataTc[3] + sourceDataTc[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Th = Math.Round((sourceDataTh[3] + sourceDataTh[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Tm = Math.Round((sourceDataTm[3] + sourceDataTm[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Pc = Math.Round((sourceDataPc[3] + sourceDataPc[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Ph = Math.Round((sourceDataPh[3] + sourceDataPh[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Pm = Math.Round((sourceDataPm[3] + sourceDataPm[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Qm5 = Math.Round((sourceDataQm5[3] + sourceDataQm5[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Temp1 = Math.Round((sourceDataTemp1[3] + sourceDataTemp1[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Temp2 = Math.Round((sourceDataTemp2[3] + sourceDataTemp2[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Temp3 = Math.Round((sourceDataTemp3[3] + sourceDataTemp3[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Temp4 = Math.Round((sourceDataTemp4[3] + sourceDataTemp4[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Temp5 = Math.Round((sourceDataTemp5[3] + sourceDataTemp5[102]) / 2, 2, MidpointRounding.AwayFromZero);
                     DataReadyToUpdateStatus();
                 }
                 isFirstAver = false;

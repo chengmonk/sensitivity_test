@@ -136,7 +136,7 @@
             this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftPanel.Location = new System.Drawing.Point(0, 0);
             this.leftPanel.Name = "leftPanel";
-            this.leftPanel.Size = new System.Drawing.Size(320, 549);
+            this.leftPanel.Size = new System.Drawing.Size(320, 548);
             this.leftPanel.TabIndex = 0;
             // 
             // left3
@@ -629,9 +629,9 @@
             this.rightPanel.Controls.Add(this.right4);
             this.rightPanel.Controls.Add(this.right1);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.rightPanel.Location = new System.Drawing.Point(704, 0);
+            this.rightPanel.Location = new System.Drawing.Point(1303, 0);
             this.rightPanel.Name = "rightPanel";
-            this.rightPanel.Size = new System.Drawing.Size(324, 549);
+            this.rightPanel.Size = new System.Drawing.Size(324, 548);
             this.rightPanel.TabIndex = 1;
             // 
             // right3
@@ -673,7 +673,7 @@
             this.right4.Location = new System.Drawing.Point(0, 350);
             this.right4.Margin = new System.Windows.Forms.Padding(0);
             this.right4.Name = "right4";
-            this.right4.Size = new System.Drawing.Size(500, 191);
+            this.right4.Size = new System.Drawing.Size(500, 199);
             this.right4.TabIndex = 8;
             // 
             // groupBox1
@@ -681,7 +681,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 13F);
-            this.groupBox1.Location = new System.Drawing.Point(11, 6);
+            this.groupBox1.Location = new System.Drawing.Point(11, 14);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(309, 185);
             this.groupBox1.TabIndex = 2;
@@ -974,7 +974,7 @@
             this.centerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.centerPanel.Location = new System.Drawing.Point(320, 0);
             this.centerPanel.Name = "centerPanel";
-            this.centerPanel.Size = new System.Drawing.Size(384, 549);
+            this.centerPanel.Size = new System.Drawing.Size(983, 548);
             this.centerPanel.TabIndex = 2;
             // 
             // center1
@@ -984,7 +984,7 @@
             this.center1.Location = new System.Drawing.Point(0, 116);
             this.center1.Margin = new System.Windows.Forms.Padding(0);
             this.center1.Name = "center1";
-            this.center1.Size = new System.Drawing.Size(384, 432);
+            this.center1.Size = new System.Drawing.Size(986, 432);
             this.center1.TabIndex = 2;
             // 
             // hslCurve1
@@ -992,15 +992,15 @@
             this.hslCurve1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.hslCurve1.ColorDashLines = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.hslCurve1.ColorLinesAndText = System.Drawing.Color.LightGray;
-            this.hslCurve1.Location = new System.Drawing.Point(3, -1);
+            this.hslCurve1.Location = new System.Drawing.Point(4, 1);
             this.hslCurve1.Name = "hslCurve1";
-            this.hslCurve1.Size = new System.Drawing.Size(373, 424);
+            this.hslCurve1.Size = new System.Drawing.Size(981, 430);
             this.hslCurve1.TabIndex = 7;
             // 
             // Title
             // 
             this.Title.Font = new System.Drawing.Font("微软雅黑", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Title.Location = new System.Drawing.Point(-16, 8);
+            this.Title.Location = new System.Drawing.Point(303, 8);
             this.Title.Name = "Title";
             this.Title.Size = new System.Drawing.Size(393, 80);
             this.Title.TabIndex = 1;
@@ -1027,7 +1027,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 549);
+            this.ClientSize = new System.Drawing.Size(1627, 548);
             this.Controls.Add(this.centerPanel);
             this.Controls.Add(this.rightPanel);
             this.Controls.Add(this.leftPanel);
