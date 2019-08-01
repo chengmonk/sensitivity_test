@@ -2910,10 +2910,11 @@ namespace 恒温测试机.UI
 
         #endregion
 
+        #region 水箱按钮
         private void doData00_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if (btn.BackColor==Color.Green)
+            if (btn.BackColor == Color.Green)
             {
                 //关闭 冷水制冷
                 btn.BackColor = Color.LightGray;
@@ -2944,7 +2945,7 @@ namespace 恒温测试机.UI
         private void doData01_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if (btn.BackColor==Color.Green)
+            if (btn.BackColor == Color.Green)
             {
                 //关闭 热水加热
                 btn.BackColor = Color.LightGray;
@@ -2975,7 +2976,7 @@ namespace 恒温测试机.UI
         private void doData02_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if (btn.BackColor==Color.Green)
+            if (btn.BackColor == Color.Green)
             {
                 //关闭 高温加热
                 btn.BackColor = Color.LightGray;
@@ -3001,7 +3002,7 @@ namespace 恒温测试机.UI
         private void doData03_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if (btn.BackColor==Color.Green)
+            if (btn.BackColor == Color.Green)
             {
                 //关闭 中温加热
                 btn.BackColor = Color.LightGray;
@@ -3027,7 +3028,7 @@ namespace 恒温测试机.UI
         private void doData04_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if (btn.BackColor==Color.Green)
+            if (btn.BackColor == Color.Green)
             {
                 //关闭 常温制冷
                 btn.BackColor = Color.LightGray;
@@ -3049,5 +3050,7 @@ namespace 恒温测试机.UI
                 control.InstantDo_Write(doData);
             }
         }
+        #endregion
+
     }
 }

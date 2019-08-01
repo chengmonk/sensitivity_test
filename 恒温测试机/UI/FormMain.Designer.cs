@@ -996,6 +996,7 @@
             this.hslCurve1.Name = "hslCurve1";
             this.hslCurve1.Size = new System.Drawing.Size(981, 430);
             this.hslCurve1.TabIndex = 7;
+            this.hslCurve1.ValueSegment = 20;
             // 
             // Title
             // 
