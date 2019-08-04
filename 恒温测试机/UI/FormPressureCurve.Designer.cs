@@ -43,13 +43,16 @@
             this.hslCurveHistory1.CurveNameWidth = 120;
             this.hslCurveHistory1.DashCoordinateColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(72)))), ((int)(((byte)(72)))));
             this.hslCurveHistory1.DataTipWidth = 200;
+            this.hslCurveHistory1.DateTimeFormate = "yyyy-MM-dd HH:mm:ss:fff";
             this.hslCurveHistory1.Location = new System.Drawing.Point(21, 23);
             this.hslCurveHistory1.MarkTextColor = System.Drawing.Color.Yellow;
             this.hslCurveHistory1.Name = "hslCurveHistory1";
             this.hslCurveHistory1.Size = new System.Drawing.Size(995, 653);
             this.hslCurveHistory1.TabIndex = 3;
-            this.hslCurveHistory1.ValueMaxLeft = 10F;
-            this.hslCurveHistory1.ValueMaxRight = 10F;
+            this.hslCurveHistory1.UnitLeft = "℃";
+            this.hslCurveHistory1.UnitRight = "L/Min";
+            this.hslCurveHistory1.ValueMaxLeft = 80F;
+            this.hslCurveHistory1.ValueMaxRight = 20F;
             this.hslCurveHistory1.ValueSegment = 20;
             // 
             // hslButton1

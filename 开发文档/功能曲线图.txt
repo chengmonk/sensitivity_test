@@ -1,0 +1,116 @@
+【主要方法】
+hsl.RemoveAllCurve();		//清除图
+hsl.SetLeftCurve(名称,数据,颜色,是否平滑,格式化显示文本);		//设置曲线属性
+hsl.SetDateTimes(时间);		//设置时间轴
+hsl.RenderCurveUI();		//所有的曲线设置好后，调用这个方法统一显示曲线信息，避免闪烁
+hsl.AddLeftAuxiliary();		//设置辅助线				
+
+hslCurveHistory1.AddMarkText( new HslControls.HslMarkText( )		//数据点标注
+                {
+                    Index = 200,
+                    CurveKey = "温度",
+                    MarkText = "标注信息",
+                    CircleBrush = Brushes.DodgerBlue,
+                    TextBrush = Brushes.Blue
+                } );
+hslCurveHistory1.RemoveAllMarkText( );								//清除数据点标注
+				
+
+hslCurveHistory1.AddMarkLine( new HslControls.HslMarkLine( )		//曲线里的一个区域画线标注出来。并且可以再标注点信息
+{
+    CircleBrush = Brushes.DodgerBlue,
+    IsLeftFrame = true,
+    IsLineClosed = true,
+    LinePen = Pens.DodgerBlue,
+    TextBrush = Brushes.DodgerBlue,
+    Points = new PointF[]
+    {
+        new PointF(200, 180f), new PointF(260, 20f), new PointF(550, 150f),
+    },
+    Marks = new string[] { "AA", "BB", "CC" },
+} );				
+				
+
+ HslControls.HslMarkBackSection backSection = new HslControls.HslMarkBackSection( )		//背景标识操作
+        {
+            StartIndex = 1000,
+            EndIndex = 1300,
+            MarkText = "K1234567890",
+        };
+hslCurveHistory1.AddMarkBackSection( backSection );	
+
+HslControls.HslMarkForeSection foreSection = new HslControls.HslMarkForeSection( )		//区间表示操作
+        {
+            StartIndex = 600,
+            EndIndex = 800,
+            StartHeight = 0.3f,         // 如果值是(0-1)的话，表示的是位置百分比，0.9就是曲线高度为90%，从上往下看的视角，如果填了600，那就是绝对坐标
+            Height = 0.9f,              // 和上面同理
+            LinePen = Pens.Chocolate,   // 指定颜色
+            IsRenderTimeText = false,   // 是否显示额外的起始时间和结束时间，此处就不要了
+            MarkText = "温度超标了",
+        };
+        hslCurveHistory1.AddMarkForeSection( foreSection );			
+				
+1、两侧坐标轴调整
+	ValueMaxLeft
+	ValueMaxRight
+	ValueMinLeft
+	ValueMinRight
+	ValueSegment	多少个格子
+
+2、加载数据
+	new Thread(new ThreadStart(ThreadReadExample1)){
+		IsBackground = true
+	}.Start();
+	
+	private void ThreadReadExample1(){
+		Invoke( new Action(()=>{
+			
+		}));
+	}
+	
+3、单位显示：UnitLeft UnitRight
+
+
+【功能曲线】
+1、设定出水温度及其上下限的辅助线：hsl.AddLeftAuxiliary();		//设置辅助线
+2、超过上下限温度的区域，标注时间：
+HslControls.HslMarkForeSection foreSection = new HslControls.HslMarkForeSection( )		//区间表示操作
+        {
+            StartIndex = 600,
+            EndIndex = 800,
+            StartHeight = 0.3f,         // 如果值是(0-1)的话，表示的是位置百分比，0.9就是曲线高度为90%，从上往下看的视角，如果填了600，那就是绝对坐标
+            Height = 0.9f,              // 和上面同理
+            LinePen = Pens.Chocolate,   // 指定颜色
+            IsRenderTimeText = false,   // 是否显示额外的起始时间和结束时间，此处就不要了
+            MarkText = "温度超标了",
+        };
+        hslCurveHistory1.AddMarkForeSection( foreSection );	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

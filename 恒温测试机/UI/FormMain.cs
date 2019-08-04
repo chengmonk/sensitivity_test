@@ -52,12 +52,13 @@ namespace 恒温测试机.UI
         public const int CHANNEL_COUNT_MAX = 16;
         private double[] m_dataScaled = new double[CHANNEL_COUNT_MAX];
 
-        bool collectDataFlag = false;
-        bool runFlag = false;
+        bool collectDataFlag = false;           //是否采集数据
+        bool runFlag = false;                   //是否执行流程
 
-        bool graphFlag = true;
+        bool graphFlag = true;          //先记录为true
         bool whFlag = true;// ture表示 当前为热水箱液面 flase表示 当前为冷水箱液面 
-        bool autoRunFlag = false;
+        bool autoRunFlag = false;               //是否自动运行
+        bool stopFlag = false;                  //是否手动停止
 
         public static DataTable dt;
         public static DataTable GraphDt;
@@ -377,13 +378,14 @@ namespace 恒温测试机.UI
                                     //(float)Tc,(float)Th,(float)Tm,
                                     //(float)Pc,(float)Ph,(float)Pm,
                                     //(float)Qm5
-                                    (float)sourceDataQc[i],(float)sourceDataQh[i],(float)sourceDataQm[i],
-                                    (float)sourceDataTc[i],(float)sourceDataTh[i],(float)sourceDataTm[i],
+                                    (float)sourceDataQc[i]*5,(float)sourceDataQh[i]*5,(float)sourceDataQm[i]*5,
+                                    (float)sourceDataTc[i]*10,(float)sourceDataTh[i]*10,(float)sourceDataTm[i]*10,
                                     (float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
                                     //(float)sourceDataQm5[i]
                             }
                         );
                     }
+                    #region 注释
                     //hslCurve1.AddCurveData(
                     //        new string[] {
                     //                "temp1","temp2","temp3","temp4","temp5"
@@ -419,6 +421,7 @@ namespace 恒温测试机.UI
                     //        QmShow.ForeColor = Color.Black;
                     //    }
                     //}
+                    #endregion
                     DataReadyToControlTemp();
                 }
             }
@@ -430,7 +433,7 @@ namespace 恒温测试机.UI
 
         }
         public bool IsOpenDC = false;
-        private void DataReadyToControlTemp()
+        private void DataReadyToControlTemp()   //程序不自动控制温度，仅用按钮颜色表示是否加热制冷
         {
             //if (!IsOpenDC)
             //{
@@ -600,56 +603,44 @@ namespace 恒温测试机.UI
 
         }
 
-        private delegate void DataGraphDelegate();//实时曲线委托
-        private void DataGraph()
+
+        private delegate void StopDelegate();   //手动停止委托
+        private void StopPro()
         {
             try
             {
                 if (this.InvokeRequired)
                 {
-                    DataGraphDelegate dataGranphDelegate = DataGraph;
-                    this.Invoke(dataGranphDelegate);
+                    StopDelegate stopDelegate = StopPro;
+                    this.Invoke(stopDelegate);
                 }
                 else
                 {
-
+                    //将数字量输出置为0
+                    doData[0] = 0;
+                    doData[1] = 0;
+                    doData[2] = 0;
+                    doData[3] = 0;
+                    control.InstantDo_Write(doData);
+                    //当前采集的数据清空
+                    analyseReportDic.Remove(logicType);
+                    dt.Clear();
+                    index = 0;
+                    //输出面板清空
+                    systemInfoTb.Text = "";
+                    
+                    //弹窗提示
+                    MessageBox.Show("当前测试流程已停止");
+                    stopFlag = false;
+                    return;
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Log.Error(ex.ToString());
                 return;
             }
-        }
-
-        private delegate void HideOrShowCurveDelegate();
-        private void HideOrShowCurve()
-        {
-            try
-            {
-                if (this.InvokeRequired)
-                {
-                    HideOrShowCurveDelegate hideOrShowCurveDelegate = HideOrShowCurve;
-                    this.Invoke(hideOrShowCurveDelegate);
-                }
-                else
-                {
-                    if (graphFlag)
-                    {
-                        hslCurve1.RemoveAllCurveData();
-                        hslCurve1.Show();
-                    }
-                    else
-                    {
-                        hslCurve1.Hide();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-                return;
-            }
+            
         }
 
         #endregion
@@ -712,6 +703,7 @@ namespace 恒温测试机.UI
             GraphDt.Columns.Add("冷水温度Tc", typeof(double));   //3
             GraphDt.Columns.Add("热水温度Th", typeof(double));   //4
             GraphDt.Columns.Add("出水温度Tm", typeof(double));   //5
+            //GraphDt.Columns.Add("出水温度Tm2", typeof(double));   //5
             GraphDt.Columns.Add("冷水压力Pc", typeof(double));   //6
             GraphDt.Columns.Add("热水压力Ph", typeof(double));   //7
             GraphDt.Columns.Add("出水压力Pm", typeof(double));   //8
@@ -738,7 +730,7 @@ namespace 恒温测试机.UI
             bpq_conf.tingzhiwei = "1";
             bpq_conf.dataFromZero = true;
             bpq_conf.stringReverse = false;
-            bpq_conf.COM_Name = "COM3";
+            bpq_conf.COM_Name = "COM11";
             bpq_conf.checkInfo = 2;
             bpq_conf.dataFrame = 2;
 
@@ -865,7 +857,7 @@ namespace 恒温测试机.UI
                 flowTimer.Enabled = true;
             }
             graphFlag = true;
-            HideOrShowCurve();
+            //HideOrShowCurve();
         }
 
         #endregion
@@ -958,6 +950,10 @@ namespace 恒温测试机.UI
         private void StartBtn_Click(object sender, EventArgs e)
         {
             //collectDataFlag = true;
+            if (runFlag)    //避免重复开启
+            {
+                return;
+            }
             switch (logicType)
             {
                 case LogicTypeEnum.safeTest:
@@ -981,6 +977,14 @@ namespace 恒温测试机.UI
         private void StopBtn_Click(object sender, EventArgs e)
         {
             collectDataFlag = false;
+            stopFlag = true;
+            runFlag = false;
+            autoRunFlag = false;
+            doData[0] = 0;
+            doData[1] = 0;
+            doData[2] = 0;
+            doData[3] = 0;
+            control.InstantDo_Write(doData);
         }
 
         //private void HeatingBtn_Click(object sender, EventArgs e)
@@ -1067,7 +1071,7 @@ namespace 恒温测试机.UI
             fileDialog.InitialDirectory = Application.StartupPath;
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                DataTableUtils.DataTableToCsvT(dt, fileDialog.FileName);
+                DataTableUtils.DataTableToCsvT(GraphDt, fileDialog.FileName);
                 MessageBox.Show("保存成功!");
                 index = 0;
             }
@@ -1087,6 +1091,8 @@ namespace 恒温测试机.UI
             {
                 //安全性测试 流程  TODO：测试报告
                 runFlag = true;
+                graphFlag = true;
+
                 analyseDataDic = new Dictionary<string, DataTable>();
                 #region 启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭vc vm 打开v5
                 set_bit(ref doData[1], 7, true);//a
@@ -1111,6 +1117,11 @@ namespace 恒温测试机.UI
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vc、Vm打开V5，开始冷水失效测试]\n");
 
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 冷水失效  持续t3后，打开VC Vm，同时关闭V5
@@ -1162,10 +1173,16 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 5, true);//vm
                 set_bit(ref doData[2], 6, false);//v5
                 control.InstantDo_Write(doData);
+
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 压力回复初始压力后，开始收集数据 T5  
-                //测试标准：混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃  ？？
+                //测试标准：混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃  
                 for (; true;)
                 {
                     if (Math.Abs(Pc - (double)Properties.Settings.Default.CoolPump011) <= (double)Properties.Settings.Default.pressureThreshold)
@@ -1211,6 +1228,12 @@ namespace 恒温测试机.UI
                 endIndex = index;
                 analyseDataDic.Add("冷水恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
                 SystemInfoPrint("[ 5s 的数据记录完毕]\n");
+
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region t1后，关闭vh vm，同时打开v5
@@ -1220,6 +1243,11 @@ namespace 恒温测试机.UI
                 doData[2].set_bit(6, true);//v5
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vh、Vm打开V5，开始热水失效测试]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 热水失效  持续t3后，打开vh vm，同时关闭v5
@@ -1271,10 +1299,15 @@ namespace 恒温测试机.UI
                 doData[2].set_bit(5, true);//vm
                 doData[2].set_bit(6, false);//v5
                 control.InstantDo_Write(doData);
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 压力回复初始压力后，开始收集数据 T5
-                //测试标准：混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃  ？？
+                //测试标准：混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃  
                 for (; true;)
                 {
                     if (Math.Abs(Ph - (double)Properties.Settings.Default.HotPump021) <= (double)Properties.Settings.Default.pressureThreshold)
@@ -1320,6 +1353,11 @@ namespace 恒温测试机.UI
                 endIndex = index;
                 analyseDataDic.Add("热水恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
                 SystemInfoPrint("[ 5s 的数据记录完毕]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 MessageBox.Show("安全性测试结束，请注意保存数据！");
@@ -1337,6 +1375,11 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 if (autoRunFlag)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        return;
+                    }
                     safeTestRbt.Checked = false;
                     pressureTestRbt.Checked = true;
                 }
@@ -1352,6 +1395,10 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 if (autoRunFlag)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                    }
                     safeTestRbt.Checked = false;
                     pressureTestRbt.Checked = true;
                 }
@@ -1363,6 +1410,8 @@ namespace 恒温测试机.UI
             try
             {
                 runFlag = true;
+                graphFlag = true;
+
                 analyseDataDic = new Dictionary<string, DataTable>();
                 //压力变化测试 流程 TODO：测试报告
 
@@ -1382,14 +1431,23 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 5, true);//vm
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统...]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
 
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-                //022压力切换为低压 用485切换    ???
+                //022压力切换为低压 用485切换    
                 set_bit(ref doData[1], 7, false);//a
                 set_bit(ref doData[2], 0, true);//b            
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水降压测试]\n");
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 热水降压 持续t3后打开a同时关闭b  022压力切换为高压 用485切换
@@ -1440,11 +1498,20 @@ namespace 恒温测试机.UI
                 index++;
                 endIndex = index;
                 analyseDataDic.Add("热水降压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 set_bit(ref doData[1], 7, true);//a
                 set_bit(ref doData[2], 0, false);//b 
                 control.InstantDo_Write(doData);
-                //022压力由低压切换为高压   ???
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
+                //022压力由低压切换为高压   
                 #endregion
 
                 #region 热水压力恢复到初始压力，开始记录 5s 的数据
@@ -1457,6 +1524,11 @@ namespace 恒温测试机.UI
                     System.Threading.Thread.Sleep((int)(100));
                 }
                 SystemInfoPrint("[热水压力恢复到初始压力，开始记录 5s 的数据]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 dt.Rows.Add("开始采集热水降压测试压力恢复数据",
                     DateTime.Now,
                                 0,
@@ -1496,6 +1568,11 @@ namespace 恒温测试机.UI
                 analyseDataDic.Add("热水降压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
 
                 SystemInfoPrint("[ 5s 的数据记录完毕]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region t1 同时 关闭a 打开b
@@ -1508,7 +1585,11 @@ namespace 恒温测试机.UI
 
                 //022高压切换           ???
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水升压测试]\n");
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 热水升压 持续t3后打开a同时关闭b  022压力切换为高压 用485切换
@@ -1524,6 +1605,11 @@ namespace 恒温测试机.UI
                     System.Threading.Thread.Sleep((int)(100));
                 }
                 SystemInfoPrint("[压力达到设定值，开始记录热水升压数据]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 //开始收集数据
                 dt.Rows.Add("开始采集热水升压测试数据",
                     DateTime.Now,
@@ -1562,7 +1648,11 @@ namespace 恒温测试机.UI
                 index++;
                 endIndex = index;
                 analyseDataDic.Add("热水升压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 set_bit(ref doData[1], 7, true);//a
                 set_bit(ref doData[2], 0, false);//b 
                 control.InstantDo_Write(doData);   //022压力切换为高压 用485切换  ???
@@ -1578,6 +1668,11 @@ namespace 恒温测试机.UI
                     System.Threading.Thread.Sleep((int)(100));
                 }
                 SystemInfoPrint("[热水压力恢复到初始压力，开始记录 5s 的数据]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 dt.Rows.Add("开始采集热水升压测试压力恢复数据",
                     DateTime.Now,
                                 0,
@@ -1617,6 +1712,11 @@ namespace 恒温测试机.UI
                 analyseDataDic.Add("热水升压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
 
                 SystemInfoPrint("[ 5s 的数据记录完毕]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region t1 同时 关闭 c 打开d
@@ -1624,7 +1724,11 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 2, false);//d 
                 control.InstantDo_Write(doData);
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 //012压力切换为低压 用485切换
                 set_bit(ref doData[2], 1, false);//c
                 set_bit(ref doData[2], 2, true);//d 
@@ -1632,7 +1736,11 @@ namespace 恒温测试机.UI
 
                 //012输出低压 485输出  ???
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭c打开d，开始压力变化测试-冷水降压测试]\n");
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 冷水降压 持续t3后打开c同时关闭d  012压力切换为高压 用485切换
@@ -1650,6 +1758,11 @@ namespace 恒温测试机.UI
                     System.Threading.Thread.Sleep((int)(100));
                 }
                 SystemInfoPrint("[压力达到设定值，开始记录冷水降压数据]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 dt.Rows.Add("开始采集冷水降压测试数据",
                     DateTime.Now,
                                 0,
@@ -1688,7 +1801,11 @@ namespace 恒温测试机.UI
                 index++;
                 endIndex = index;
                 analyseDataDic.Add("冷水降压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 set_bit(ref doData[2], 1, true);//c
                 set_bit(ref doData[2], 2, false);//d 
                                                  //012输出高压 485输出     ???
@@ -1706,6 +1823,11 @@ namespace 恒温测试机.UI
                     System.Threading.Thread.Sleep((int)(100));
                 }
                 SystemInfoPrint("[冷水压力恢复到初始压力，开始记录 5s 的数据]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 dt.Rows.Add("开始采集冷水降压测试压力恢复数据",
                     DateTime.Now,
                                 0,
@@ -1744,7 +1866,11 @@ namespace 恒温测试机.UI
 
                 SystemInfoPrint("[ 5s 的数据记录完毕]\n");
                 analyseDataDic.Add("冷水降压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region t1 同时 关闭c 打开d
@@ -1762,7 +1888,11 @@ namespace 恒温测试机.UI
 
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭c打开d，开始压力变化测试-冷水升压测试]\n");
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 冷水升压 持续t3后打开a同时关闭b  022压力切换为高压 用485切换
@@ -1779,6 +1909,11 @@ namespace 恒温测试机.UI
                     System.Threading.Thread.Sleep((int)(100));
                 }
                 SystemInfoPrint("[压力达到设定值，开始记录冷水升压数据]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 //开始收集数据
                 dt.Rows.Add("开始采集冷水升压测试数据",
                     DateTime.Now,
@@ -1818,7 +1953,11 @@ namespace 恒温测试机.UI
                 index++;
                 endIndex = index;
                 analyseDataDic.Add("冷水升压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 set_bit(ref doData[2], 1, true);//c
                 set_bit(ref doData[2], 2, false);//d            
                 control.InstantDo_Write(doData);
@@ -1834,6 +1973,11 @@ namespace 恒温测试机.UI
                     System.Threading.Thread.Sleep((int)(100));
                 }
                 SystemInfoPrint("[冷水压力恢复到初始压力，开始记录 5s 的数据]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 dt.Rows.Add("开始采集冷水升压测试压力恢复数据",
                     DateTime.Now,
                                 0,
@@ -1872,7 +2016,11 @@ namespace 恒温测试机.UI
                 analyseDataDic.Add("冷水升压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
 
                 SystemInfoPrint("[ 5s 的数据记录完毕]\n");
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 MessageBox.Show("压力变化测试结束，请注意保存数据！");
@@ -1892,6 +2040,11 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 if (autoRunFlag)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        return;
+                    }
                     pressureTestRbt.Checked = false;
                     coolTestRbt.Checked = true;
                 }
@@ -1907,6 +2060,11 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 if (autoRunFlag)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        //return;
+                    }
                     pressureTestRbt.Checked = false;
                     coolTestRbt.Checked = true;
                 }
@@ -1918,8 +2076,10 @@ namespace 恒温测试机.UI
             try
             {
                 runFlag = true;
+                graphFlag = true;
+
                 analyseDataDic = new Dictionary<string, DataTable>();
-                //TODO：如何判断温度达到设定值？
+                
 
                 #region 启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭12 打开14
                 set_bit(ref doData[1], 7, true);//a
@@ -1935,11 +2095,20 @@ namespace 恒温测试机.UI
                 SystemInfoPrint("[初始化系统...]\n");
 
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 set_bit(ref doData[0], 6, false);//12
                 set_bit(ref doData[1], 6, true);//14            
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭12 打开14，开始降温测试]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 温度达到设定稳定温度后  持续t3后 关闭14 打开12
@@ -1950,6 +2119,11 @@ namespace 恒温测试机.UI
                 SystemInfoPrint("[等待温度到达设定值...]\n");
                 for (; true;)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        return;
+                    }
                     if (true)       //???
                         break;
                     System.Threading.Thread.Sleep((int)(100));
@@ -1993,7 +2167,11 @@ namespace 恒温测试机.UI
                 index++;
                 endIndex = index;
                 analyseDataDic.Add("降温测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 set_bit(ref doData[0], 6, true);//12
                 set_bit(ref doData[1], 6, false);//14  
                 control.InstantDo_Write(doData);
@@ -2004,6 +2182,11 @@ namespace 恒温测试机.UI
                 //1、T40 秒后混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃
                 for (; true;)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        return;
+                    }
                     if (true) break;                //???
                     System.Threading.Thread.Sleep((int)(100));
                 }
@@ -2043,7 +2226,11 @@ namespace 恒温测试机.UI
                                index);
                 index++;
                 analyseDataDic.Add("降温测试恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 SystemInfoPrint("[ 45s 的数据记录完毕]\n");
                 #endregion
 
@@ -2062,6 +2249,11 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 if (autoRunFlag)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        return;
+                    }
                     coolTestRbt.Checked = false;
                     tmpTestRbt.Checked = true;
                 }
@@ -2077,6 +2269,11 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 if (autoRunFlag)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        //return;
+                    }
                     coolTestRbt.Checked = false;
                     tmpTestRbt.Checked = true;
                 }
@@ -2088,6 +2285,8 @@ namespace 恒温测试机.UI
             try
             {
                 runFlag = true;
+                graphFlag = true;
+
                 analyseDataDic = new Dictionary<string, DataTable>();
 
                 #region 启动 a、c、11、12、vc、vh
@@ -2099,6 +2298,11 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 4, true);//vh
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统...]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 #region 开启电机，原点，旋转记录 Tm36 38 40 位置
@@ -2127,7 +2331,11 @@ namespace 恒温测试机.UI
                     Log.Error(ex.ToString());
                     return;
                 }
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
 
@@ -2146,6 +2354,11 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 if (autoRunFlag)
                 {
+                    if (stopFlag)   //手动停止
+                    {
+                        StopPro();
+                        //return;
+                    }
                     tmpTestRbt.Checked = false;
                     FlowTestRbt.Checked = true;
                 }
@@ -2173,6 +2386,8 @@ namespace 恒温测试机.UI
             try
             {
                 runFlag = true;
+                graphFlag = true;
+
                 analyseDataDic = new Dictionary<string, DataTable>();
 
                 #region 启动 a、c、11、011、12、012、vc、vh、vm
@@ -2187,7 +2402,11 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 5, true);//vm
                 control.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统...]\n");
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
                 //TODO 电机控制
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，电机开始转动，开始流量减少测试]\n");
@@ -2233,7 +2452,11 @@ namespace 恒温测试机.UI
                 index++;
                 endIndex = index;
                 analyseDataDic.Add("流量减少测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 //TODO 电机控制
 
                 #endregion
@@ -2278,7 +2501,11 @@ namespace 恒温测试机.UI
                 index++;
                 endIndex = index;
                 analyseDataDic.Add("温度稳定的测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
                 #endregion
 
                 dataReportAnalyseApp = new DataReportAnalyseApp(logicType, analyseDataDic);
@@ -2304,6 +2531,11 @@ namespace 恒温测试机.UI
             {
                 runFlag = false;
                 graphFlag = false;
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    //return;
+                }
             }
         }
 
@@ -2328,11 +2560,15 @@ namespace 恒温测试机.UI
 
         private void GraphDataBtn_Click(object sender, EventArgs e)
         {
-            if (GraphDt.Rows.Count > 1)
+            if (GraphDt.Rows != null && GraphDt.Rows.Count > 1)
             {
                 Log.Info("启动图像界面");
                 FormPressureCurve form = new FormPressureCurve(GraphDt);
                 form.Show();
+            }
+            else
+            {
+                MessageBox.Show("未采集到数据");
             }
         }
 
@@ -2437,6 +2673,7 @@ namespace 恒温测试机.UI
         private double[] sourceDataTh = new double[106];
 
         private double[] sourceDataTm = new double[106];
+        //private double[] sourceDataTm2 = new double[106];
 
         private double[] sourceDataTc = new double[106];
 
@@ -2478,28 +2715,28 @@ namespace 恒温测试机.UI
                 err = waveformAiCtrl1.GetData(args.Count, m_dataScaled);//读取数据     
 
                 DateTime t = DateTime.Now;
-                t = t.AddSeconds(-1.97);//采集到的是一秒钟之前的数据，因此需要对当前的时间减去1s
+                t = t.AddSeconds(-1.03);//采集到的是一秒钟之前的数据，因此需要对当前的时间减去1s，再减去30ms是因为该30ms的数据，并在当前缓冲区做平滑
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
                 //Log.Info(t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
 
                 int index = 0;
                 for (int i = 0; i < m_dataScaled.Length; i += 16)
                 {
-                    Qc = Math.Round(m_dataScaled[i + 0], 2, MidpointRounding.AwayFromZero) * 5;
-                    Qh = Math.Round(m_dataScaled[i + 1], 2, MidpointRounding.AwayFromZero) * 5;
-                    Qm = Math.Round(m_dataScaled[i + 2], 2, MidpointRounding.AwayFromZero) * 5;
-                    Tc = Math.Round(m_dataScaled[i + 3], 2, MidpointRounding.AwayFromZero) * 10;
-                    Th = Math.Round(m_dataScaled[i + 4], 2, MidpointRounding.AwayFromZero) * 10;
-                    Tm = Math.Round(m_dataScaled[i + 5], 2, MidpointRounding.AwayFromZero) * 10;
+                    Qc = Math.Round(m_dataScaled[i + 0], 2, MidpointRounding.AwayFromZero);// * 5;
+                    Qh = Math.Round(m_dataScaled[i + 1], 2, MidpointRounding.AwayFromZero);// * 5;
+                    Qm = Math.Round(m_dataScaled[i + 2], 2, MidpointRounding.AwayFromZero);// * 5;
+                    Tc = Math.Round(m_dataScaled[i + 3], 2, MidpointRounding.AwayFromZero);// * 10;
+                    Th = Math.Round(m_dataScaled[i + 4], 2, MidpointRounding.AwayFromZero);// * 10;
+                    Tm = Math.Round(m_dataScaled[i + 5], 2, MidpointRounding.AwayFromZero);// * 10;
                     Pc = Math.Round(m_dataScaled[i + 6], 2, MidpointRounding.AwayFromZero);
                     Ph = Math.Round(m_dataScaled[i + 7], 2, MidpointRounding.AwayFromZero);
                     Pm = Math.Round(m_dataScaled[i + 8], 2, MidpointRounding.AwayFromZero);
                     Qm5 = Math.Round(m_dataScaled[i + 9], 2, MidpointRounding.AwayFromZero);
-                    Temp1 = Math.Round(m_dataScaled[i + 10], 2, MidpointRounding.AwayFromZero) * 10;
-                    Temp2 = Math.Round(m_dataScaled[i + 11], 2, MidpointRounding.AwayFromZero) * 10;
-                    Temp3 = Math.Round(m_dataScaled[i + 12], 2, MidpointRounding.AwayFromZero) * 10;
-                    Temp4 = Math.Round(m_dataScaled[i + 13], 2, MidpointRounding.AwayFromZero) * 10;
-                    Temp5 = Math.Round(m_dataScaled[i + 14], 2, MidpointRounding.AwayFromZero) * 10;
+                    Temp1 = Math.Round(m_dataScaled[i + 10], 2, MidpointRounding.AwayFromZero);// * 10;
+                    Temp2 = Math.Round(m_dataScaled[i + 11], 2, MidpointRounding.AwayFromZero);// * 10;
+                    Temp3 = Math.Round(m_dataScaled[i + 12], 2, MidpointRounding.AwayFromZero);// * 10;
+                    Temp4 = Math.Round(m_dataScaled[i + 13], 2, MidpointRounding.AwayFromZero);// * 10;
+                    Temp5 = Math.Round(m_dataScaled[i + 14], 2, MidpointRounding.AwayFromZero);// * 10;
                     Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) *200;
                     
                     if (index < 6)
@@ -2527,6 +2764,8 @@ namespace 恒温测试机.UI
                     sourceDataTc[index + 5] = Tc;
                     sourceDataTh[index + 5] = Th;
                     sourceDataTm[index + 5] = Tm;
+                    //sourceDataTm2[index + 5] = Tm;
+                    
                     sourceDataPc[index + 5] = Pc;
                     sourceDataPh[index + 5] = Ph;
                     sourceDataPm[index + 5] = Pm;
@@ -2565,12 +2804,12 @@ namespace 恒温测试机.UI
                         {
                             dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
                                 t,
-                                sourceDataQc[i],
-                                sourceDataQh[i],
-                                sourceDataQm[i],
-                                sourceDataTc[i],
-                                sourceDataTh[i],
-                                sourceDataTm[i],
+                                sourceDataQc[i]*5,
+                                sourceDataQh[i]*5,
+                                sourceDataQm[i]*5,
+                                sourceDataTc[i]*10,
+                                sourceDataTh[i]*10,
+                                sourceDataTm[i]*10,
                                 sourceDataPc[i],
                                 sourceDataPh[i],
                                 sourceDataPm[i],
@@ -2579,15 +2818,16 @@ namespace 恒温测试机.UI
                                 index);
                             index++;
                         }
-                        if (graphFlag)
+                        if (graphFlag)          //记录流程测试中的，曲线变化
                         {
                             GraphDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                sourceDataQc[i],
-                                sourceDataQh[i],
-                                sourceDataQm[i],
-                                sourceDataTc[i],
-                                sourceDataTh[i],
-                                sourceDataTm[i],
+                                sourceDataQc[i] * 5,
+                                sourceDataQh[i] * 5,
+                                sourceDataQm[i] * 5,
+                                sourceDataTc[i] * 10,
+                                sourceDataTh[i] * 10,
+                                sourceDataTm[i] * 10,
+                                //sourceDataTm2[i] * 10,
                                 sourceDataPc[i],
                                 sourceDataPh[i],
                                 sourceDataPm[i],
@@ -2597,12 +2837,12 @@ namespace 恒温测试机.UI
                         if (electDataFlag)
                         {
                             ElectDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                sourceDataQc[i],
-                                sourceDataQh[i],
-                                sourceDataQm[i],
-                                sourceDataTc[i],
-                                sourceDataTh[i],
-                                sourceDataTm[i],
+                                sourceDataQc[i] * 5,
+                                sourceDataQh[i] * 5,
+                                sourceDataQm[i] * 5,
+                                sourceDataTc[i] * 10,
+                                sourceDataTh[i] * 10,
+                                sourceDataTm[i] * 10,
                                 sourceDataPc[i],
                                 sourceDataPh[i],
                                 sourceDataPm[i],
@@ -2611,21 +2851,21 @@ namespace 恒温测试机.UI
                         }
                         t = t.AddMilliseconds(10.0);
                     }
-                    Qc = Math.Round((sourceDataQc[3] + sourceDataQc[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Qh = Math.Round((sourceDataQh[3] + sourceDataQh[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Qm = Math.Round((sourceDataQm[3] + sourceDataQm[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Tc = Math.Round((sourceDataTc[3] + sourceDataTc[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Th = Math.Round((sourceDataTh[3] + sourceDataTh[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Tm = Math.Round((sourceDataTm[3] + sourceDataTm[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Pc = Math.Round((sourceDataPc[3] + sourceDataPc[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Ph = Math.Round((sourceDataPh[3] + sourceDataPh[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Pm = Math.Round((sourceDataPm[3] + sourceDataPm[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Qm5 = Math.Round((sourceDataQm5[3] + sourceDataQm5[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Temp1 = Math.Round((sourceDataTemp1[3] + sourceDataTemp1[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Temp2 = Math.Round((sourceDataTemp2[3] + sourceDataTemp2[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Temp3 = Math.Round((sourceDataTemp3[3] + sourceDataTemp3[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Temp4 = Math.Round((sourceDataTemp4[3] + sourceDataTemp4[102]) / 2, 2, MidpointRounding.AwayFromZero);
-                    Temp5 = Math.Round((sourceDataTemp5[3] + sourceDataTemp5[102]) / 2, 2, MidpointRounding.AwayFromZero);
+                    Qc = Math.Round((sourceDataQc[3] + sourceDataQc[102]) * 2.5, 2, MidpointRounding.AwayFromZero);
+                    Qh = Math.Round((sourceDataQh[3] + sourceDataQh[102]) * 2.5, 2, MidpointRounding.AwayFromZero);
+                    Qm = Math.Round((sourceDataQm[3] + sourceDataQm[102]) * 2.5, 2, MidpointRounding.AwayFromZero);
+                    Tc = Math.Round((sourceDataTc[3] + sourceDataTc[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Th = Math.Round((sourceDataTh[3] + sourceDataTh[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Tm = Math.Round((sourceDataTm[3] + sourceDataTm[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Pc = Math.Round((sourceDataPc[3] + sourceDataPc[102]) * 0.5, 2, MidpointRounding.AwayFromZero);
+                    Ph = Math.Round((sourceDataPh[3] + sourceDataPh[102]) * 0.5, 2, MidpointRounding.AwayFromZero);
+                    Pm = Math.Round((sourceDataPm[3] + sourceDataPm[102]) * 0.5, 2, MidpointRounding.AwayFromZero);
+                    Qm5 = Math.Round((sourceDataQm5[3] + sourceDataQm5[102]) * 0.5, 2, MidpointRounding.AwayFromZero);
+                    Temp1 = Math.Round((sourceDataTemp1[3] + sourceDataTemp1[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Temp2 = Math.Round((sourceDataTemp2[3] + sourceDataTemp2[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Temp3 = Math.Round((sourceDataTemp3[3] + sourceDataTemp3[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Temp4 = Math.Round((sourceDataTemp4[3] + sourceDataTemp4[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Temp5 = Math.Round((sourceDataTemp5[3] + sourceDataTemp5[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     DataReadyToUpdateStatus();
                 }
                 isFirstAver = false;
@@ -2886,7 +3126,7 @@ namespace 恒温测试机.UI
             }
             else
             {
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 100; i++)               //3——102
                 {
                     List<double> temp = new List<double>();
                     for (int j = 0; j < 7; j++)
@@ -2896,15 +3136,15 @@ namespace 恒温测试机.UI
                     double sum = temp.Sum() - temp.Max() - temp.Min();
                     data[i + 3] = Math.Round(sum / 5, 2, MidpointRounding.AwayFromZero);
                 }
-                
             }
-            lastTempData[type * 6 + 0] = data[97];
-            lastTempData[type * 6 + 1] = data[98];
-            lastTempData[type * 6 + 2] = data[99];
+            //该六位数据，供下一组数据使用
+            lastTempData[type * 6 + 0] = data[100];
+            lastTempData[type * 6 + 1] = data[101];
+            lastTempData[type * 6 + 2] = data[102];
 
-            lastTempData[type * 6 + 3] = data[100];
-            lastTempData[type * 6 + 4] = data[101];
-            lastTempData[type * 6 + 5] = data[102];
+            lastTempData[type * 6 + 3] = data[103];
+            lastTempData[type * 6 + 4] = data[104];
+            lastTempData[type * 6 + 5] = data[105];
             return data;
         }
 
