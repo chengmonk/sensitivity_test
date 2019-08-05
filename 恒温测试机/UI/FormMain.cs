@@ -2666,6 +2666,7 @@ namespace 恒温测试机.UI
 
         private double[] sourceDataQc = new double[106];
 
+
         private double[] sourceDataQh = new double[106];
 
         private double[] sourceDataQm = new double[106];
@@ -2778,21 +2779,65 @@ namespace 恒温测试机.UI
                     index++;
                 }
                 //Console.WriteLine("液面高度：" + Wh);
+               
                 sourceDataQc = averge(ref sourceDataQc,0);
+                if (isFirstAver == false)
+                {
+                    for(int i = 3; i < sourceDataQc.Length - 3; i++){
+                        Log.Info("before"+ i + "-》" + sourceDataQc[i]);
+                    }
+                }
+                sourceDataQc = filterKalMan(sourceDataQc);
+                if (isFirstAver == false)
+                {
+                    for (int i = 3; i < sourceDataQc.Length - 3; i++)
+                    {
+                        Log.Info("after" + i+"-》"+ sourceDataQc[i]);
+                    }
+                }
+
                 sourceDataQh = averge(ref sourceDataQh,1);
+                //sourceDataQh = filter(ref sourceDataQh, 10);
+
                 sourceDataQm = averge(ref sourceDataQm,2);
+                //sourceDataQm = filter(ref sourceDataQm, 10);
+
                 sourceDataTc = averge(ref sourceDataTc,3);
+                //sourceDataTc = filter(ref sourceDataTc, 10);
+
                 sourceDataTh = averge(ref sourceDataTh,4);
+               // sourceDataTh = filter(ref sourceDataTh, 10);
+
                 sourceDataTm = averge(ref sourceDataTm,5);
+                //sourceDataTm = filter(ref sourceDataTm, 10);             
+                
                 sourceDataPc = averge(ref sourceDataPc,6);
+                //sourceDataPc = filter(ref sourceDataPc, 10);
+
                 sourceDataPh = averge(ref sourceDataPh,7);
+               // sourceDataPh = filter(ref sourceDataPh, 10);
+
                 sourceDataPm = averge(ref sourceDataPm,8);
+               // sourceDataPm = filter(ref sourceDataPm, 10);
+
                 sourceDataQm5 = averge(ref sourceDataQm5,9);
+                //sourceDataQm5 = filter(ref sourceDataQm5, 10);
+
                 sourceDataTemp1 = averge(ref sourceDataTemp1, 10);
+                //sourceDataTemp1 = filter(ref sourceDataTemp1, 10);
+
                 sourceDataTemp2 = averge(ref sourceDataTemp2, 11);
+                //sourceDataTemp2 = filter(ref sourceDataTemp2, 10);
+
                 sourceDataTemp3 = averge(ref sourceDataTemp3, 12);
+                //sourceDataTemp3 = filter(ref sourceDataTemp3, 10);
+
                 sourceDataTemp4 = averge(ref sourceDataTemp4, 13);
+                //sourceDataTemp4 = filter(ref sourceDataTemp4, 10);
+
                 sourceDataTemp5 = averge(ref sourceDataTemp5, 14);
+                //sourceDataTemp5 = filter(ref sourceDataTemp5, 10);
+
                 if (isFirstAver==false)
                 {
                     for (int i = 3; i < sourceDataQc.Length-3; i++)
@@ -2881,7 +2926,38 @@ namespace 恒温测试机.UI
             }
         }
 
+        //输入：任意长度的数组
+        //输出：滤波之后相同长度的数组
+        double Average;
+        public double[] filterKalMan(double[] Observe)
+        {
+            double[] CanShu = { 1, 1, 1, 1, 1, 0, 0, 0 };
+            //导入参数
+            double KamanX = CanShu[0];
+            double KamanP = CanShu[1];
+            double KamanQ = CanShu[2];
+            double KamanR = CanShu[3];
+            double KamanY = CanShu[4];
+            double KamanKg = CanShu[5];
+            double KamanSum = CanShu[6];
 
+            //加载观察值
+            double[] True = new double[Observe.Length];
+            for (int i = 0; i <= Observe.Length - 1; i++)
+            {
+                //对每个观察值迭代
+                KamanY = KamanX;
+                KamanP = KamanP + KamanQ;
+                KamanKg = KamanP / (KamanP + KamanR);
+                KamanX = (KamanY + KamanKg * (Observe[i] - KamanY));
+                KamanSum += KamanX;
+                True[i] = KamanX;
+                KamanP = (1 - KamanKg) * KamanP;
+            }
+            Average = KamanSum / Observe.Length;
+            return True;
+
+        }
 
         private void WaveformAiCtrl1_Overrun(object sender, BfdAiEventArgs e)
         {
@@ -3146,6 +3222,83 @@ namespace 恒温测试机.UI
             lastTempData[type * 6 + 4] = data[104];
             lastTempData[type * 6 + 5] = data[105];
             return data;
+        }
+
+        /// <summary>
+        /// 传入的数组为：前6位上次数据+后100位缓冲区数据
+        /// 消除后100位滤波抖动
+        /// </summary>
+        /// <param name="sourceData"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        double[] filter(ref double[] sourceData, int N)
+        {
+            double[] data = sourceData.ToList().Skip(6).Take(100).ToArray();
+            double[] temp = new double[100];
+            double value = -99;//前一个可信的value
+            double new_value;
+            int pos = 0;//记录上一个value的下标
+            int count = 0;//缓存区计数器
+            int addLength = 0;//每次遇到新的可用的value，要根据前一个value 复制的长度
+            for (int i = 0; i < 100; i++)
+            {
+                count++;
+                if (-99 == value)
+                {
+                    value = data[i];
+                    //temp[i] = data[i];
+                    pos = i;
+                }
+                else
+                {
+                    if (data[i] == value)
+                    {
+                        // addLength += count;
+                        count = 0;
+                    }
+
+                    else
+                    {
+
+                        if (count >= N)
+                        {
+                            new_value = data[i];
+                            Console.WriteLine(data[i]);
+                            addLength = i - pos + 1;
+                            count = 0;
+                            double addvalue = (new_value - value) / addLength;
+                            for (int j = 0; j < addLength; j++)
+                            {
+                                temp[pos + j] = value + addvalue * j;
+                            }
+                            value = data[i];
+                            pos = i;
+                            count = 0;
+                            //addLength = 0;
+                        }
+
+                    }
+                }
+            }
+
+
+            {
+                new_value = data[99];
+                Console.WriteLine("++:" + data[99]);
+                addLength = 99 - pos + 1;
+                count = 0;
+                double addvalue = (new_value - value) / addLength;
+                for (int j = 0; j < addLength; j++)
+                {
+                    temp[pos + j] = value + addvalue * j;
+                }
+
+            }
+            for(int i = 6; i < sourceData.Length; i++)
+            {
+                sourceData[i] = temp[i - 6];
+            }
+            return sourceData;
         }
 
         #endregion
