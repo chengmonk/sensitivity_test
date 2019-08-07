@@ -22,7 +22,7 @@ namespace 恒温测试机.UI
         {
             InitializeComponent();
             InitControl();
-            InitData();
+            //InitData();
             InitTimer();
         }
 
@@ -50,6 +50,9 @@ namespace 恒温测试机.UI
         public DAQ_profile control;
         public byte[] doData = new byte[4];    //数字量输出数据
         public byte[] diData = new byte[4];    //数字量输入数据
+
+        public byte[] doData2 = new byte[2];
+        public byte[] diData2 = new byte[2];
         double[] aoData = new double[2];           //模拟量输出数据
 
         private config collectConfig;
@@ -193,7 +196,7 @@ namespace 恒温测试机.UI
                         set_bit(ref doData[3], 3, true);//wh
                     }
                     whFlag = !whFlag;
-                    control.InstantDo_Write(doData);
+                    collectData.InstantDo_Write(doData);
                 }
             }
             catch (Exception ex)
@@ -221,12 +224,12 @@ namespace 恒温测试机.UI
                 }
                 else
                 {
-                    diData[0] = control.InstantDi_Read();//读取数字量函数
+                    diData[0] = collectData.InstantDi_Read();//读取数字量函数
                     //监控数字量
                     if (diData[0].get_bit(3) == 0)
                     {
                         set_bit(ref doData[2], 7, false);
-                        control.InstantDo_Write(doData);
+                        collectData.InstantDo_Write(doData);
                         isAlarm011 = true;
                     }
                     else
@@ -237,7 +240,7 @@ namespace 恒温测试机.UI
                     if ((diData[0].get_bit(4) == 0))
                     {
                         set_bit(ref doData[3], 0, false);
-                        control.InstantDo_Write(doData);
+                        collectData.InstantDo_Write(doData);
                         isAlarm012 = true;
                     }
                     else
@@ -248,7 +251,7 @@ namespace 恒温测试机.UI
                     if ((diData[0].get_bit(5) == 0))
                     {
                         set_bit(ref doData[3], 1, false);
-                        control.InstantDo_Write(doData);
+                        collectData.InstantDo_Write(doData);
                         isAlarm021 = true;
                     }
                     else
@@ -259,7 +262,7 @@ namespace 恒温测试机.UI
                     if ((diData[0].get_bit(6) == 0))
                     {
                         set_bit(ref doData[3], 2, false);
-                        control.InstantDo_Write(doData);
+                        collectData.InstantDo_Write(doData);
                         isAlarm022 = true;
                     }
                     else
@@ -639,7 +642,7 @@ namespace 恒温测试机.UI
                     //Temp5Status.Text = Temp5 + "℃\n" + "制冷中";
                 }
             }
-            control.InstantDo_Write(doData);
+            collectData.InstantDo_Write(doData);
             //}
             //else
             //{
@@ -677,7 +680,7 @@ namespace 恒温测试机.UI
                     doData[1] = 0;
                     doData[2] = 0;
                     doData[3] = 0;
-                    control.InstantDo_Write(doData);
+                    collectData.InstantDo_Write(doData);
                     //当前采集的数据清空
                     analyseReportDic.Remove(logicType);
                     dt.Clear();
@@ -804,25 +807,34 @@ namespace 恒温测试机.UI
             collectConfig.sectionLength = 100;
             collectConfig.startChannel = 0;
 
-            controlConfig = new config();
-            controlConfig.deviceDescription = "PCI-1756,BID#0";
-            controlConfig.sectionCount = 0;//The 0 means setting 'streaming' mode.
-
             collectData = new DAQ_profile(0, collectConfig);
             collectData.InstantAo();
             collectData.InstantAo_Write(aoData);//输出模拟量函数
+            collectData.InstantDo();
+            collectData.InstantDi();
+            //Example:
+            collectData.InstantDo_Write(doData2);//数字量输出            
+            diData2[0]= collectData.InstantDi_Read();//数字量输入   
 
-            control = new DAQ_profile(0, controlConfig);
-            control.InstantDo();
-            control.InstantDi();
+            //灵敏度的机器只有1710板卡,数字量的输入输出只有16个通道，也就是说byte 类型的doData长度由4变为2  diData同理，此处需要进行修改下
+            //controlConfig = new config();
+            //controlConfig.deviceDescription = "PCI-1756,BID#0";
+            //controlConfig.sectionCount = 0;//The 0 means setting 'streaming' mode.
+
+
+
+            //control = new DAQ_profile(0, controlConfig);
+
+            //collectData.InstantDo();
+            //collectData.InstantDi();
 
             for (int i = 0; i < 4; i++)     //初始化数字量输出
             {
                 doData[i] = 0x00;
             }
-            control.InstantDo_Write(doData);//输出数字量函数
-            control.InstantDi();
-            diData[0] = control.InstantDi_Read();//读取数字量函数
+            collectData.InstantDo_Write(doData);//输出数字量函数
+            //collectData.InstantDi();
+            diData[0] = collectData.InstantDi_Read();//读取数字量函数
             Console.WriteLine("D0" + diData[0].get_bit(0));
             Console.WriteLine("D3" + diData[0].get_bit(3));
             Console.WriteLine("D4" + diData[0].get_bit(4));
@@ -954,7 +966,7 @@ namespace 恒温测试机.UI
             doData[1] = 0;
             doData[2] = 0;
             doData[3] = 0;
-            control.InstantDo_Write(doData);
+            collectData.InstantDo_Write(doData);
             //monitorTimer.Enabled = false;
             //monitorTimer.Dispose();
             if (monitorWhTimer != null)
@@ -1107,7 +1119,7 @@ namespace 恒温测试机.UI
             doData[1] = 0;
             doData[2] = 0;
             doData[3] = 0;
-            control.InstantDo_Write(doData);
+            collectData.InstantDo_Write(doData);
         }
 
         //private void HeatingBtn_Click(object sender, EventArgs e)
@@ -1227,7 +1239,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 3, true);//vc
                 set_bit(ref doData[2], 4, true);//vh
                 set_bit(ref doData[2], 5, true);//vm
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统]\n");
 
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
@@ -1237,7 +1249,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 3, false);//vc
                 set_bit(ref doData[2], 5, false);//vm
                 set_bit(ref doData[2], 6, true);//v5
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vc、Vm打开V5，开始冷水失效测试]\n");
 
                 if (stopFlag)   //手动停止
@@ -1295,7 +1307,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 3, true);//vc
                 set_bit(ref doData[2], 5, true);//vm
                 set_bit(ref doData[2], 6, false);//v5
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
 
                 if (stopFlag)   //手动停止
                 {
@@ -1364,7 +1376,7 @@ namespace 恒温测试机.UI
                 doData[2].set_bit(4, false);//vh
                 doData[2].set_bit(5, false);//vm
                 doData[2].set_bit(6, true);//v5
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vh、Vm打开V5，开始热水失效测试]\n");
                 if (stopFlag)   //手动停止
                 {
@@ -1421,7 +1433,7 @@ namespace 恒温测试机.UI
                 doData[2].set_bit(3, true);//vc
                 doData[2].set_bit(5, true);//vm
                 doData[2].set_bit(6, false);//v5
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 if (stopFlag)   //手动停止
                 {
                     StopPro();
@@ -1552,7 +1564,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 3, true);//vc
                 set_bit(ref doData[2], 4, true);//vh
                 set_bit(ref doData[2], 5, true);//vm
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统...]\n");
                 if (stopFlag)   //手动停止
                 {
@@ -1564,7 +1576,7 @@ namespace 恒温测试机.UI
                 //022压力切换为低压 用485切换    
                 set_bit(ref doData[1], 7, false);//a
                 set_bit(ref doData[2], 0, true);//b            
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水降压测试]\n");
                 if (stopFlag)   //手动停止
                 {
@@ -1628,7 +1640,7 @@ namespace 恒温测试机.UI
                 }
                 set_bit(ref doData[1], 7, true);//a
                 set_bit(ref doData[2], 0, false);//b 
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 if (stopFlag)   //手动停止
                 {
                     StopPro();
@@ -1704,7 +1716,7 @@ namespace 恒温测试机.UI
                 //022压力切换为高压 用485切换
                 set_bit(ref doData[1], 7, false);//a
                 set_bit(ref doData[2], 0, true);//b  
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
 
                 //022高压切换           ???
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水升压测试]\n");
@@ -1778,7 +1790,7 @@ namespace 恒温测试机.UI
                 }
                 set_bit(ref doData[1], 7, true);//a
                 set_bit(ref doData[2], 0, false);//b 
-                control.InstantDo_Write(doData);   //022压力切换为高压 用485切换  ???
+                collectData.InstantDo_Write(doData);   //022压力切换为高压 用485切换  ???
                 #endregion
 
                 #region 热水压力恢复到初始压力，开始记录 5s 的数据
@@ -1845,7 +1857,7 @@ namespace 恒温测试机.UI
                 #region t1 同时 关闭 c 打开d
                 set_bit(ref doData[2], 1, true);//c
                 set_bit(ref doData[2], 2, false);//d 
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
                 if (stopFlag)   //手动停止
                 {
@@ -1855,7 +1867,7 @@ namespace 恒温测试机.UI
                 //012压力切换为低压 用485切换
                 set_bit(ref doData[2], 1, false);//c
                 set_bit(ref doData[2], 2, true);//d 
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
 
                 //012输出低压 485输出  ???
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭c打开d，开始压力变化测试-冷水降压测试]\n");
@@ -1933,7 +1945,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 2, false);//d 
                                                  //012输出高压 485输出     ???
 
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 #endregion
 
                 #region 冷水压力恢复到初始压力，开始记录 5s 的数据
@@ -2002,14 +2014,14 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 2, false);//d 
                                                  //012输出高压 485输出
 
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
 
                 //012压力切换为高压 用485切换
                 set_bit(ref doData[2], 1, false);//c
                 set_bit(ref doData[2], 2, true);//d 
 
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭c打开d，开始压力变化测试-冷水升压测试]\n");
                 if (stopFlag)   //手动停止
                 {
@@ -2083,7 +2095,7 @@ namespace 恒温测试机.UI
                 }
                 set_bit(ref doData[2], 1, true);//c
                 set_bit(ref doData[2], 2, false);//d            
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 #endregion
 
                 #region 冷水压力恢复到初始压力，开始记录 5s 的数据
@@ -2214,7 +2226,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 3, true);//vc
                 set_bit(ref doData[2], 4, true);//vh
                 set_bit(ref doData[2], 5, true);//vm
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统...]\n");
 
                 System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
@@ -2225,7 +2237,7 @@ namespace 恒温测试机.UI
                 }
                 set_bit(ref doData[0], 6, false);//12
                 set_bit(ref doData[1], 6, true);//14            
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭12 打开14，开始降温测试]\n");
                 if (stopFlag)   //手动停止
                 {
@@ -2297,7 +2309,7 @@ namespace 恒温测试机.UI
                 }
                 set_bit(ref doData[0], 6, true);//12
                 set_bit(ref doData[1], 6, false);//14  
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 #endregion
 
                 #region 温度达到设定稳定温度后,开始记录40s 的数据
@@ -2419,7 +2431,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[0], 6, true);//12
                 set_bit(ref doData[2], 3, true);//vc
                 set_bit(ref doData[2], 4, true);//vh
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统...]\n");
                 if (stopFlag)   //手动停止
                 {
@@ -2523,7 +2535,7 @@ namespace 恒温测试机.UI
                 set_bit(ref doData[2], 3, true);//vc
                 set_bit(ref doData[2], 4, true);//vh
                 set_bit(ref doData[2], 5, true);//vm
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
                 SystemInfoPrint("[初始化系统...]\n");
                 if (stopFlag)   //手动停止
                 {
@@ -3577,7 +3589,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.LightGray;
                 set_bit(ref doData[0], 0, false);
                 set_bit(ref doData[1], 2, false);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
             else
             {
@@ -3595,7 +3607,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.Green;
                 set_bit(ref doData[0], 0, true);
                 set_bit(ref doData[1], 2, true);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
         }
 
@@ -3608,7 +3620,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.LightGray;
                 set_bit(ref doData[0], 1, false);
                 set_bit(ref doData[1], 3, false);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
             else
             {
@@ -3626,7 +3638,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.Green;
                 set_bit(ref doData[0], 1, true);
                 set_bit(ref doData[1], 3, true);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
         }
 
@@ -3639,7 +3651,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.LightGray;
                 set_bit(ref doData[0], 2, false);
                 set_bit(ref doData[1], 4, false);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
             else
             {
@@ -3652,7 +3664,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.Green;
                 set_bit(ref doData[0], 2, true);
                 set_bit(ref doData[1], 4, true);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
         }
 
@@ -3665,7 +3677,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.LightGray;
                 set_bit(ref doData[0], 3, false);
                 set_bit(ref doData[1], 5, false);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
             else
             {
@@ -3678,7 +3690,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.Green;
                 set_bit(ref doData[0], 3, true);
                 set_bit(ref doData[1], 5, true);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
         }
 
@@ -3691,7 +3703,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.LightGray;
                 set_bit(ref doData[0], 4, false);
                 set_bit(ref doData[1], 6, false);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
             else
             {
@@ -3704,7 +3716,7 @@ namespace 恒温测试机.UI
                 btn.BackColor = Color.Green;
                 set_bit(ref doData[0], 4, true);
                 set_bit(ref doData[1], 6, true);
-                control.InstantDo_Write(doData);
+                collectData.InstantDo_Write(doData);
             }
         }
         #endregion

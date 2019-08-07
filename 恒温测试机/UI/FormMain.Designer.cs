@@ -96,6 +96,9 @@
             this.hslButton2 = new HslControls.HslButton();
             this.right1 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.TmSteadyRbt = new System.Windows.Forms.RadioButton();
+            this.freRbt = new System.Windows.Forms.RadioButton();
+            this.sensitivityRbt = new System.Windows.Forms.RadioButton();
             this.FlowTestRbt = new System.Windows.Forms.RadioButton();
             this.tmpTestRbt = new System.Windows.Forms.RadioButton();
             this.coolTestRbt = new System.Windows.Forms.RadioButton();
@@ -109,9 +112,6 @@
             this.instantDoCtrl1 = new Automation.BDaq.InstantDoCtrl(this.components);
             this.instantDiCtrl1 = new Automation.BDaq.InstantDiCtrl(this.components);
             this.waveformAiCtrl1 = new Automation.BDaq.WaveformAiCtrl(this.components);
-            this.sensitivityRbt = new System.Windows.Forms.RadioButton();
-            this.freRbt = new System.Windows.Forms.RadioButton();
-            this.TmSteadyRbt = new System.Windows.Forms.RadioButton();
             this.leftPanel.SuspendLayout();
             this.left3.SuspendLayout();
             this.waterBoxGbx.SuspendLayout();
@@ -633,7 +633,7 @@
             this.rightPanel.Controls.Add(this.right4);
             this.rightPanel.Controls.Add(this.right1);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.rightPanel.Location = new System.Drawing.Point(1303, 0);
+            this.rightPanel.Location = new System.Drawing.Point(960, 0);
             this.rightPanel.Name = "rightPanel";
             this.rightPanel.Size = new System.Drawing.Size(324, 548);
             this.rightPanel.TabIndex = 1;
@@ -911,6 +911,42 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "子操作界面选择";
             // 
+            // TmSteadyRbt
+            // 
+            this.TmSteadyRbt.AutoSize = true;
+            this.TmSteadyRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.TmSteadyRbt.Location = new System.Drawing.Point(123, 29);
+            this.TmSteadyRbt.Name = "TmSteadyRbt";
+            this.TmSteadyRbt.Size = new System.Drawing.Size(134, 21);
+            this.TmSteadyRbt.TabIndex = 12;
+            this.TmSteadyRbt.Text = "出水温度稳定性测试";
+            this.TmSteadyRbt.UseVisualStyleBackColor = true;
+            this.TmSteadyRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
+            // 
+            // freRbt
+            // 
+            this.freRbt.AutoSize = true;
+            this.freRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.freRbt.Location = new System.Drawing.Point(6, 63);
+            this.freRbt.Name = "freRbt";
+            this.freRbt.Size = new System.Drawing.Size(86, 21);
+            this.freRbt.TabIndex = 11;
+            this.freRbt.Text = "保真度测试";
+            this.freRbt.UseVisualStyleBackColor = true;
+            this.freRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
+            // 
+            // sensitivityRbt
+            // 
+            this.sensitivityRbt.AutoSize = true;
+            this.sensitivityRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.sensitivityRbt.Location = new System.Drawing.Point(7, 29);
+            this.sensitivityRbt.Name = "sensitivityRbt";
+            this.sensitivityRbt.Size = new System.Drawing.Size(86, 21);
+            this.sensitivityRbt.TabIndex = 10;
+            this.sensitivityRbt.Text = "灵敏度测试";
+            this.sensitivityRbt.UseVisualStyleBackColor = true;
+            this.sensitivityRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
+            // 
             // FlowTestRbt
             // 
             this.FlowTestRbt.AutoSize = true;
@@ -981,7 +1017,7 @@
             this.centerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.centerPanel.Location = new System.Drawing.Point(320, 0);
             this.centerPanel.Name = "centerPanel";
-            this.centerPanel.Size = new System.Drawing.Size(983, 548);
+            this.centerPanel.Size = new System.Drawing.Size(640, 548);
             this.centerPanel.TabIndex = 2;
             // 
             // center1
@@ -1031,47 +1067,11 @@
             // 
             this.waveformAiCtrl1._StateStream = ((Automation.BDaq.DeviceStateStreamer)(resources.GetObject("waveformAiCtrl1._StateStream")));
             // 
-            // sensitivityRbt
-            // 
-            this.sensitivityRbt.AutoSize = true;
-            this.sensitivityRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.sensitivityRbt.Location = new System.Drawing.Point(7, 29);
-            this.sensitivityRbt.Name = "sensitivityRbt";
-            this.sensitivityRbt.Size = new System.Drawing.Size(86, 21);
-            this.sensitivityRbt.TabIndex = 10;
-            this.sensitivityRbt.Text = "灵敏度测试";
-            this.sensitivityRbt.UseVisualStyleBackColor = true;
-            this.sensitivityRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
-            // 
-            // freRbt
-            // 
-            this.freRbt.AutoSize = true;
-            this.freRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.freRbt.Location = new System.Drawing.Point(6, 63);
-            this.freRbt.Name = "freRbt";
-            this.freRbt.Size = new System.Drawing.Size(86, 21);
-            this.freRbt.TabIndex = 11;
-            this.freRbt.Text = "保真度测试";
-            this.freRbt.UseVisualStyleBackColor = true;
-            this.freRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
-            // 
-            // TmSteadyRbt
-            // 
-            this.TmSteadyRbt.AutoSize = true;
-            this.TmSteadyRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.TmSteadyRbt.Location = new System.Drawing.Point(123, 29);
-            this.TmSteadyRbt.Name = "TmSteadyRbt";
-            this.TmSteadyRbt.Size = new System.Drawing.Size(134, 21);
-            this.TmSteadyRbt.TabIndex = 12;
-            this.TmSteadyRbt.Text = "出水温度稳定性测试";
-            this.TmSteadyRbt.UseVisualStyleBackColor = true;
-            this.TmSteadyRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1627, 548);
+            this.ClientSize = new System.Drawing.Size(1284, 548);
             this.Controls.Add(this.centerPanel);
             this.Controls.Add(this.rightPanel);
             this.Controls.Add(this.leftPanel);
