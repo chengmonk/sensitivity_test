@@ -109,6 +109,9 @@
             this.instantDoCtrl1 = new Automation.BDaq.InstantDoCtrl(this.components);
             this.instantDiCtrl1 = new Automation.BDaq.InstantDiCtrl(this.components);
             this.waveformAiCtrl1 = new Automation.BDaq.WaveformAiCtrl(this.components);
+            this.sensitivityRbt = new System.Windows.Forms.RadioButton();
+            this.freRbt = new System.Windows.Forms.RadioButton();
+            this.TmSteadyRbt = new System.Windows.Forms.RadioButton();
             this.leftPanel.SuspendLayout();
             this.left3.SuspendLayout();
             this.waterBoxGbx.SuspendLayout();
@@ -608,6 +611,7 @@
             this.standardCbx.FormattingEnabled = true;
             this.standardCbx.Items.AddRange(new object[] {
             "EN1111-2017",
+            "灵敏度流程",
             "自定义"});
             this.standardCbx.Location = new System.Drawing.Point(5, 31);
             this.standardCbx.Name = "standardCbx";
@@ -890,6 +894,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.TmSteadyRbt);
+            this.groupBox2.Controls.Add(this.freRbt);
+            this.groupBox2.Controls.Add(this.sensitivityRbt);
             this.groupBox2.Controls.Add(this.FlowTestRbt);
             this.groupBox2.Controls.Add(this.tmpTestRbt);
             this.groupBox2.Controls.Add(this.coolTestRbt);
@@ -1024,6 +1031,42 @@
             // 
             this.waveformAiCtrl1._StateStream = ((Automation.BDaq.DeviceStateStreamer)(resources.GetObject("waveformAiCtrl1._StateStream")));
             // 
+            // sensitivityRbt
+            // 
+            this.sensitivityRbt.AutoSize = true;
+            this.sensitivityRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.sensitivityRbt.Location = new System.Drawing.Point(7, 29);
+            this.sensitivityRbt.Name = "sensitivityRbt";
+            this.sensitivityRbt.Size = new System.Drawing.Size(86, 21);
+            this.sensitivityRbt.TabIndex = 10;
+            this.sensitivityRbt.Text = "灵敏度测试";
+            this.sensitivityRbt.UseVisualStyleBackColor = true;
+            this.sensitivityRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
+            // 
+            // freRbt
+            // 
+            this.freRbt.AutoSize = true;
+            this.freRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.freRbt.Location = new System.Drawing.Point(6, 63);
+            this.freRbt.Name = "freRbt";
+            this.freRbt.Size = new System.Drawing.Size(86, 21);
+            this.freRbt.TabIndex = 11;
+            this.freRbt.Text = "保真度测试";
+            this.freRbt.UseVisualStyleBackColor = true;
+            this.freRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
+            // 
+            // TmSteadyRbt
+            // 
+            this.TmSteadyRbt.AutoSize = true;
+            this.TmSteadyRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.TmSteadyRbt.Location = new System.Drawing.Point(123, 29);
+            this.TmSteadyRbt.Name = "TmSteadyRbt";
+            this.TmSteadyRbt.Size = new System.Drawing.Size(134, 21);
+            this.TmSteadyRbt.TabIndex = 12;
+            this.TmSteadyRbt.Text = "出水温度稳定性测试";
+            this.TmSteadyRbt.UseVisualStyleBackColor = true;
+            this.TmSteadyRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1142,5 +1185,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RadioButton sensitivityRbt;
+        private System.Windows.Forms.RadioButton freRbt;
+        private System.Windows.Forms.RadioButton TmSteadyRbt;
     }
 }

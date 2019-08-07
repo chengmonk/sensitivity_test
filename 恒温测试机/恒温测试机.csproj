@@ -130,6 +130,7 @@
     <Compile Include="Utils\ExtendUtils.cs" />
     <Compile Include="Utils\FormUtils.cs" />
     <Compile Include="Utils\LogUtils.cs" />
+    <Compile Include="Utils\UnscentedKalmanFilter.cs" />
     <EmbeddedResource Include="UI\FormConnectValueSetting.resx">
       <DependentUpon>FormConnectValueSetting.cs</DependentUpon>
     </EmbeddedResource>
@@ -192,6 +193,9 @@
     </PackageReference>
     <PackageReference Include="log4net">
       <Version>2.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="MathNet.Numerics">
+      <Version>4.8.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>

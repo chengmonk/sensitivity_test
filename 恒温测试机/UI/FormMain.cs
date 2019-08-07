@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UnscentedKalmanFilter;
 using 恒温测试机.App;
 using 恒温测试机.Model.Enum;
 using 恒温测试机.Utils;
@@ -36,11 +37,15 @@ namespace 恒温测试机.UI
         System.Timers.Timer steadyTimer;             //温度稳定性测试 定时器
         System.Timers.Timer flowTimer;               //流量减少测试 定时器
 
+        System.Timers.Timer senstivityTimer;        //灵敏度测试 定时器
+        System.Timers.Timer fidelityTimer;        //保真度测试 定时器
+        System.Timers.Timer tmSteadyTimer;        //出水温度稳定性测试 定时器
+
         System.Timers.Timer monitorWhTimer;          //监控液面高度定时器
         //System.Timers.Timer monitorTimer;            //监控阀门定时器
         System.Timers.Timer monitorDiTimer;          //监控数字量定时器
         COMconfig bpq_conf;
-        public  M_485Rtu bpq;
+        public M_485Rtu bpq;
         public DAQ_profile collectData;
         public DAQ_profile control;
         public byte[] doData = new byte[4];    //数字量输出数据
@@ -151,7 +156,7 @@ namespace 恒温测试机.UI
                 {
                     //冷水箱进水阀 28 - 4
                     //热水箱进水阀 29 - 5
-                    if (Wh< (double)Properties.Settings.Default.WhMin)  //液面高度小于下限时，关闭加热、制冷功能，关闭对应泵
+                    if (Wh < (double)Properties.Settings.Default.WhMin)  //液面高度小于下限时，关闭加热、制冷功能，关闭对应泵
                     {
                         if (whFlag)
                         {
@@ -170,9 +175,9 @@ namespace 恒温测试机.UI
                     if (Wh > (double)Properties.Settings.Default.WhMax) //液面高度大于上限时，关闭加水
                     {
                         if (whFlag)
-                            set_bit(ref doData[3],5, false);
+                            set_bit(ref doData[3], 5, false);
                         else
-                            set_bit(ref doData[3],4, false);
+                            set_bit(ref doData[3], 4, false);
                     }
                     //set_bit(ref doData[3], 3, false);//wh
                     //WhCool = Wh;
@@ -337,6 +342,57 @@ namespace 恒温测试机.UI
 
         }
 
+        private delegate void ChangeRadioButtonDelegate();          //自动切换按钮
+        private void ChangeRadioButton()
+        {
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    ChangeRadioButtonDelegate changeRadioButtonDelegate = ChangeRadioButton;
+                    this.Invoke(changeRadioButtonDelegate);
+                }
+                else
+                {
+                    if (safeTestRbt.Checked)
+                    {
+                        safeTestRbt.Checked = false;
+                        pressureTestRbt.Checked = true;
+                    }
+                    if (pressureTestRbt.Checked)
+                    {
+                        pressureTestRbt.Checked = false;
+                        coolTestRbt.Checked = true;
+                    }
+                    if (coolTestRbt.Checked)
+                    {
+                        coolTestRbt.Checked = false;
+                        tmpTestRbt.Checked = true;
+                    }
+                    if (tmpTestRbt.Checked)
+                    {
+                        tmpTestRbt.Checked = false;
+                        FlowTestRbt.Checked = true;
+                    }
+
+                    if (sensitivityRbt.Checked)
+                    {
+                        sensitivityRbt.Checked = false;
+                        freRbt.Checked = true;
+                    }
+                    if (freRbt.Checked)
+                    {
+                        freRbt.Checked = false;
+                        TmSteadyRbt.Checked = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+        }
+
         private delegate void DataReadyDelegate();//数据采集委托  
         private void DataReadyToUpdateStatus()
         {
@@ -360,7 +416,7 @@ namespace 恒温测试机.UI
                     PhShow.Text = Ph.ToString();
                     //if (graphFlag)
                     //{
-                    for(int i = 3; i < 103; i++)
+                    for (int i = 3; i < 103; i++)
                     {
                         hslCurve1.AddCurveData(
                             new string[] {
@@ -467,7 +523,7 @@ namespace 恒温测试机.UI
                     //Temp1Status.Text =  Temp1 + "℃\n"+ WhCool + "mm\n" + "制冷中";
                 }
             }
-            
+
             if (doData[0].get_bit(1) == 0)//制热控温
             {
                 button2.BackColor = Color.LightGray;
@@ -499,7 +555,7 @@ namespace 恒温测试机.UI
                     //Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "加热中";
                 }
             }
-            
+
             if (doData[0].get_bit(2) == 0)//制热控温
             {
                 button3.BackColor = Color.LightGray;
@@ -628,19 +684,19 @@ namespace 恒温测试机.UI
                     index = 0;
                     //输出面板清空
                     systemInfoTb.Text = "";
-                    
+
                     //弹窗提示
                     MessageBox.Show("当前测试流程已停止");
                     stopFlag = false;
                     return;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex.ToString());
                 return;
             }
-            
+
         }
 
         #endregion
@@ -654,6 +710,9 @@ namespace 恒温测试机.UI
         private void InitControl()
         {
             standardCbx.Text = "EN1111-2017";
+            sensitivityRbt.Visible = false;
+            freRbt.Visible = false;
+            TmSteadyRbt.Visible = false;
             //safeTestRbt.Checked = true;
             //hslCurve1.SetLeftCurve("冷水箱温度", null, Color.OrangeRed);
             //hslCurve1.SetLeftCurve("热水箱温度", null, Color.Orchid);
@@ -788,21 +847,21 @@ namespace 恒温测试机.UI
             //monitorTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
             //monitorTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
-            monitorDiTimer = new System.Timers.Timer(5000);
-            monitorDiTimer.Elapsed += (o, a) =>
-            {
-                MonitorDiActive();
-            };//到达时间的时候执行事件； 
-            monitorDiTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
-            monitorDiTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
+            //monitorDiTimer = new System.Timers.Timer(5000);
+            //monitorDiTimer.Elapsed += (o, a) =>
+            //{
+            //    MonitorDiActive();
+            //};//到达时间的时候执行事件； 
+            //monitorDiTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
+            //monitorDiTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
-            monitorWhTimer = new System.Timers.Timer(5000);
-            monitorWhTimer.Elapsed += (o, a) =>
-            {
-                MonitorWhActive();
-            };//到达时间的时候执行事件； 
-            monitorWhTimer.AutoReset = true;
-            monitorWhTimer.Enabled = true;
+            //monitorWhTimer = new System.Timers.Timer(5000);
+            //monitorWhTimer.Elapsed += (o, a) =>
+            //{
+            //    MonitorWhActive();
+            //};//到达时间的时候执行事件； 
+            //monitorWhTimer.AutoReset = true;
+            //monitorWhTimer.Enabled = true;
 
 
             safetyTimer = new System.Timers.Timer(2);
@@ -829,6 +888,21 @@ namespace 恒温测试机.UI
             flowTimer.Elapsed += new System.Timers.ElapsedEventHandler(FlowTimer_Action);//到达时间的时候执行事件； 
             flowTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
             flowTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
+
+            senstivityTimer = new System.Timers.Timer(2);
+            senstivityTimer.Elapsed += new System.Timers.ElapsedEventHandler(SenstivityTimer_Action);//到达时间的时候执行事件； 
+            senstivityTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
+            senstivityTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
+
+            fidelityTimer = new System.Timers.Timer(2);
+            fidelityTimer.Elapsed += new System.Timers.ElapsedEventHandler(FidelityTimer_Action);//到达时间的时候执行事件； 
+            fidelityTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
+            fidelityTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
+
+            tmSteadyTimer = new System.Timers.Timer(2);
+            tmSteadyTimer.Elapsed += new System.Timers.ElapsedEventHandler(TmSteadyTimer_Action);//到达时间的时候执行事件； 
+            tmSteadyTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
+            tmSteadyTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
         }
 
         /// <summary>
@@ -837,25 +911,26 @@ namespace 恒温测试机.UI
         private void ChangeTimer()
         {
             if (logicType == LogicTypeEnum.safeTest)
-            {
                 safetyTimer.Enabled = true;
-            }
+
             if (logicType == LogicTypeEnum.PressureTest)
-            {
                 pressureTimer.Enabled = true;
-            }
+
             if (logicType == LogicTypeEnum.CoolTest)
-            {
                 coolTimer.Enabled = true;
-            }
+
             if (logicType == LogicTypeEnum.TemTest)
-            {
                 steadyTimer.Enabled = true;
-            }
+
             if (logicType == LogicTypeEnum.FlowTest)
-            {
                 flowTimer.Enabled = true;
-            }
+
+            if (logicType == LogicTypeEnum.SensitivityTest)
+                senstivityTimer.Enabled = true;
+            if (logicType == LogicTypeEnum.FidelityTest)
+                fidelityTimer.Enabled = true;
+            if (logicType == LogicTypeEnum.TmSteadyTest)
+                tmSteadyTimer.Enabled = true;
             graphFlag = true;
             //HideOrShowCurve();
         }
@@ -882,10 +957,17 @@ namespace 恒温测试机.UI
             control.InstantDo_Write(doData);
             //monitorTimer.Enabled = false;
             //monitorTimer.Dispose();
-            monitorWhTimer.Enabled = false;
-            monitorWhTimer.Dispose();
-            monitorDiTimer.Enabled = false;
-            monitorDiTimer.Dispose();
+            if (monitorWhTimer != null)
+            {
+                monitorWhTimer.Enabled = false;
+                monitorWhTimer.Dispose();
+            }
+            if (monitorDiTimer != null)
+            {
+                monitorDiTimer.Enabled = false;
+                monitorDiTimer.Dispose();
+            }
+
         }
 
 
@@ -903,7 +985,7 @@ namespace 恒温测试机.UI
                 return;
             }
             //TODO:
-            if (autoRunFlag||(MessageBox.Show("确认切换子操作界面？注意保存数据", "", MessageBoxButtons.YesNo) == DialogResult.Yes))
+            if (autoRunFlag || (MessageBox.Show("确认切换子操作界面？注意保存数据", "", MessageBoxButtons.YesNo) == DialogResult.Yes))
             {
                 //monitorTimer.Enabled = false;
                 safetyTimer.Enabled = false;
@@ -911,6 +993,9 @@ namespace 恒温测试机.UI
                 coolTimer.Enabled = false;
                 steadyTimer.Enabled = false;
                 flowTimer.Enabled = false;
+                senstivityTimer.Enabled = false;
+                fidelityTimer.Enabled = false;
+                tmSteadyTimer.Enabled = false;
                 switch (((RadioButton)sender).Text.ToString())
                 {
                     case "安全性测试":
@@ -928,7 +1013,17 @@ namespace 恒温测试机.UI
                     case "流量减少测试":
                         logicType = LogicTypeEnum.FlowTest;
                         break;
+                    case "灵敏度测试":
+                        logicType = LogicTypeEnum.SensitivityTest;
+                        break;
+                    case "保真度测试":
+                        logicType = LogicTypeEnum.FidelityTest;
+                        break;
+                    case "出水温度稳定性测试":
+                        logicType = LogicTypeEnum.TmSteadyTest;
+                        break;
                 }
+                Console.WriteLine(logicType.ToDescription());
                 //InitData();
                 ChangeTimer();
             }
@@ -940,6 +1035,25 @@ namespace 恒温测试机.UI
             {
                 case "EN1111-2017":
                     testStandard = TestStandardEnum.default1711;
+                    safeTestRbt.Visible = true;
+                    pressureTestRbt.Visible = true;
+                    coolTestRbt.Visible = true;
+                    tmpTestRbt.Visible = true;
+                    FlowTestRbt.Visible = true;
+                    sensitivityRbt.Visible = false;
+                    freRbt.Visible = false;
+                    TmSteadyRbt.Visible = false;
+                    break;
+                case "灵敏度流程":
+                    testStandard = TestStandardEnum.sensitivityProcess;
+                    safeTestRbt.Visible = false;
+                    pressureTestRbt.Visible = false;
+                    coolTestRbt.Visible = false;
+                    tmpTestRbt.Visible = false;
+                    FlowTestRbt.Visible = false;
+                    sensitivityRbt.Visible = true;
+                    freRbt.Visible = true;
+                    TmSteadyRbt.Visible = true;
                     break;
                 case "自定义":
                     testStandard = TestStandardEnum.blank;
@@ -970,6 +1084,15 @@ namespace 恒温测试机.UI
                     break;
                 case LogicTypeEnum.FlowTest:
                     flowTimer.Enabled = true;
+                    break;
+                case LogicTypeEnum.SensitivityTest:
+                    senstivityTimer.Enabled = true;
+                    break;
+                case LogicTypeEnum.FidelityTest:
+                    fidelityTimer.Enabled = true;
+                    break;
+                case LogicTypeEnum.TmSteadyTest:
+                    tmSteadyTimer.Enabled = true;
                     break;
             }
         }
@@ -2079,7 +2202,7 @@ namespace 恒温测试机.UI
                 graphFlag = true;
 
                 analyseDataDic = new Dictionary<string, DataTable>();
-                
+
 
                 #region 启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭12 打开14
                 set_bit(ref doData[1], 7, true);//a
@@ -2378,7 +2501,7 @@ namespace 恒温测试机.UI
                     FlowTestRbt.Checked = true;
                 }
             }
-            
+
         }
 
         private void FlowTimer_Action(object source, System.Timers.ElapsedEventArgs e)
@@ -2539,6 +2662,65 @@ namespace 恒温测试机.UI
             }
         }
 
+        private void SenstivityTimer_Action(object source, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                Console.WriteLine("灵敏度测试开始");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                runFlag = false;
+                graphFlag = false;
+                if (autoRunFlag)
+                {
+                    ChangeRadioButton();
+                }
+            }
+        }
+
+        private void FidelityTimer_Action(object source, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                Console.WriteLine("保真度测试");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                runFlag = false;
+                graphFlag = false;
+                if (autoRunFlag)
+                {
+                    ChangeRadioButton();
+                }
+            }
+        }
+
+        private void TmSteadyTimer_Action(object source, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                Console.WriteLine("出水温度稳定性测试");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                runFlag = false;
+                graphFlag = false;
+            }
+        }
+
         public void Read(string address, byte station)
         {
             var val = bpq.read_short(address, station);
@@ -2581,6 +2763,7 @@ namespace 恒温测试机.UI
             }
             else        //启动自动运行
             {
+                autoRunFlag = true;
                 if (runFlag)
                 {
                     MessageBox.Show("当前已有测试流程正在执行，请等待！");
@@ -2589,10 +2772,18 @@ namespace 恒温测试机.UI
                 else
                 {
                     autoRunBtn.OriginalColor = Color.Green;
-                    safetyTimer.Enabled = true;
+                    switch (testStandard)
+                    {
+                        case TestStandardEnum.default1711:
+                            safetyTimer.Enabled = true;
+                            break;
+                        case TestStandardEnum.sensitivityProcess:
+                            senstivityTimer.Enabled = true;
+                            break;
+                    }
                 }
             }
-            
+
         }
         private void ShutDownBtn_Click(object sender, EventArgs e)
         {
@@ -2695,7 +2886,7 @@ namespace 恒温测试机.UI
         private double[] sourceDataTemp4 = new double[106];
 
         private double[] sourceDataTemp5 = new double[106];
-        
+
         private void WaveformAiCtrl1_DataReady(object sender, BfdAiEventArgs args)
         {
             ErrorCode err = ErrorCode.Success;
@@ -2738,8 +2929,8 @@ namespace 恒温测试机.UI
                     Temp3 = Math.Round(m_dataScaled[i + 12], 2, MidpointRounding.AwayFromZero);// * 10;
                     Temp4 = Math.Round(m_dataScaled[i + 13], 2, MidpointRounding.AwayFromZero);// * 10;
                     Temp5 = Math.Round(m_dataScaled[i + 14], 2, MidpointRounding.AwayFromZero);// * 10;
-                    Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) *200;
-                    
+                    Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) * 200;
+
                     if (index < 6)
                     {
                         int typeIndex = 0;
@@ -2766,7 +2957,7 @@ namespace 恒温测试机.UI
                     sourceDataTh[index + 5] = Th;
                     sourceDataTm[index + 5] = Tm;
                     //sourceDataTm2[index + 5] = Tm;
-                    
+
                     sourceDataPc[index + 5] = Pc;
                     sourceDataPh[index + 5] = Ph;
                     sourceDataPm[index + 5] = Pm;
@@ -2779,48 +2970,55 @@ namespace 恒温测试机.UI
                     index++;
                 }
                 //Console.WriteLine("液面高度：" + Wh);
-               
-                sourceDataQc = averge(ref sourceDataQc,0);
-                if (isFirstAver == false)
-                {
-                    for(int i = 3; i < sourceDataQc.Length - 3; i++){
-                        Log.Info("before"+ i + "-》" + sourceDataQc[i]);
-                    }
-                }
-                sourceDataQc = filterKalMan(sourceDataQc);
+
+                sourceDataQc = averge(ref sourceDataQc, 0);
                 if (isFirstAver == false)
                 {
                     for (int i = 3; i < sourceDataQc.Length - 3; i++)
                     {
-                        Log.Info("after" + i+"-》"+ sourceDataQc[i]);
+                        Log.Info("before" + i + "-》" + sourceDataQc[i]);
+                    }
+                }
+                sourceDataQc = filterKalMan(sourceDataQc);
+                sourceDataQc = averge(ref sourceDataQc, 0);
+                if (isFirstAver == false)
+                {
+                    for (int i = 3; i < sourceDataQc.Length - 3; i++)
+                    {
+                        Log.Info("after" + i + "-》" + sourceDataQc[i]);
                     }
                 }
 
-                sourceDataQh = averge(ref sourceDataQh,1);
+                sourceDataQh = averge(ref sourceDataQh, 1);
                 //sourceDataQh = filter(ref sourceDataQh, 10);
 
-                sourceDataQm = averge(ref sourceDataQm,2);
+                sourceDataQm = averge(ref sourceDataQm, 2);
                 //sourceDataQm = filter(ref sourceDataQm, 10);
 
-                sourceDataTc = averge(ref sourceDataTc,3);
+                sourceDataTc = averge(ref sourceDataTc, 3);
                 //sourceDataTc = filter(ref sourceDataTc, 10);
 
-                sourceDataTh = averge(ref sourceDataTh,4);
-               // sourceDataTh = filter(ref sourceDataTh, 10);
+                sourceDataTh = averge(ref sourceDataTh, 4);
+                // sourceDataTh = filter(ref sourceDataTh, 10);
 
-                sourceDataTm = averge(ref sourceDataTm,5);
+                //unsen卡尔曼滤波算法，比纯卡尔曼滤波效果要好
+         
+                sourceDataTm = averge(ref sourceDataTm, 5);
+                sourceDataTm = midFilter(ref sourceDataTm, 5);
+                //sourceDataTm = UFK_filter(sourceDataTm);
+               
                 //sourceDataTm = filter(ref sourceDataTm, 10);             
-                
-                sourceDataPc = averge(ref sourceDataPc,6);
+
+                sourceDataPc = averge(ref sourceDataPc, 6);
                 //sourceDataPc = filter(ref sourceDataPc, 10);
 
-                sourceDataPh = averge(ref sourceDataPh,7);
-               // sourceDataPh = filter(ref sourceDataPh, 10);
+                sourceDataPh = averge(ref sourceDataPh, 7);
+                // sourceDataPh = filter(ref sourceDataPh, 10);
 
-                sourceDataPm = averge(ref sourceDataPm,8);
-               // sourceDataPm = filter(ref sourceDataPm, 10);
+                sourceDataPm = averge(ref sourceDataPm, 8);
+                // sourceDataPm = filter(ref sourceDataPm, 10);
 
-                sourceDataQm5 = averge(ref sourceDataQm5,9);
+                sourceDataQm5 = averge(ref sourceDataQm5, 9);
                 //sourceDataQm5 = filter(ref sourceDataQm5, 10);
 
                 sourceDataTemp1 = averge(ref sourceDataTemp1, 10);
@@ -2838,9 +3036,9 @@ namespace 恒温测试机.UI
                 sourceDataTemp5 = averge(ref sourceDataTemp5, 14);
                 //sourceDataTemp5 = filter(ref sourceDataTemp5, 10);
 
-                if (isFirstAver==false)
+                if (isFirstAver == false)
                 {
-                    for (int i = 3; i < sourceDataQc.Length-3; i++)
+                    for (int i = 3; i < sourceDataQc.Length - 3; i++)
                     {
                         //Log.Info(t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
                         //Log.Info("index:" + i + " Value:" + (float)sourceDataTemp1[i]);
@@ -2849,12 +3047,12 @@ namespace 恒温测试机.UI
                         {
                             dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
                                 t,
-                                sourceDataQc[i]*5,
-                                sourceDataQh[i]*5,
-                                sourceDataQm[i]*5,
-                                sourceDataTc[i]*10,
-                                sourceDataTh[i]*10,
-                                sourceDataTm[i]*10,
+                                sourceDataQc[i] * 5,
+                                sourceDataQh[i] * 5,
+                                sourceDataQm[i] * 5,
+                                sourceDataTc[i] * 10,
+                                sourceDataTh[i] * 10,
+                                sourceDataTm[i] * 10,
                                 sourceDataPc[i],
                                 sourceDataPh[i],
                                 sourceDataPm[i],
@@ -3037,7 +3235,7 @@ namespace 恒温测试机.UI
             timeAngleDt = new DataTable();
             timeAngleDt.Columns.Add("时间", typeof(string));
             timeAngleDt.Columns.Add("角度", typeof(double));
-            
+
             monitorDTimer = new System.Timers.Timer(200);
             monitorDTimer.Elapsed += (o, a) =>
             {
@@ -3053,14 +3251,14 @@ namespace 恒温测试机.UI
         /// </summary>
         private void AnalyseElect()
         {
-            foreach(DataRow tmRow in ElectDt.Rows)
+            foreach (DataRow tmRow in ElectDt.Rows)
             {
                 if (tmTimeDict.Keys.Count == 3)
                 {
                     break;
                 }
-                var tm =tmRow["出水温度Tm"].AsDouble();
-                var tmTime= tmRow["时间"].AsDateTime();
+                var tm = tmRow["出水温度Tm"].AsDouble();
+                var tmTime = tmRow["时间"].AsDateTime();
                 if (tm == 36)
                 {
                     if (tmTimeDict.ContainsKey(36))
@@ -3092,7 +3290,7 @@ namespace 恒温测试机.UI
                 var angle = eleRow["角度"].AsDouble();
                 var angleTime = eleRow["时间"].AsDateTime();
 
-                if (timeAngleDict .ContainsKey(tmTimeDict[36])==false && (angleTime-tmTimeDict[36]).TotalMilliseconds < 0.5)
+                if (timeAngleDict.ContainsKey(tmTimeDict[36]) == false && (angleTime - tmTimeDict[36]).TotalMilliseconds < 0.5)
                 {
                     timeAngleDict.Add(tmTimeDict[36], angle);
                 }
@@ -3155,7 +3353,7 @@ namespace 恒温测试机.UI
 
         #region 预留模拟量输出
 
-        public void AO_Func(int index,double value)
+        public void AO_Func(int index, double value)
         {
             aoData[index] = value;
             collectData.InstantAo_Write(aoData);//输出模拟量函数
@@ -3179,13 +3377,79 @@ namespace 恒温测试机.UI
 
         }
 
+
+        //此算法用于历史曲线的处理，不适用于实时曲线的处理。一次性将所有的数据扔进来处理，如果是缓存区进来处理，会有边界效应。
+        double[] UFK_filter(double[] res)
+        {
+            var filter = new UKF();
+            double[] result = new double[res.Length];
+            for (int i = 0; i < res.ToArray().Length; i++)
+            {
+                filter.Update(new[] { res[i] });
+                result[i] = filter.getState()[0];
+            }
+            res = result;
+            for (int i = 0; i < res.ToArray().Length; i++)
+            {
+                filter.Update(new[] { res[i] });
+                result[i] = filter.getState()[0];
+            }
+            return result;
+        }
+
+
+        /// <summary>
+        /// N为7的平均数据处理
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private bool isFirstMid = true;
+        double[] midFilter(ref double[] data, int type)
+        {
+            if (isFirstMid)        //i=6開始
+            {
+                for (int i = 6; i < 100; i++)
+                {
+                    List<double> temp = new List<double>();
+                    for (int j = 0; j < 7; j++)
+                    {
+                        temp.Add(data[i + j]);
+                    }
+                    temp.Sort();
+                    data[i + 3] = temp[3];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 100; i++)               //3——102
+                {
+                    List<double> temp = new List<double>();
+                    for (int j = 0; j < 7; j++)
+                    {
+                        temp.Add(data[i + j]);
+                    }
+                    temp.Sort();
+                    data[i + 3] = temp[3];
+                }
+            }
+            //该六位数据，供下一组数据使用
+            lastTempData[type * 6 + 0] = data[100];
+            lastTempData[type * 6 + 1] = data[101];
+            lastTempData[type * 6 + 2] = data[102];
+
+            lastTempData[type * 6 + 3] = data[103];
+            lastTempData[type * 6 + 4] = data[104];
+            lastTempData[type * 6 + 5] = data[105];
+            return data;
+        }
+
         /// <summary>
         /// N为7的平均数据处理
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
         private bool isFirstAver = true;
-        double[] averge(ref double[] data,int type)
+        double[] averge(ref double[] data, int type)
         {
             if (isFirstAver)        //i=6開始
             {
@@ -3294,7 +3558,7 @@ namespace 恒温测试机.UI
                 }
 
             }
-            for(int i = 6; i < sourceData.Length; i++)
+            for (int i = 6; i < sourceData.Length; i++)
             {
                 sourceData[i] = temp[i - 6];
             }

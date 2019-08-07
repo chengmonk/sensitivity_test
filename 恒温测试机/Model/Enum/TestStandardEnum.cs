@@ -11,6 +11,8 @@ namespace 恒温测试机.Model.Enum
     {
         [EnumDescription("EN1111-2017")]
         default1711 = 1,
+        [EnumDescription("灵敏度流程")]
+        sensitivityProcess=2,
         [EnumDescription("自定义")]
         blank = 10
     }
