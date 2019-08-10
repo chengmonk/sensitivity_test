@@ -16,5 +16,9 @@ namespace 恒温测试机.Model.Enum
         tempType = 1,
         [EnumDescription("按键流量电机")]
         flowType = 2,
+        [EnumDescription("旋转伺服电机")]
+        spinType = 3,
+        [EnumDescription("升降伺服电机")]
+        upDownType = 4
     }
 }

@@ -28,7 +28,6 @@ namespace 恒温测试机.UI
         private void InitControl()
         {
             //默认按键恒温电机
-            electCbx.Text = "按键恒温电机";
             type = ElectricalMachineryType.tempType;
             powerAddress = "2056";                  //伺服开关
             forwardWriteAddress = "2048";            //正传写入地址
@@ -105,12 +104,12 @@ namespace 恒温测试机.UI
                 case "2":
                     station = 2;
                     break;
-                case "3":
-                    station = 3;
-                    break;
-                case "4":
-                    station = 4;
-                    break;
+                //case "3":
+                //    station = 3;
+                //    break;
+                //case "4":
+                //    station = 4;
+                //    break;
             }
             int val2 = Convert.ToInt32(textBox3.Text)*500;
             
@@ -238,18 +237,18 @@ namespace 恒温测试机.UI
             {
                 case "按键恒温电机":
                     type = ElectricalMachineryType.tempType;
-                    powerAddress = "2056";
-                    forwardWriteAddress = "2048";
-                    forwardReadAddress = "2053";
-                    noForwardWriteAddress = "2049";
-                    noForwardReadAddress = "2054";
-                    orignWriteAddress = "2050";
-                    orignReadAddress = "2055";
-                    autoRunAddress = "2051";
-                    backOrignAddress = "2052";
-                    shutdownAddress = "2057";
-                    radioAddress = "4296";
-                    angleAddress = "2616";
+                    powerAddress = "2056";              //私服开关
+                    forwardWriteAddress = "2048";       //正传（写）
+                    forwardReadAddress = "2053";        //正传（反）
+                    noForwardWriteAddress = "2049";     //反传（写）
+                    noForwardReadAddress = "2054";      //反传（读）
+                    orignWriteAddress = "2050";         //原点（写）
+                    orignReadAddress = "2055";          //原点（读）
+                    autoRunAddress = "2051";            //自动运行
+                    backOrignAddress = "2052";          //回到原点
+                    shutdownAddress = "2057";           //紧急停止
+                    radioAddress = "4296";              //转速
+                    angleAddress = "2616";              //角度
                     break;
                 case "按键流量电机":
                     type = ElectricalMachineryType.flowType;

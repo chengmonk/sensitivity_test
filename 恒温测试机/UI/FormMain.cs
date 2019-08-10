@@ -22,49 +22,38 @@ namespace 恒温测试机.UI
         {
             InitializeComponent();
             InitControl();
-            //InitData();
+            InitData();
             InitTimer();
         }
 
 
         #region 变量
-        LogicTypeEnum logicType = LogicTypeEnum.safeTest;
-        TestStandardEnum testStandard = TestStandardEnum.default1711;
-
-        System.Timers.Timer safetyTimer;             //安全性测试 定时器
-        System.Timers.Timer pressureTimer;           //压力变化测试 定时器
-        System.Timers.Timer coolTimer;               //降温测试 定时器
-        System.Timers.Timer steadyTimer;             //温度稳定性测试 定时器
-        System.Timers.Timer flowTimer;               //流量减少测试 定时器
+        LogicTypeEnum logicType = LogicTypeEnum.SensitivityTest;
+        TestStandardEnum testStandard = TestStandardEnum.sensitivityProcess;
 
         System.Timers.Timer senstivityTimer;        //灵敏度测试 定时器
         System.Timers.Timer fidelityTimer;        //保真度测试 定时器
         System.Timers.Timer tmSteadyTimer;        //出水温度稳定性测试 定时器
 
-        System.Timers.Timer monitorWhTimer;          //监控液面高度定时器
-        //System.Timers.Timer monitorTimer;            //监控阀门定时器
         System.Timers.Timer monitorDiTimer;          //监控数字量定时器
+
         COMconfig bpq_conf;
         public M_485Rtu bpq;
         public DAQ_profile collectData;
         public DAQ_profile control;
-        public byte[] doData = new byte[4];    //数字量输出数据
-        public byte[] diData = new byte[4];    //数字量输入数据
-
-        public byte[] doData2 = new byte[2];
-        public byte[] diData2 = new byte[2];
-        double[] aoData = new double[2];           //模拟量输出数据
-
         private config collectConfig;
         private config controlConfig;
         public const int CHANNEL_COUNT_MAX = 16;
         private double[] m_dataScaled = new double[CHANNEL_COUNT_MAX];
 
+        public byte[] doData2 = new byte[2];    //数字量输出数据
+        public byte[] diData2 = new byte[2];    //数字量输入数据
+        double[] aoData = new double[2];           //模拟量输出数据
+
         bool collectDataFlag = false;           //是否采集数据
         bool runFlag = false;                   //是否执行流程
 
         bool graphFlag = true;          //先记录为true
-        bool whFlag = true;// ture表示 当前为热水箱液面 flase表示 当前为冷水箱液面 
         bool autoRunFlag = false;               //是否自动运行
         bool stopFlag = false;                  //是否手动停止
 
@@ -102,116 +91,16 @@ namespace 恒温测试机.UI
 
         #region 委托
 
-        private delegate void MonitorActiveDelegate(byte[] data);//控制阀的状态监控
-        private void MonitorActive(byte[] data)
-        {
-            try
-            {
-                if (this.InvokeRequired)
-                {
-                    MonitorActiveDelegate monitorActiveDelegate = MonitorActive;
-                    this.Invoke(monitorActiveDelegate, new object[] { data });
-                }
-                else
-                {
-                    if (doData[0].get_bit(0) == 1)
-                        Temp1Status.ForeColor = Color.Red;
-                    else
-                        Temp1Status.ForeColor = Color.Black;
+        //diData【0】
+        //伺服1报警：0-0
+        //伺服2报警：1-1
+        //冷水泵报警：2-2
+        //热水泵报警：3-3
 
-                    if (doData[0].get_bit(1) == 1)
-                        Temp2Status.ForeColor = Color.Red;
-                    else
-                        Temp2Status.ForeColor = Color.Black;
-                    if (doData[0].get_bit(2) == 1)
-                        Temp3Status.ForeColor = Color.Red;
-                    else
-                        Temp3Status.ForeColor = Color.Black;
-                    if (doData[0].get_bit(3) == 1)
-                        Temp4Status.ForeColor = Color.Red;
-                    else
-                        Temp4Status.ForeColor = Color.Black;
-                    if (doData[0].get_bit(4) == 1)
-                        Temp5Status.ForeColor = Color.Red;
-                    else
-                        Temp5Status.ForeColor = Color.Black;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-                return;
-            }
-
-        }
-
-        private delegate void MonitorWhActiveDelegate();//液面高度状态的监控，进行对应行为逻辑
-        private void MonitorWhActive()
-        {
-            try
-            {
-                if (this.InvokeRequired)
-                {
-                    MonitorWhActiveDelegate monitorWhActiveDelegate = MonitorWhActive;
-                    this.Invoke(monitorWhActiveDelegate);
-                }
-                else
-                {
-                    //冷水箱进水阀 28 - 4
-                    //热水箱进水阀 29 - 5
-                    if (Wh < (double)Properties.Settings.Default.WhMin)  //液面高度小于下限时，关闭加热、制冷功能，关闭对应泵
-                    {
-                        if (whFlag)
-                        {
-                            set_bit(ref doData[0], 1, false);       //热水加热
-                            set_bit(ref doData[3], 1, false);       //热水泵
-                            set_bit(ref doData[1], 3, false);       //热循环泵
-                        }
-                        else
-                        {
-                            set_bit(ref doData[0], 0, false);       //冷水制冷
-                            set_bit(ref doData[2], 7, false);       //冷水泵
-                            set_bit(ref doData[1], 2, false);       //冷循环泵
-                        }
-                    }
-
-                    if (Wh > (double)Properties.Settings.Default.WhMax) //液面高度大于上限时，关闭加水
-                    {
-                        if (whFlag)
-                            set_bit(ref doData[3], 5, false);
-                        else
-                            set_bit(ref doData[3], 4, false);
-                    }
-                    //set_bit(ref doData[3], 3, false);//wh
-                    //WhCool = Wh;
-                    //whFlag = false;
-                    if (whFlag) //热水箱->冷水箱
-                    {
-                        WhHeat = Wh;
-                        set_bit(ref doData[3], 3, false);//wh
-                    }
-                    else
-                    {
-                        WhCool = Wh;
-                        set_bit(ref doData[3], 3, true);//wh
-                    }
-                    whFlag = !whFlag;
-                    collectData.InstantDo_Write(doData);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-                return;
-            }
-        }
-
-        public bool isAlarm011 = false;//冷水泵
-        public bool isAlarm012 = false;//冷水变压泵
-        public bool isAlarm021 = false;//热水泵
-        public bool isAlarm022 = false;//热水变压泵
-        public bool isAlarmA = false;//伺服电机A
-        //public bool isAlarmM = false;//伺服电机M
+        public bool isAlarmS1 = false;//伺服1报警
+        public bool isAlarmS2 = false;//伺服2报警
+        public bool isAlarmCool = false;//冷水泵
+        public bool isAlarmHeat = false;//热水泵
         private delegate void MonitorDiActiveDelegate();//数字量输入，进行对应行为逻辑
         private void MonitorDiActive()
         {
@@ -224,99 +113,61 @@ namespace 恒温测试机.UI
                 }
                 else
                 {
-                    diData[0] = collectData.InstantDi_Read();//读取数字量函数
+                    diData2[0] = collectData.InstantDi_Read();//读取数字量函数
                     //监控数字量
-                    if (diData[0].get_bit(3) == 0)
+                    if (diData2[0].get_bit(0) == 0)
                     {
-                        set_bit(ref doData[2], 7, false);
-                        collectData.InstantDo_Write(doData);
-                        isAlarm011 = true;
+                        //TODO 伺服1报警 
+                        isAlarmS1 = true;
                     }
                     else
                     {
-                        isAlarm011 = false;
+                        isAlarmS1 = false;
                     }
 
-                    if ((diData[0].get_bit(4) == 0))
+                    if (diData2[0].get_bit(1) == 0)
                     {
-                        set_bit(ref doData[3], 0, false);
-                        collectData.InstantDo_Write(doData);
-                        isAlarm012 = true;
+                        //TODO 伺服2报警
+                        isAlarmS2 = true;
                     }
                     else
                     {
-                        isAlarm012 = false;
+                        isAlarmS2 = false;
                     }
 
-                    if ((diData[0].get_bit(5) == 0))
+                    if (diData2[0].get_bit(2) == 0)
                     {
-                        set_bit(ref doData[3], 1, false);
-                        collectData.InstantDo_Write(doData);
-                        isAlarm021 = true;
+                        //TODO 冷水泵报警
+                        isAlarmCool = true;
                     }
                     else
                     {
-                        isAlarm021 = false;
+                        isAlarmCool = false;
                     }
 
-                    if ((diData[0].get_bit(6) == 0))
+                    if (diData2[0].get_bit(3) == 0)
                     {
-                        set_bit(ref doData[3], 2, false);
-                        collectData.InstantDo_Write(doData);
-                        isAlarm022 = true;
+                        //TODO 热水泵报警
+                        isAlarmHeat = true;
                     }
                     else
                     {
-                        isAlarm022 = false;
+                        isAlarmHeat = false;
                     }
-                    if ((diData[0].get_bit(0) == 0))
-                    {
-                        bpq.write_coil("2048", false, 5);
-                        bpq.write_coil("2049", false, 5);
-                        bpq.write_coil("2050", false, 5);
-                        bpq.write_coil("2051", false, 5);
-                        bpq.write_coil("2052", false, 5);
-                        isAlarmA = true;
-                    }
-                    else
-                    {
-                        isAlarmA = false;
-                    }
-                    //if ((diData[0].get_bit(1) == 0))
-                    //{
-                    //    bpq.write_coil("2058", false, 5);
-                    //    bpq.write_coil("2059", false, 5);
-                    //    bpq.write_coil("2060", false, 5);
-                    //    bpq.write_coil("2061", false, 5);
-                    //    bpq.write_coil("2062", false, 5);
-                    //    isAlarmM = true;
-                    //}
-                    //else
-                    //{
-                    //    isAlarmM = false;
-                    //}
-                    //if ((diData[0].get_bit(2) == 0))
-                    //{
-                    //    Console.WriteLine("伺服电机M报警");
 
-                    //}
-                    if (isAlarm011)
+                    if (isAlarmS1)
+                        Console.WriteLine("伺服1报警");
+                    if (isAlarmS2)
+                        Console.WriteLine("伺服2报警");
+                    if (isAlarmCool)
                         Console.WriteLine("冷水泵报警");
-                    if (isAlarm012)
-                        Console.WriteLine("冷水变压泵报警");
-                    if (isAlarm021)
+                    if (isAlarmHeat)
                         Console.WriteLine("热水泵报警");
-                    if (isAlarm022)
-                        Console.WriteLine("热水变压泵报警");
-                    if (isAlarmA)
-                        Console.WriteLine("伺服电机A报警");
-                    //if (isAlarmM)
-                    //    Console.WriteLine("伺服电机L报警");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex.ToString());
+                Log.Error("数字量输入报警异常：" + ex.ToString());
                 return;
             }
         }
@@ -357,37 +208,17 @@ namespace 恒温测试机.UI
                 }
                 else
                 {
-                    if (safeTestRbt.Checked)
-                    {
-                        safeTestRbt.Checked = false;
-                        pressureTestRbt.Checked = true;
-                    }
-                    if (pressureTestRbt.Checked)
-                    {
-                        pressureTestRbt.Checked = false;
-                        coolTestRbt.Checked = true;
-                    }
-                    if (coolTestRbt.Checked)
-                    {
-                        coolTestRbt.Checked = false;
-                        tmpTestRbt.Checked = true;
-                    }
-                    if (tmpTestRbt.Checked)
-                    {
-                        tmpTestRbt.Checked = false;
-                        FlowTestRbt.Checked = true;
-                    }
-
-                    if (sensitivityRbt.Checked)
-                    {
-                        sensitivityRbt.Checked = false;
-                        freRbt.Checked = true;
-                    }
-                    if (freRbt.Checked)
-                    {
-                        freRbt.Checked = false;
-                        TmSteadyRbt.Checked = true;
-                    }
+                    //暂时屏蔽自动运行，由于需要手动确认全冷位置和全开状态
+                    //if (sensitivityRbt.Checked)
+                    //{
+                    //    sensitivityRbt.Checked = false;
+                    //    freRbt.Checked = true;
+                    //}
+                    //if (freRbt.Checked)
+                    //{
+                    //    freRbt.Checked = false;
+                    //    TmSteadyRbt.Checked = true;
+                    //}
                 }
             }
             catch (Exception ex)
@@ -417,8 +248,13 @@ namespace 恒温测试机.UI
                     PmShow.Text = Pm.ToString();
                     PcShow.Text = Pc.ToString();
                     PhShow.Text = Ph.ToString();
-                    //if (graphFlag)
-                    //{
+
+
+                    Temp1Status.Text = Temp1 + "℃\n";
+                    Temp2Status.Text = Temp2 + "℃\n";
+                    Temp3Status.Text = Temp3 + "℃\n";
+                    Temp4Status.Text = Temp4 + "℃\n";
+                    Temp5Status.Text = Temp5 + "℃\n";
                     for (int i = 3; i < 103; i++)
                     {
                         hslCurve1.AddCurveData(
@@ -437,51 +273,13 @@ namespace 恒温测试机.UI
                                     //(float)Tc,(float)Th,(float)Tm,
                                     //(float)Pc,(float)Ph,(float)Pm,
                                     //(float)Qm5
-                                    (float)sourceDataQc[i]*5,(float)sourceDataQh[i]*5,(float)sourceDataQm[i]*5,
+                                    (float)((sourceDataQc[i]-1)*12.5),(float)((sourceDataQh[i]-1)*12.5),(float)((sourceDataQm[i]-1)*12.5),         //流量 1-5V 对应 0-50L/min
                                     (float)sourceDataTc[i]*10,(float)sourceDataTh[i]*10,(float)sourceDataTm[i]*10,
                                     (float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
                                     //(float)sourceDataQm5[i]
                             }
                         );
                     }
-                    #region 注释
-                    //hslCurve1.AddCurveData(
-                    //        new string[] {
-                    //                "temp1","temp2","temp3","temp4","temp5"
-                    //                //"冷水流量Qc", "热水流量Qh", "出水流量Qm",
-                    //                //"冷水温度Tc", "热水温度Th", "出水温度Tm",
-                    //                //"冷水压力Pc", "热水压力Ph", "出水压力Pm",
-                    //                //"出水重量Qm5"
-                    //        },
-                    //        new float[]
-                    //        {
-                    //            (float)Temp1,(float)Temp2,(float)Temp3,(float)Temp4,(float)Temp5
-                    //                //(float)Qc,(float)Qh,(float)Qm,
-                    //                //(float)Tc,(float)Th,(float)Tm,
-                    //                //(float)Pc,(float)Ph,(float)Pm,
-                    //                //(float)Qm5
-                    //                //(float)sourceDataQc[i],(float)sourceDataQh[i],(float)sourceDataQm[i],
-                    //                //(float)sourceDataTc[i],(float)sourceDataTh[i],(float)sourceDataTm[i],
-                    //                //(float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
-                    //                //(float)sourceDataQm5[i]
-                    //        }
-                    //    );
-                    ////}
-                    //if (logicType == LogicTypeEnum.safeTest || logicType == LogicTypeEnum.PressureTest)
-                    //{
-                    //    if (Qm > (double)Properties.Settings.Default.QmMax || Qm < (double)Properties.Settings.Default.QmMin)
-                    //    {
-                    //        QmShow.ForeColor = Color.Red;
-                    //        systemInfoTb.AppendText("[时间:" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "] " + "[出水流量Qm" + "超出上下限！]");
-                    //        systemInfoTb.AppendText("\n");
-                    //    }
-                    //    else
-                    //    {
-                    //        QmShow.ForeColor = Color.Black;
-                    //    }
-                    //}
-                    #endregion
-                    DataReadyToControlTemp();
                 }
             }
             catch (Exception ex)
@@ -492,175 +290,7 @@ namespace 恒温测试机.UI
 
         }
         public bool IsOpenDC = false;
-        private void DataReadyToControlTemp()   //程序不自动控制温度，仅用按钮颜色表示是否加热制冷
-        {
-            //if (!IsOpenDC)
-            //{
-            if (doData[0].get_bit(0) == 0)//制冷控温
-            {
-                button1.BackColor = Color.LightGray;
-                //if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set + Properties.Settings.Default.Temp1Range))
-                //    Temp1Status.Text = Temp1 + "℃\n"+ WhCool + "mm\n" + "保持温度";
-                //else
-                //{
-                //    if (WhCool > (double)(Properties.Settings.Default.WhMin))
-                //    {
-                //        Temp1Status.Text = Temp1 + "℃\n"+WhCool + "mm\n" + "制冷中";
-                //        set_bit(ref doData[0], 0, true);
-                //        set_bit(ref doData[1], 2, true);    //冷循环泵
-                //    }
-                //}
-            }
-            else
-            {
-                if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
-                {
-                    button1.BackColor = Color.LightGray;
-                    //Temp1Status.Text = Temp1 + "℃\n" + WhCool + "mm\n";// + "保持温度";
-                    set_bit(ref doData[0], 0, false);
-                    set_bit(ref doData[1], 2, false);    //冷循环泵
-                }
-                else
-                {
-                    button1.BackColor = Color.Green;
-                    //Temp1Status.Text =  Temp1 + "℃\n"+ WhCool + "mm\n" + "制冷中";
-                }
-            }
-
-            if (doData[0].get_bit(1) == 0)//制热控温
-            {
-                button2.BackColor = Color.LightGray;
-                //if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set - Properties.Settings.Default.Temp2Range))
-                //    Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "保持温度";
-                //else
-                //{
-                //    //加热需热水箱液面高度>下限，同时开启循环泵
-                //    if (WhHeat > (double)(Properties.Settings.Default.WhMin))
-                //    {
-                //        Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "加热中";
-                //        set_bit(ref doData[0], 1, true);
-                //        set_bit(ref doData[1], 3, true);    //热循环泵
-                //    }
-                //}
-            }
-            else
-            {
-                if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
-                {
-                    button2.BackColor = Color.LightGray;
-                    //Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "保持温度";
-                    set_bit(ref doData[0], 1, false);
-                    set_bit(ref doData[1], 3, false);    //热循环泵
-                }
-                else
-                {
-                    button2.BackColor = Color.Green;
-                    //Temp2Status.Text = Temp2 + "℃\n" + WhHeat + "mm\n" + "加热中";
-                }
-            }
-
-            if (doData[0].get_bit(2) == 0)//制热控温
-            {
-                button3.BackColor = Color.LightGray;
-                //if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set - Properties.Settings.Default.Temp3Range))
-                //    Temp3Status.Text = Temp3 + "℃\n" + "保持温度";
-                //else
-                //{
-                //    Temp3Status.Text = Temp3 + "℃\n" + "加热中";
-                //    set_bit(ref doData[0], 2, true);
-                //    set_bit(ref doData[1], 4, true);    //高循环泵
-                //}
-            }
-            else
-            {
-                if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
-                {
-                    button3.BackColor = Color.LightGray;
-                    //Temp3Status.Text = Temp3 + "℃\n" + "保持温度";
-                    set_bit(ref doData[0], 2, false);
-                    set_bit(ref doData[1], 4, false);    //高循环泵
-                }
-                else
-                {
-                    button3.BackColor = Color.Green;
-                    //Temp3Status.Text = Temp3 + "℃\n" + "加热中";
-                }
-            }
-
-            if (doData[0].get_bit(3) == 0)//制热控温
-            {
-                button4.BackColor = Color.LightGray;
-                //if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set - Properties.Settings.Default.Temp4Range))
-                //    Temp4Status.Text = Temp4 + "℃\n" + "保持温度";
-                //else
-                //{
-                //    Temp4Status.Text = Temp4 + "℃\n" + "加热中";
-                //    set_bit(ref doData[0], 3, true);
-                //    set_bit(ref doData[1], 5, true);    //中循环泵
-                //}
-            }
-            else
-            {
-                if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
-                {
-                    button4.BackColor = Color.LightGray;
-                    //Temp4Status.Text = Temp4 + "℃\n" + "保持温度";
-                    set_bit(ref doData[0], 3, false);
-                    set_bit(ref doData[1], 5, false);    //中循环泵
-                }
-                else
-                {
-                    button4.BackColor = Color.Green;
-                    //Temp4Status.Text = Temp4 + "℃\n" + "加热中";
-                }
-            }
-
-            if (doData[0].get_bit(4) == 0)//制冷控温
-            {
-                button5.BackColor = Color.LightGray;
-                //if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set + Properties.Settings.Default.Temp5Range))
-                //    Temp5Status.Text = Temp5 + "℃\n" + "保持温度";
-                //else
-                //{
-                //    Temp5Status.Text = Temp5 + "℃\n" + "制冷中";
-                //    set_bit(ref doData[0], 4, true);
-                //    set_bit(ref doData[1], 6, true);    //常循环泵
-                //}
-            }
-            else
-            {
-                if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
-                {
-                    button5.BackColor = Color.LightGray;
-                    //Temp5Status.Text = Temp5 + "℃\n" + "保持温度";
-                    set_bit(ref doData[0], 4, false);
-                    set_bit(ref doData[1], 6, false);    //常循环泵
-                }
-                else
-                {
-                    button5.BackColor = Color.Green;
-                    //Temp5Status.Text = Temp5 + "℃\n" + "制冷中";
-                }
-            }
-            collectData.InstantDo_Write(doData);
-            //}
-            //else
-            //{
-            //    Temp1Status.Text =  Temp1 + "℃\n"+ WhCool + "mm\n";
-            //    Temp2Status.Text =  Temp2 + "℃\n"+ WhHeat + "mm\n";
-            //    Temp3Status.Text = Temp3 + "℃\n";
-            //    Temp4Status.Text = Temp4 + "℃\n";
-            //    Temp5Status.Text = Temp5 + "℃\n";
-            //}
-            Temp1Status.Text = Temp1 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
-            label1.Text = WhCool + "mm";
-            Temp2Status.Text = Temp2 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
-            label5.Text = WhHeat + "mm";
-            Temp3Status.Text = Temp3 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
-            Temp4Status.Text = Temp4 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
-            Temp5Status.Text = Temp5 + "℃\n";// + WhCool + "mm\n";// + "保持温度";
-
-        }
+        
 
 
         private delegate void StopDelegate();   //手动停止委托
@@ -676,11 +306,8 @@ namespace 恒温测试机.UI
                 else
                 {
                     //将数字量输出置为0
-                    doData[0] = 0;
-                    doData[1] = 0;
-                    doData[2] = 0;
-                    doData[3] = 0;
-                    collectData.InstantDo_Write(doData);
+                    doData2[0] = 0;
+                    collectData.InstantDo_Write(doData2);
                     //当前采集的数据清空
                     analyseReportDic.Remove(logicType);
                     dt.Clear();
@@ -712,11 +339,11 @@ namespace 恒温测试机.UI
         /// </summary>
         private void InitControl()
         {
-            standardCbx.Text = "EN1111-2017";
-            sensitivityRbt.Visible = false;
-            freRbt.Visible = false;
-            TmSteadyRbt.Visible = false;
-            //safeTestRbt.Checked = true;
+            standardCbx.Text = "灵敏度流程";
+            sensitivityRbt.Visible = true;
+            freRbt.Visible = true;
+            TmSteadyRbt.Visible = true;
+            //sensitivityRbt.Checked = true;
             //hslCurve1.SetLeftCurve("冷水箱温度", null, Color.OrangeRed);
             //hslCurve1.SetLeftCurve("热水箱温度", null, Color.Orchid);
             //hslCurve1.SetLeftCurve("高温水箱温度", null, Color.White);
@@ -813,8 +440,8 @@ namespace 恒温测试机.UI
             collectData.InstantDo();
             collectData.InstantDi();
             //Example:
-            collectData.InstantDo_Write(doData2);//数字量输出            
-            diData2[0]= collectData.InstantDi_Read();//数字量输入   
+            //collectData.InstantDo_Write(doData2);//数字量输出            
+            //diData2[0]= collectData.InstantDi_Read();//数字量输入   
 
             //灵敏度的机器只有1710板卡,数字量的输入输出只有16个通道，也就是说byte 类型的doData长度由4变为2  diData同理，此处需要进行修改下
             //controlConfig = new config();
@@ -828,18 +455,17 @@ namespace 恒温测试机.UI
             //collectData.InstantDo();
             //collectData.InstantDi();
 
-            for (int i = 0; i < 4; i++)     //初始化数字量输出
+            for (int i = 0; i < 2; i++)     //初始化数字量输出
             {
-                doData[i] = 0x00;
+                doData2[i] = 0x00;
             }
-            collectData.InstantDo_Write(doData);//输出数字量函数
+            //collectData.InstantDo_Write(doData);//输出数字量函数
             //collectData.InstantDi();
-            diData[0] = collectData.InstantDi_Read();//读取数字量函数
-            Console.WriteLine("D0" + diData[0].get_bit(0));
-            Console.WriteLine("D3" + diData[0].get_bit(3));
-            Console.WriteLine("D4" + diData[0].get_bit(4));
-            Console.WriteLine("D5" + diData[0].get_bit(5));
-            Console.WriteLine("D6" + diData[0].get_bit(6));
+            diData2[0] = collectData.InstantDi_Read();//读取数字量函数
+            Console.WriteLine("D0" + diData2[0].get_bit(0));
+            Console.WriteLine("D1" + diData2[0].get_bit(1));
+            Console.WriteLine("D2" + diData2[0].get_bit(2));
+            Console.WriteLine("D3" + diData2[0].get_bit(3));
             //Log.Info("diData:" + diData[0]);
             WaveformAi();//
             WaveformAiCtrl1_Start();//开始高速读取模拟量数据
@@ -851,55 +477,13 @@ namespace 恒温测试机.UI
         /// </summary>
         private void InitTimer()
         {
-            //monitorTimer = new System.Timers.Timer(100);
-            //monitorTimer.Elapsed += (o, a) =>
-            //{
-            //    MonitorActive(doData);
-            //};//到达时间的时候执行事件； 
-            //monitorTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
-            //monitorTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
-
-            //monitorDiTimer = new System.Timers.Timer(5000);
-            //monitorDiTimer.Elapsed += (o, a) =>
-            //{
-            //    MonitorDiActive();
-            //};//到达时间的时候执行事件； 
-            //monitorDiTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
-            //monitorDiTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
-
-            //monitorWhTimer = new System.Timers.Timer(5000);
-            //monitorWhTimer.Elapsed += (o, a) =>
-            //{
-            //    MonitorWhActive();
-            //};//到达时间的时候执行事件； 
-            //monitorWhTimer.AutoReset = true;
-            //monitorWhTimer.Enabled = true;
-
-
-            safetyTimer = new System.Timers.Timer(2);
-            safetyTimer.Elapsed += new System.Timers.ElapsedEventHandler(SafetyTimer_Action);//到达时间的时候执行事件； 
-            safetyTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            safetyTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
-
-            pressureTimer = new System.Timers.Timer(2);//87/4
-            pressureTimer.Elapsed += new System.Timers.ElapsedEventHandler(PressureTimer_Action);//到达时间的时候执行事件； 
-            pressureTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            pressureTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件； 
-
-            coolTimer = new System.Timers.Timer(2);
-            coolTimer.Elapsed += new System.Timers.ElapsedEventHandler(CoolTimer_Action);//到达时间的时候执行事件； 
-            coolTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            coolTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
-
-            steadyTimer = new System.Timers.Timer(2);
-            steadyTimer.Elapsed += new System.Timers.ElapsedEventHandler(SteadyTimer_Action);//到达时间的时候执行事件； 
-            steadyTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            steadyTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
-
-            flowTimer = new System.Timers.Timer(2);
-            flowTimer.Elapsed += new System.Timers.ElapsedEventHandler(FlowTimer_Action);//到达时间的时候执行事件； 
-            flowTimer.AutoReset = false;//设置是执行一次（false）还是一直执行(true)；
-            flowTimer.Enabled = false;//是否执行System.Timers.Timer.Elapsed事件；
+            monitorDiTimer = new System.Timers.Timer(5000);
+            monitorDiTimer.Elapsed += (o, a) =>
+            {
+                MonitorDiActive();
+            };//到达时间的时候执行事件； 
+            monitorDiTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
+            monitorDiTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
             senstivityTimer = new System.Timers.Timer(2);
             senstivityTimer.Elapsed += new System.Timers.ElapsedEventHandler(SenstivityTimer_Action);//到达时间的时候执行事件； 
@@ -922,27 +506,13 @@ namespace 恒温测试机.UI
         /// </summary>
         private void ChangeTimer()
         {
-            if (logicType == LogicTypeEnum.safeTest)
-                safetyTimer.Enabled = true;
-
-            if (logicType == LogicTypeEnum.PressureTest)
-                pressureTimer.Enabled = true;
-
-            if (logicType == LogicTypeEnum.CoolTest)
-                coolTimer.Enabled = true;
-
-            if (logicType == LogicTypeEnum.TemTest)
-                steadyTimer.Enabled = true;
-
-            if (logicType == LogicTypeEnum.FlowTest)
-                flowTimer.Enabled = true;
-
-            if (logicType == LogicTypeEnum.SensitivityTest)
-                senstivityTimer.Enabled = true;
-            if (logicType == LogicTypeEnum.FidelityTest)
-                fidelityTimer.Enabled = true;
-            if (logicType == LogicTypeEnum.TmSteadyTest)
-                tmSteadyTimer.Enabled = true;
+            //TODO 注意屏蔽
+            //if (logicType == LogicTypeEnum.SensitivityTest)
+            //    senstivityTimer.Enabled = true;
+            //if (logicType == LogicTypeEnum.FidelityTest)
+            //    fidelityTimer.Enabled = true;
+            //if (logicType == LogicTypeEnum.TmSteadyTest)
+            //    tmSteadyTimer.Enabled = true;
             graphFlag = true;
             //HideOrShowCurve();
         }
@@ -962,18 +532,8 @@ namespace 恒温测试机.UI
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            doData[0] = 0;
-            doData[1] = 0;
-            doData[2] = 0;
-            doData[3] = 0;
-            collectData.InstantDo_Write(doData);
-            //monitorTimer.Enabled = false;
-            //monitorTimer.Dispose();
-            if (monitorWhTimer != null)
-            {
-                monitorWhTimer.Enabled = false;
-                monitorWhTimer.Dispose();
-            }
+            doData2[0] = 0;
+            collectData.InstantDo_Write(doData2);
             if (monitorDiTimer != null)
             {
                 monitorDiTimer.Enabled = false;
@@ -999,12 +559,6 @@ namespace 恒温测试机.UI
             //TODO:
             if (autoRunFlag || (MessageBox.Show("确认切换子操作界面？注意保存数据", "", MessageBoxButtons.YesNo) == DialogResult.Yes))
             {
-                //monitorTimer.Enabled = false;
-                safetyTimer.Enabled = false;
-                pressureTimer.Enabled = false;
-                coolTimer.Enabled = false;
-                steadyTimer.Enabled = false;
-                flowTimer.Enabled = false;
                 senstivityTimer.Enabled = false;
                 fidelityTimer.Enabled = false;
                 tmSteadyTimer.Enabled = false;
@@ -1082,21 +636,6 @@ namespace 恒温测试机.UI
             }
             switch (logicType)
             {
-                case LogicTypeEnum.safeTest:
-                    safetyTimer.Enabled = true;
-                    break;
-                case LogicTypeEnum.PressureTest:
-                    pressureTimer.Enabled = true;
-                    break;
-                case LogicTypeEnum.CoolTest:
-                    coolTimer.Enabled = true;
-                    break;
-                case LogicTypeEnum.TemTest:
-                    steadyTimer.Enabled = true;
-                    break;
-                case LogicTypeEnum.FlowTest:
-                    flowTimer.Enabled = true;
-                    break;
                 case LogicTypeEnum.SensitivityTest:
                     senstivityTimer.Enabled = true;
                     break;
@@ -1115,56 +654,9 @@ namespace 恒温测试机.UI
             stopFlag = true;
             runFlag = false;
             autoRunFlag = false;
-            doData[0] = 0;
-            doData[1] = 0;
-            doData[2] = 0;
-            doData[3] = 0;
-            collectData.InstantDo_Write(doData);
+            doData2[0] = 0;
+            collectData.InstantDo_Write(doData2);
         }
-
-        //private void HeatingBtn_Click(object sender, EventArgs e)
-        //{
-        //    //if (heatFlag)
-        //    //{
-        //    //    hslButton10.Text = "加热";
-        //    //    set_bit(ref doData[0],1, false);
-        //    //    set_bit(ref doData[0],2, false);
-        //    //    set_bit(ref doData[0],3, false);
-        //    //    heatFlag = false;
-        //    //}
-        //    //else
-        //    //{
-        //    //    if(Wh < (double)Properties.Settings.Default.WhMin)
-        //    //    {
-        //    //        MessageBox.Show("液面过低，无法加热！");
-        //    //        return;
-        //    //    }
-        //    //    heatFlag = true;
-        //    //    set_bit(ref doData[0],1, true);
-        //    //    set_bit(ref doData[0],2, true);
-        //    //    set_bit(ref doData[0],3, true);
-
-        //    //    hslButton10.Text = "停止加热";
-        //    //}
-        //}
-
-        //private void CoolingBtn_Click(object sender, EventArgs e)
-        //{
-        //    //if (coolFlag)
-        //    //{
-        //    //    hslButton9.Text = "制冷";
-        //    //    set_bit(ref doData[0],0, false);
-        //    //    set_bit(ref doData[0],4, false);
-        //    //    coolFlag = false;
-        //    //}
-        //    //else
-        //    //{
-        //    //    coolFlag = true;
-        //    //    set_bit(ref doData[0],0, true);
-        //    //    set_bit(ref doData[0],4, true);
-        //    //    hslButton9.Text = "停止制冷";
-        //    //}
-        //}
 
         private void SetParamBtn_Click(object sender, EventArgs e)
         {
@@ -1218,1460 +710,6 @@ namespace 恒温测试机.UI
             systemInfoTb.Text = "";
             dt.Clear();
             index = 0;
-        }
-
-        private void SafetyTimer_Action(object source, System.Timers.ElapsedEventArgs e)
-        {
-            try
-            {
-                //安全性测试 流程  TODO：测试报告
-                runFlag = true;
-                graphFlag = true;
-
-                analyseDataDic = new Dictionary<string, DataTable>();
-                #region 启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭vc vm 打开v5
-                set_bit(ref doData[1], 7, true);//a
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[0], 5, true);//11
-                set_bit(ref doData[2], 7, true);//011
-                set_bit(ref doData[0], 6, true);//12
-                set_bit(ref doData[3], 1, true);//021
-                set_bit(ref doData[2], 3, true);//vc
-                set_bit(ref doData[2], 4, true);//vh
-                set_bit(ref doData[2], 5, true);//vm
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[初始化系统]\n");
-
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-                double orgPm = Pm;//在界面上显示初始压力，一次判断过后压力恢复到初始压力以后对温度进行判断
-                                  //Log.Info("初始压力:" + Math.Round(orgPm, 2).ToString());
-
-                set_bit(ref doData[2], 3, false);//vc
-                set_bit(ref doData[2], 5, false);//vm
-                set_bit(ref doData[2], 6, true);//v5
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vc、Vm打开V5，开始冷水失效测试]\n");
-
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 冷水失效  持续t3后，打开VC Vm，同时关闭V5
-                //测试标准：T5s内出水流量降至 1.9L/min 以下记录 Qm5
-                //测试标准：T5s内出水温度应 ≤ 49℃
-
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t2));//可调节时间 t2
-                SystemInfoPrint("[t2 = " + Properties.Settings.Default.t2.ToString() + "s 延时结束，开始记录冷水失效数据]\n");
-
-                dt.Rows.Add("开始采集冷水失效数据",
-                                DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;   //开始收集数据
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
-                collectDataFlag = false;  //停止收集数据
-                dt.Rows.Add("冷水失效数据采集完毕",
-                                DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("冷水失效数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                SystemInfoPrint("[t3 = " + Properties.Settings.Default.t3.ToString() + " s 冷水测试阶段结束，停止记录数据。关闭V5，打开Vc、Vm，压力开始恢复]\n");
-
-                set_bit(ref doData[2], 3, true);//vc
-                set_bit(ref doData[2], 5, true);//vm
-                set_bit(ref doData[2], 6, false);//v5
-                collectData.InstantDo_Write(doData);
-
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 压力回复初始压力后，开始收集数据 T5  
-                //测试标准：混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃  
-                for (; true;)
-                {
-                    if (Math.Abs(Pc - (double)Properties.Settings.Default.CoolPump011) <= (double)Properties.Settings.Default.pressureThreshold)
-                    {
-                        break;
-                    }
-                }
-                SystemInfoPrint("[压力恢复到初始压力，开始记录 5s 的数据]\n");
-                dt.Rows.Add("开始采集冷水恢复数据",
-                                DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
-                collectDataFlag = false;
-                dt.Rows.Add("冷水恢复数据采集完毕",
-                    DateTime.Now,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("冷水恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                SystemInfoPrint("[ 5s 的数据记录完毕]\n");
-
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region t1后，关闭vh vm，同时打开v5
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-                doData[2].set_bit(4, false);//vh
-                doData[2].set_bit(5, false);//vm
-                doData[2].set_bit(6, true);//v5
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭Vh、Vm打开V5，开始热水失效测试]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 热水失效  持续t3后，打开vh vm，同时关闭v5
-                //测试标准：T5s内出水流量降至 1.9L/min 以下记录 Qm5
-                //测试标准：T5s内出水温度应 ≤ 49℃
-
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t2));//可调节时间 t2
-                SystemInfoPrint("[t2 = " + Properties.Settings.Default.t2.ToString() + "s 延时结束，开始记录热水失效数据]\n");
-
-                dt.Rows.Add("开始采集热水失效数据",
-                                DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;   //开始收集数据
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
-                collectDataFlag = false;  //停止收集数据
-                dt.Rows.Add("热水失效数据采集完毕",
-                                DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("热水失效数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                SystemInfoPrint("[t3 = " + Properties.Settings.Default.t3.ToString() + " s 热水测试阶段结束，停止记录数据。关闭V5，打开Vh、Vm，压力开始恢复]\n");
-
-                doData[2].set_bit(3, true);//vc
-                doData[2].set_bit(5, true);//vm
-                doData[2].set_bit(6, false);//v5
-                collectData.InstantDo_Write(doData);
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 压力回复初始压力后，开始收集数据 T5
-                //测试标准：混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃  
-                for (; true;)
-                {
-                    if (Math.Abs(Ph - (double)Properties.Settings.Default.HotPump021) <= (double)Properties.Settings.Default.pressureThreshold)
-                    {
-                        break;
-                    }
-                }
-                SystemInfoPrint("[压力恢复到初始压力，开始记录 5s 的数据]\n");
-                dt.Rows.Add("开始采集热水恢复数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
-                collectDataFlag = false;
-                dt.Rows.Add("热水恢复数据采集完毕",
-                    DateTime.Now,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("热水恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                SystemInfoPrint("[ 5s 的数据记录完毕]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                MessageBox.Show("安全性测试结束，请注意保存数据！");
-                dataReportAnalyseApp = new DataReportAnalyseApp(logicType, analyseDataDic);
-                if (analyseReportDic.ContainsKey(logicType))
-                {
-                    analyseReportDic[logicType] = dataReportAnalyseApp.AnalyseResult();
-                }
-                else
-                {
-                    analyseReportDic.Add(logicType, dataReportAnalyseApp.AnalyseResult());
-                }
-                SystemInfoPrint(analyseReportDic[logicType] + "\n");
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        return;
-                    }
-                    safeTestRbt.Checked = false;
-                    pressureTestRbt.Checked = true;
-                }
-                //HideOrShowCurve();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-            }
-            finally
-            {
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                    }
-                    safeTestRbt.Checked = false;
-                    pressureTestRbt.Checked = true;
-                }
-            }
-        }
-
-        private void PressureTimer_Action(object source, System.Timers.ElapsedEventArgs e)
-        {
-            try
-            {
-                runFlag = true;
-                graphFlag = true;
-
-                analyseDataDic = new Dictionary<string, DataTable>();
-                //压力变化测试 流程 TODO：测试报告
-
-                #region 启动a、c、11、011、12、012、022、021、vc、vh、vm 保持t1时间 然后关闭a 打开b
-                set_bit(ref doData[1], 7, true);//a
-                set_bit(ref doData[2], 0, false);//b  
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[2], 2, false);//d  
-                set_bit(ref doData[0], 5, true);//11
-                set_bit(ref doData[2], 7, true);//011
-                set_bit(ref doData[0], 6, true);//12
-                set_bit(ref doData[3], 0, true);//012
-                set_bit(ref doData[3], 2, true);//022
-                set_bit(ref doData[3], 1, true);//021
-                set_bit(ref doData[2], 3, true);//vc
-                set_bit(ref doData[2], 4, true);//vh
-                set_bit(ref doData[2], 5, true);//vm
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[初始化系统...]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-                //022压力切换为低压 用485切换    
-                set_bit(ref doData[1], 7, false);//a
-                set_bit(ref doData[2], 0, true);//b            
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水降压测试]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 热水降压 持续t3后打开a同时关闭b  022压力切换为高压 用485切换
-                //测试标准：【TODO】
-                //1、T5 秒内超过 3℃的时间不大于 T1.5 秒
-                //2、T5 秒内低于 5℃的时间不大于 T1 秒
-                //3、T5 秒后出水温度偏差 ≤ 2℃
-                SystemInfoPrint("[等待压力到达设定值...]\n");
-                for (; true;)
-                {
-                    if (Math.Abs(Ph - (double)Properties.Settings.Default.PumpHotLow022) <= (double)Properties.Settings.Default.pressureThreshold)
-                        break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[压力达到设定值，开始记录热水降压数据]\n");
-                dt.Rows.Add("开始采集热水降压测试数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
-                SystemInfoPrint("[t3 = " + Properties.Settings.Default.t3.ToString() + " s 热水降压测试阶段结束，停止记录数据。关闭b，打开a，压力开始恢复，022压力由低压切换为高压]\n");
-                collectDataFlag = false;
-                dt.Rows.Add("热水降压测试数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("热水降压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                set_bit(ref doData[1], 7, true);//a
-                set_bit(ref doData[2], 0, false);//b 
-                collectData.InstantDo_Write(doData);
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                //022压力由低压切换为高压   
-                #endregion
-
-                #region 热水压力恢复到初始压力，开始记录 5s 的数据
-                //测试标准：
-                //1、T5 秒内混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃
-                for (; true;)
-                {
-                    if (Math.Abs(Ph - (double)Properties.Settings.Default.HotPump021) <=
-                       (double)Properties.Settings.Default.pressureThreshold) break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[热水压力恢复到初始压力，开始记录 5s 的数据]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                dt.Rows.Add("开始采集热水降压测试压力恢复数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-
-                System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
-                collectDataFlag = false;
-                dt.Rows.Add("热水降压测试压力恢复数据采集完毕",
-                    DateTime.Now,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("热水降压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
-                SystemInfoPrint("[ 5s 的数据记录完毕]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region t1 同时 关闭a 打开b
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-
-                //022压力切换为高压 用485切换
-                set_bit(ref doData[1], 7, false);//a
-                set_bit(ref doData[2], 0, true);//b  
-                collectData.InstantDo_Write(doData);
-
-                //022高压切换           ???
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭a打开b，开始压力变化测试-热水升压测试]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 热水升压 持续t3后打开a同时关闭b  022压力切换为高压 用485切换
-                //测试标准：【TODO】
-                //1、T5 秒内超过 3℃的时间不大于 T1.5 秒
-                //2、T5 秒内低于 5℃的时间不大于 T1 秒
-                //3、T5 秒后出水温度偏差 ≤ 2℃
-                SystemInfoPrint("[等待压力到达设定值...]\n");
-                for (; true;)
-                {
-                    if (Math.Abs(Ph - (double)Properties.Settings.Default.PumpHotLow022) <= (double)Properties.Settings.Default.pressureThreshold)
-                        break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[压力达到设定值，开始记录热水升压数据]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                //开始收集数据
-                dt.Rows.Add("开始采集热水升压测试数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
-                SystemInfoPrint("[t3 = " + Properties.Settings.Default.t3.ToString() + " s 热水升压测试阶段结束，停止记录数据。关闭b，打开a，压力开始恢复，022压力由低压切换为高压]\n");
-                collectDataFlag = false;
-                dt.Rows.Add("热水升压测试数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("热水升压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                set_bit(ref doData[1], 7, true);//a
-                set_bit(ref doData[2], 0, false);//b 
-                collectData.InstantDo_Write(doData);   //022压力切换为高压 用485切换  ???
-                #endregion
-
-                #region 热水压力恢复到初始压力，开始记录 5s 的数据
-                //测试标准：
-                //1、T5 秒内混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃
-                for (; true;)
-                {
-                    if (Math.Abs(Ph - (double)Properties.Settings.Default.HotPump021) <=
-                       (double)Properties.Settings.Default.pressureThreshold) break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[热水压力恢复到初始压力，开始记录 5s 的数据]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                dt.Rows.Add("开始采集热水升压测试压力恢复数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-
-                System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
-                collectDataFlag = false;
-                dt.Rows.Add("热水升压测试压力恢复数据采集完毕",
-                    DateTime.Now,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("热水升压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
-                SystemInfoPrint("[ 5s 的数据记录完毕]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region t1 同时 关闭 c 打开d
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[2], 2, false);//d 
-                collectData.InstantDo_Write(doData);
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                //012压力切换为低压 用485切换
-                set_bit(ref doData[2], 1, false);//c
-                set_bit(ref doData[2], 2, true);//d 
-                collectData.InstantDo_Write(doData);
-
-                //012输出低压 485输出  ???
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭c打开d，开始压力变化测试-冷水降压测试]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 冷水降压 持续t3后打开c同时关闭d  012压力切换为高压 用485切换
-                //测试标准：【TODO】
-                //1、T5 秒内超过 3℃的时间不大于 T1.5 秒
-                //2、T5 秒内低于 5℃的时间不大于 T1 秒
-                //3、T5 秒后出水温度偏差 ≤ 2℃
-                SystemInfoPrint("[等待压力到达设定值...]\n");
-
-                for (; true;)
-                {
-                    if (Math.Abs(Pc - (double)Properties.Settings.Default.PumpCoolLow012) <=
-                        (double)Properties.Settings.Default.pressureThreshold)
-                        break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[压力达到设定值，开始记录冷水降压数据]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                dt.Rows.Add("开始采集冷水降压测试数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
-                SystemInfoPrint("[t3 = " + Properties.Settings.Default.t3.ToString() + " s 冷水降压测试阶段结束，停止记录数据。关闭b，打开a，压力开始恢复，022压力由低压切换为高压]\n");
-                collectDataFlag = false;
-                dt.Rows.Add("冷水降压测试数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("冷水降压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[2], 2, false);//d 
-                                                 //012输出高压 485输出     ???
-
-                collectData.InstantDo_Write(doData);
-                #endregion
-
-                #region 冷水压力恢复到初始压力，开始记录 5s 的数据
-                //测试标准：
-                //1、T5 秒内混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃
-                for (; true;)
-                {
-                    if (Math.Abs(Pc - (double)Properties.Settings.Default.CoolPump011) <=
-                       (double)Properties.Settings.Default.pressureThreshold) break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[冷水压力恢复到初始压力，开始记录 5s 的数据]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                dt.Rows.Add("开始采集冷水降压测试压力恢复数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
-                collectDataFlag = false;
-                dt.Rows.Add("冷水降压测试压力恢复数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-
-                SystemInfoPrint("[ 5s 的数据记录完毕]\n");
-                analyseDataDic.Add("冷水降压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region t1 同时 关闭c 打开d
-                //冷水升压测试
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[2], 2, false);//d 
-                                                 //012输出高压 485输出
-
-                collectData.InstantDo_Write(doData);
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-
-                //012压力切换为高压 用485切换
-                set_bit(ref doData[2], 1, false);//c
-                set_bit(ref doData[2], 2, true);//d 
-
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭c打开d，开始压力变化测试-冷水升压测试]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 冷水升压 持续t3后打开a同时关闭b  022压力切换为高压 用485切换
-                //测试标准：【TODO】
-                //1、T5 秒内超过 3℃的时间不大于 T1.5 秒
-                //2、T5 秒内低于 5℃的时间不大于 T1 秒
-                //3、T5 秒后出水温度偏差 ≤ 2℃
-                SystemInfoPrint("[等待压力到达设定值...]\n");
-                for (; true;)
-                {
-                    if (Math.Abs(Pc - (double)Properties.Settings.Default.PumpCoolHigh012) <=
-                        (double)Properties.Settings.Default.pressureThreshold)
-                        break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[压力达到设定值，开始记录冷水升压数据]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                //开始收集数据
-                dt.Rows.Add("开始采集冷水升压测试数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
-                SystemInfoPrint("[t3 = " + Properties.Settings.Default.t3.ToString() + " s 冷水升压测试阶段结束，停止记录数据。关闭d，打开c，压力开始恢复，022压力由低压切换为高压]\n");
-                //停止收集数据,持续t3后
-                collectDataFlag = false;
-                dt.Rows.Add("冷水升压测试数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("冷水升压测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[2], 2, false);//d            
-                collectData.InstantDo_Write(doData);
-                #endregion
-
-                #region 冷水压力恢复到初始压力，开始记录 5s 的数据
-                //测试标准：
-                //1、T5 秒内混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃
-                for (; true;)
-                {
-                    if (Math.Abs(Pc - (double)Properties.Settings.Default.CoolPump011) <=
-                       (double)Properties.Settings.Default.pressureThreshold) break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[冷水压力恢复到初始压力，开始记录 5s 的数据]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                dt.Rows.Add("开始采集冷水升压测试压力恢复数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * 5));//延时5s
-                collectDataFlag = false;
-                dt.Rows.Add("冷水降压测试压力恢复数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("冷水升压恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-
-                SystemInfoPrint("[ 5s 的数据记录完毕]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                MessageBox.Show("压力变化测试结束，请注意保存数据！");
-
-                dataReportAnalyseApp = new DataReportAnalyseApp(logicType, analyseDataDic);
-                if (analyseReportDic.ContainsKey(logicType))
-                {
-                    analyseReportDic[logicType] = dataReportAnalyseApp.AnalyseResult();
-                }
-                else
-                {
-                    analyseReportDic.Add(logicType, dataReportAnalyseApp.AnalyseResult());
-                }
-                SystemInfoPrint(analyseReportDic[logicType] + "\n");
-
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        return;
-                    }
-                    pressureTestRbt.Checked = false;
-                    coolTestRbt.Checked = true;
-                }
-                //HideOrShowCurve();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-            }
-            finally
-            {
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        //return;
-                    }
-                    pressureTestRbt.Checked = false;
-                    coolTestRbt.Checked = true;
-                }
-            }
-        }
-
-        private void CoolTimer_Action(object source, System.Timers.ElapsedEventArgs e)
-        {
-            try
-            {
-                runFlag = true;
-                graphFlag = true;
-
-                analyseDataDic = new Dictionary<string, DataTable>();
-
-
-                #region 启动a、c、11、011、12、021、vc、vh、vm 保持t1时间 然后关闭12 打开14
-                set_bit(ref doData[1], 7, true);//a
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[0], 5, true);//11
-                set_bit(ref doData[2], 7, true);//011
-                set_bit(ref doData[0], 6, true);//12
-                set_bit(ref doData[3], 1, true);//021
-                set_bit(ref doData[2], 3, true);//vc
-                set_bit(ref doData[2], 4, true);//vh
-                set_bit(ref doData[2], 5, true);//vm
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[初始化系统...]\n");
-
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                set_bit(ref doData[0], 6, false);//12
-                set_bit(ref doData[1], 6, true);//14            
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，关闭12 打开14，开始降温测试]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 温度达到设定稳定温度后  持续t3后 关闭14 打开12
-                //测试标准：【TODO】
-                //1、T5 秒内超过 3℃的时间不大于 T1 秒
-                //2、T5 秒出水温度波动 ≤ 1℃
-                //3、T5 秒后出水温度偏差 ≤ 2℃
-                SystemInfoPrint("[等待温度到达设定值...]\n");
-                for (; true;)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        return;
-                    }
-                    if (true)       //???
-                        break;
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-
-                SystemInfoPrint("[温度达到设定值，开始记录降温测试数据]\n");
-                dt.Rows.Add("开始采集降温测试数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t3));
-                SystemInfoPrint("[t3 = " + Properties.Settings.Default.t3.ToString() + " s 降温测试阶段结束，停止记录数据。关闭14，打开12]\n");
-                collectDataFlag = false;
-                dt.Rows.Add("降温测试数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("降温测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                set_bit(ref doData[0], 6, true);//12
-                set_bit(ref doData[1], 6, false);//14  
-                collectData.InstantDo_Write(doData);
-                #endregion
-
-                #region 温度达到设定稳定温度后,开始记录40s 的数据
-                //测试标准：
-                //1、T40 秒后混合水出水温度与所设定的温度偏差应 ≤ ±2 ℃
-                for (; true;)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        return;
-                    }
-                    if (true) break;                //???
-                    System.Threading.Thread.Sleep((int)(100));
-                }
-                SystemInfoPrint("[温度达到设定值，开始记录 45s 的数据]\n");
-                dt.Rows.Add("开始采集降温测试恢复数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                collectDataFlag = true;
-
-                System.Threading.Thread.Sleep((int)(1000 * 45));//延时40s
-                collectDataFlag = false;
-                dt.Rows.Add("降温测试恢复数据采集完毕",
-                    DateTime.Now,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               0,
-                               index);
-                index++;
-                analyseDataDic.Add("降温测试恢复数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                SystemInfoPrint("[ 45s 的数据记录完毕]\n");
-                #endregion
-
-                dataReportAnalyseApp = new DataReportAnalyseApp(logicType, analyseDataDic);
-                if (analyseReportDic.ContainsKey(logicType))
-                {
-                    analyseReportDic[logicType] = dataReportAnalyseApp.AnalyseResult();
-                }
-                else
-                {
-                    analyseReportDic.Add(logicType, dataReportAnalyseApp.AnalyseResult());
-                }
-                SystemInfoPrint(analyseReportDic[logicType] + "\n");
-
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        return;
-                    }
-                    coolTestRbt.Checked = false;
-                    tmpTestRbt.Checked = true;
-                }
-                //HideOrShowCurve();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-            }
-            finally
-            {
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        //return;
-                    }
-                    coolTestRbt.Checked = false;
-                    tmpTestRbt.Checked = true;
-                }
-            }
-        }
-
-        private void SteadyTimer_Action(object source, System.Timers.ElapsedEventArgs e)
-        {
-            try
-            {
-                runFlag = true;
-                graphFlag = true;
-
-                analyseDataDic = new Dictionary<string, DataTable>();
-
-                #region 启动 a、c、11、12、vc、vh
-                set_bit(ref doData[1], 7, true);//a
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[0], 5, true);//11
-                set_bit(ref doData[0], 6, true);//12
-                set_bit(ref doData[2], 3, true);//vc
-                set_bit(ref doData[2], 4, true);//vh
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[初始化系统...]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                #region 开启电机，原点，旋转记录 Tm36 38 40 位置
-                try
-                {
-                    InitElect();
-                    bpq.write_coil(powerAddress, true, 5);  //开启电机
-                    powerState = true;
-                    bpq.write_coil(orignWriteAddress, true, 5); //原点
-                    System.Threading.Thread.Sleep((int)(200));
-                    bpq.write_coil(orignWriteAddress, false, 5);
-
-                    bpq.write_coil(forwardWriteAddress, true, 5);//正传
-                    electDataFlag = true;
-                    while (powerState && (Tm <= 42))
-                    {
-
-                    }
-                    bpq.write_coil(forwardWriteAddress, false, 5);
-                    electDataFlag = false;
-
-                    AnalyseElect();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.ToString());
-                    return;
-                }
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-
-                dataReportAnalyseApp = new DataReportAnalyseApp(logicType, analyseDataDic);
-                if (analyseReportDic.ContainsKey(logicType))
-                {
-                    analyseReportDic[logicType] = dataReportAnalyseApp.AnalyseResult();
-                }
-                else
-                {
-                    analyseReportDic.Add(logicType, dataReportAnalyseApp.AnalyseResult());
-                }
-                SystemInfoPrint(analyseReportDic[logicType] + "\n");
-
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    if (stopFlag)   //手动停止
-                    {
-                        StopPro();
-                        //return;
-                    }
-                    tmpTestRbt.Checked = false;
-                    FlowTestRbt.Checked = true;
-                }
-                //HideOrShowCurve();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-            }
-            finally
-            {
-                runFlag = false;
-                graphFlag = false;
-                if (autoRunFlag)
-                {
-                    tmpTestRbt.Checked = false;
-                    FlowTestRbt.Checked = true;
-                }
-            }
-
-        }
-
-        private void FlowTimer_Action(object source, System.Timers.ElapsedEventArgs e)
-        {
-            try
-            {
-                runFlag = true;
-                graphFlag = true;
-
-                analyseDataDic = new Dictionary<string, DataTable>();
-
-                #region 启动 a、c、11、011、12、012、vc、vh、vm
-                set_bit(ref doData[1], 7, true);//a
-                set_bit(ref doData[2], 1, true);//c
-                set_bit(ref doData[0], 5, true);//11
-                set_bit(ref doData[2], 7, true);//011
-                set_bit(ref doData[0], 6, true);//12
-                set_bit(ref doData[3], 0, true);//012
-                set_bit(ref doData[2], 3, true);//vc
-                set_bit(ref doData[2], 4, true);//vh
-                set_bit(ref doData[2], 5, true);//vm
-                collectData.InstantDo_Write(doData);
-                SystemInfoPrint("[初始化系统...]\n");
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
-                //TODO 电机控制
-                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束，电机开始转动，开始流量减少测试]\n");
-
-                #endregion
-
-                #region 5-6s 内降低50%流量
-                SystemInfoPrint("[开始记录流量减少测试数据]\n");
-                dt.Rows.Add("开始采集流量减少测试数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * 6));
-                SystemInfoPrint("6s 流量减少测试阶段结束，停止记录数据。]\n");
-                collectDataFlag = false;
-                dt.Rows.Add("流量减少测试数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("流量减少测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                //TODO 电机控制
-
-                #endregion
-
-                #region T30秒后
-                //System.Threading.Thread.Sleep((int)(1000 * 30));
-                //SystemInfoPrint("T30s 计时结束]\n");
-                dt.Rows.Add("开始采集T30秒后温度稳定的数据",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                startIndex = index;
-                index++;
-                collectDataFlag = true;
-                System.Threading.Thread.Sleep((int)(1000 * 35));
-                SystemInfoPrint("温度稳定的数据采集完毕，停止记录数据。]\n");
-                collectDataFlag = false;
-                dt.Rows.Add("温度稳定的数据采集完毕",
-                    DateTime.Now,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                index);
-                index++;
-                endIndex = index;
-                analyseDataDic.Add("温度稳定的测试数据", DataTableUtils.SubDataTable(dt, startIndex, endIndex));
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    return;
-                }
-                #endregion
-
-                dataReportAnalyseApp = new DataReportAnalyseApp(logicType, analyseDataDic);
-                if (analyseReportDic.ContainsKey(logicType))
-                {
-                    analyseReportDic[logicType] = dataReportAnalyseApp.AnalyseResult();
-                }
-                else
-                {
-                    analyseReportDic.Add(logicType, dataReportAnalyseApp.AnalyseResult());
-                }
-                SystemInfoPrint(analyseReportDic[logicType] + "\n");
-
-                runFlag = false;
-                graphFlag = false;
-                //HideOrShowCurve();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-            }
-            finally
-            {
-                runFlag = false;
-                graphFlag = false;
-                if (stopFlag)   //手动停止
-                {
-                    StopPro();
-                    //return;
-                }
-            }
         }
 
         private void SenstivityTimer_Action(object source, System.Timers.ElapsedEventArgs e)
@@ -2768,34 +806,33 @@ namespace 恒温测试机.UI
 
         private void AutoRunBtn_Click(object sender, EventArgs e)
         {
-            if (autoRunFlag)    //停止自动运行
-            {
-                autoRunBtn.OriginalColor = Color.Lavender;
-                autoRunFlag = false;
-            }
-            else        //启动自动运行
-            {
-                autoRunFlag = true;
-                if (runFlag)
-                {
-                    MessageBox.Show("当前已有测试流程正在执行，请等待！");
-                    return;
-                }
-                else
-                {
-                    autoRunBtn.OriginalColor = Color.Green;
-                    switch (testStandard)
-                    {
-                        case TestStandardEnum.default1711:
-                            safetyTimer.Enabled = true;
-                            break;
-                        case TestStandardEnum.sensitivityProcess:
-                            senstivityTimer.Enabled = true;
-                            break;
-                    }
-                }
-            }
-
+            //if (autoRunFlag)    //停止自动运行
+            //{
+            //    autoRunBtn.OriginalColor = Color.Lavender;
+            //    autoRunFlag = false;
+            //}
+            //else        //启动自动运行
+            //{
+            //    autoRunFlag = true;
+            //    if (runFlag)
+            //    {
+            //        MessageBox.Show("当前已有测试流程正在执行，请等待！");
+            //        return;
+            //    }
+            //    else
+            //    {
+            //        autoRunBtn.OriginalColor = Color.Green;
+            //        switch (testStandard)
+            //        {
+            //            case TestStandardEnum.default1711:
+            //                safetyTimer.Enabled = true;
+            //                break;
+            //            case TestStandardEnum.sensitivityProcess:
+            //                senstivityTimer.Enabled = true;
+            //                break;
+            //        }
+            //    }
+            //}
         }
         private void ShutDownBtn_Click(object sender, EventArgs e)
         {
@@ -2808,9 +845,9 @@ namespace 恒温测试机.UI
 
         private void DOControlBtn_Click(object sender, EventArgs e)
         {
-            IsOpenDC = true;
-            FormDOControl doControlForm = new FormDOControl(this);
-            doControlForm.Show();
+            //IsOpenDC = true;
+            //FormDOControl doControlForm = new FormDOControl(this);
+            //doControlForm.Show();
         }
         #endregion
 
@@ -2984,22 +1021,8 @@ namespace 恒温测试机.UI
                 //Console.WriteLine("液面高度：" + Wh);
 
                 sourceDataQc = averge(ref sourceDataQc, 0);
-                if (isFirstAver == false)
-                {
-                    for (int i = 3; i < sourceDataQc.Length - 3; i++)
-                    {
-                        Log.Info("before" + i + "-》" + sourceDataQc[i]);
-                    }
-                }
                 sourceDataQc = filterKalMan(sourceDataQc);
                 sourceDataQc = averge(ref sourceDataQc, 0);
-                if (isFirstAver == false)
-                {
-                    for (int i = 3; i < sourceDataQc.Length - 3; i++)
-                    {
-                        Log.Info("after" + i + "-》" + sourceDataQc[i]);
-                    }
-                }
 
                 sourceDataQh = averge(ref sourceDataQh, 1);
                 //sourceDataQh = filter(ref sourceDataQh, 10);
@@ -3059,9 +1082,9 @@ namespace 恒温测试机.UI
                         {
                             dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
                                 t,
-                                sourceDataQc[i] * 5,
-                                sourceDataQh[i] * 5,
-                                sourceDataQm[i] * 5,
+                                (sourceDataQc[i] - 1) * 12.5,
+                                (sourceDataQh[i] - 1) * 12.5,
+                                (sourceDataQm[i] - 1) * 12.5,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -3076,9 +1099,9 @@ namespace 恒温测试机.UI
                         if (graphFlag)          //记录流程测试中的，曲线变化
                         {
                             GraphDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                sourceDataQc[i] * 5,
-                                sourceDataQh[i] * 5,
-                                sourceDataQm[i] * 5,
+                                (sourceDataQc[i] - 1) * 12.5,
+                                (sourceDataQh[i] - 1) * 12.5,
+                                (sourceDataQm[i] - 1) * 12.5,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -3092,9 +1115,9 @@ namespace 恒温测试机.UI
                         if (electDataFlag)
                         {
                             ElectDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                sourceDataQc[i] * 5,
-                                sourceDataQh[i] * 5,
-                                sourceDataQm[i] * 5,
+                                (sourceDataQc[i] - 1) * 12.5,
+                                (sourceDataQh[i] - 1) * 12.5,
+                                (sourceDataQm[i] - 1) * 12.5,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -3106,9 +1129,9 @@ namespace 恒温测试机.UI
                         }
                         t = t.AddMilliseconds(10.0);
                     }
-                    Qc = Math.Round((sourceDataQc[3] + sourceDataQc[102]) * 2.5, 2, MidpointRounding.AwayFromZero);
-                    Qh = Math.Round((sourceDataQh[3] + sourceDataQh[102]) * 2.5, 2, MidpointRounding.AwayFromZero);
-                    Qm = Math.Round((sourceDataQm[3] + sourceDataQm[102]) * 2.5, 2, MidpointRounding.AwayFromZero);
+                    Qc = Math.Round((sourceDataQc[3] + sourceDataQc[102] - 2) * 0.5 * 12.5, 2, MidpointRounding.AwayFromZero);
+                    Qh = Math.Round((sourceDataQh[3] + sourceDataQh[102] - 2) * 0.5 * 12.5, 2, MidpointRounding.AwayFromZero);
+                    Qm = Math.Round((sourceDataQm[3] + sourceDataQm[102] - 2) * 0.5 * 12.5, 2, MidpointRounding.AwayFromZero);
                     Tc = Math.Round((sourceDataTc[3] + sourceDataTc[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Th = Math.Round((sourceDataTh[3] + sourceDataTh[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Tm = Math.Round((sourceDataTm[3] + sourceDataTm[102]) * 5, 2, MidpointRounding.AwayFromZero);
@@ -3228,7 +1251,7 @@ namespace 恒温测试机.UI
         /// <summary>
         /// 初始化电机通信
         /// </summary>
-        private void InitElect()
+        private void InitE()
         {
             type = ElectricalMachineryType.tempType;
             powerAddress = "2056";
@@ -3355,11 +1378,6 @@ namespace 恒温测试机.UI
             }
 
         }
-
-
-
-
-
 
         #endregion
 
@@ -3577,148 +1595,6 @@ namespace 恒温测试机.UI
             return sourceData;
         }
 
-        #endregion
-
-        #region 水箱按钮
-        private void doData00_Click(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn.BackColor == Color.Green)
-            {
-                //关闭 冷水制冷
-                btn.BackColor = Color.LightGray;
-                set_bit(ref doData[0], 0, false);
-                set_bit(ref doData[1], 2, false);
-                collectData.InstantDo_Write(doData);
-            }
-            else
-            {
-                //开启 冷水制冷
-                if (Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
-                {
-                    MessageBox.Show("冷水箱温度已符合设定温度，无法继续制冷");
-                    return;
-                }
-                if (WhCool < (double)Properties.Settings.Default.WhMin)
-                {
-                    MessageBox.Show("冷水箱液面过低，无法开启");
-                    return;
-                }
-                btn.BackColor = Color.Green;
-                set_bit(ref doData[0], 0, true);
-                set_bit(ref doData[1], 2, true);
-                collectData.InstantDo_Write(doData);
-            }
-        }
-
-        private void doData01_Click(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn.BackColor == Color.Green)
-            {
-                //关闭 热水加热
-                btn.BackColor = Color.LightGray;
-                set_bit(ref doData[0], 1, false);
-                set_bit(ref doData[1], 3, false);
-                collectData.InstantDo_Write(doData);
-            }
-            else
-            {
-                //开启 热水加热
-                if (Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
-                {
-                    MessageBox.Show("热水箱温度已符合设定温度，无法继续加热");
-                    return;
-                }
-                if (WhHeat < (double)Properties.Settings.Default.WhMin)
-                {
-                    MessageBox.Show("热水箱液面过低，无法开启");
-                    return;
-                }
-                btn.BackColor = Color.Green;
-                set_bit(ref doData[0], 1, true);
-                set_bit(ref doData[1], 3, true);
-                collectData.InstantDo_Write(doData);
-            }
-        }
-
-        private void doData02_Click(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn.BackColor == Color.Green)
-            {
-                //关闭 高温加热
-                btn.BackColor = Color.LightGray;
-                set_bit(ref doData[0], 2, false);
-                set_bit(ref doData[1], 4, false);
-                collectData.InstantDo_Write(doData);
-            }
-            else
-            {
-                //开启 高温加热
-                if (Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
-                {
-                    MessageBox.Show("高温水箱温度已符合设定温度，无法继续加热");
-                    return;
-                }
-                btn.BackColor = Color.Green;
-                set_bit(ref doData[0], 2, true);
-                set_bit(ref doData[1], 4, true);
-                collectData.InstantDo_Write(doData);
-            }
-        }
-
-        private void doData03_Click(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn.BackColor == Color.Green)
-            {
-                //关闭 中温加热
-                btn.BackColor = Color.LightGray;
-                set_bit(ref doData[0], 3, false);
-                set_bit(ref doData[1], 5, false);
-                collectData.InstantDo_Write(doData);
-            }
-            else
-            {
-                //开启 中温加热
-                if (Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
-                {
-                    MessageBox.Show("中水箱温度已符合设定温度，无法继续加热");
-                    return;
-                }
-                btn.BackColor = Color.Green;
-                set_bit(ref doData[0], 3, true);
-                set_bit(ref doData[1], 5, true);
-                collectData.InstantDo_Write(doData);
-            }
-        }
-
-        private void doData04_Click(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn.BackColor == Color.Green)
-            {
-                //关闭 常温制冷
-                btn.BackColor = Color.LightGray;
-                set_bit(ref doData[0], 4, false);
-                set_bit(ref doData[1], 6, false);
-                collectData.InstantDo_Write(doData);
-            }
-            else
-            {
-                //开启 常温制冷
-                if (Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
-                {
-                    MessageBox.Show("常温水箱温度已符合设定温度，无法继续制冷");
-                    return;
-                }
-                btn.BackColor = Color.Green;
-                set_bit(ref doData[0], 4, true);
-                set_bit(ref doData[1], 6, true);
-                collectData.InstantDo_Write(doData);
-            }
-        }
         #endregion
 
     }

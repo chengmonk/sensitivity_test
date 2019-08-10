@@ -33,13 +33,6 @@
             this.leftPanel = new System.Windows.Forms.Panel();
             this.left3 = new System.Windows.Forms.Panel();
             this.waterBoxGbx = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.hslWaterBox5 = new HslControls.HslWaterBox();
             this.Temp5Status = new System.Windows.Forms.Label();
             this.Temp4Status = new System.Windows.Forms.Label();
@@ -155,13 +148,6 @@
             // waterBoxGbx
             // 
             this.waterBoxGbx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.waterBoxGbx.Controls.Add(this.label5);
-            this.waterBoxGbx.Controls.Add(this.label1);
-            this.waterBoxGbx.Controls.Add(this.button5);
-            this.waterBoxGbx.Controls.Add(this.button4);
-            this.waterBoxGbx.Controls.Add(this.button3);
-            this.waterBoxGbx.Controls.Add(this.button2);
-            this.waterBoxGbx.Controls.Add(this.button1);
             this.waterBoxGbx.Controls.Add(this.hslWaterBox5);
             this.waterBoxGbx.Controls.Add(this.Temp5Status);
             this.waterBoxGbx.Controls.Add(this.Temp4Status);
@@ -180,91 +166,11 @@
             this.waterBoxGbx.TabStop = false;
             this.waterBoxGbx.Text = "水箱状态";
             // 
-            // label5
-            // 
-            this.label5.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(63, 141);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(61, 18);
-            this.label5.TabIndex = 23;
-            this.label5.Text = "0mm";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label1
-            // 
-            this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(2, 141);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 18);
-            this.label1.TabIndex = 22;
-            this.label1.Text = "0mm";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.LightGray;
-            this.button5.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button5.Location = new System.Drawing.Point(248, 172);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(43, 47);
-            this.button5.TabIndex = 21;
-            this.button5.Text = "常温制冷";
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.doData04_Click);
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.LightGray;
-            this.button4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button4.Location = new System.Drawing.Point(189, 172);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(43, 47);
-            this.button4.TabIndex = 20;
-            this.button4.Text = "中温加热";
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.doData03_Click);
-            // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.LightGray;
-            this.button3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button3.Location = new System.Drawing.Point(128, 172);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(43, 47);
-            this.button3.TabIndex = 19;
-            this.button3.Text = "高温加热";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.doData02_Click);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.LightGray;
-            this.button2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(69, 172);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(43, 47);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "热水加热";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.doData01_Click);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.LightGray;
-            this.button1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(9, 172);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(43, 47);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "冷水制冷";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.doData00_Click);
-            // 
             // hslWaterBox5
             // 
             this.hslWaterBox5.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox5.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox5.Location = new System.Drawing.Point(243, 52);
+            this.hslWaterBox5.Location = new System.Drawing.Point(243, 64);
             this.hslWaterBox5.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox5.Name = "hslWaterBox5";
             this.hslWaterBox5.Size = new System.Drawing.Size(60, 87);
@@ -275,7 +181,7 @@
             // Temp5Status
             // 
             this.Temp5Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp5Status.Location = new System.Drawing.Point(245, 26);
+            this.Temp5Status.Location = new System.Drawing.Point(245, 38);
             this.Temp5Status.Name = "Temp5Status";
             this.Temp5Status.Size = new System.Drawing.Size(56, 18);
             this.Temp5Status.TabIndex = 16;
@@ -285,7 +191,7 @@
             // Temp4Status
             // 
             this.Temp4Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp4Status.Location = new System.Drawing.Point(188, 26);
+            this.Temp4Status.Location = new System.Drawing.Point(188, 38);
             this.Temp4Status.Name = "Temp4Status";
             this.Temp4Status.Size = new System.Drawing.Size(56, 18);
             this.Temp4Status.TabIndex = 15;
@@ -295,7 +201,7 @@
             // Temp3Status
             // 
             this.Temp3Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp3Status.Location = new System.Drawing.Point(129, 26);
+            this.Temp3Status.Location = new System.Drawing.Point(129, 38);
             this.Temp3Status.Name = "Temp3Status";
             this.Temp3Status.Size = new System.Drawing.Size(56, 18);
             this.Temp3Status.TabIndex = 14;
@@ -305,7 +211,7 @@
             // Temp2Status
             // 
             this.Temp2Status.Font = new System.Drawing.Font("微软雅黑", 9F);
-            this.Temp2Status.Location = new System.Drawing.Point(68, 26);
+            this.Temp2Status.Location = new System.Drawing.Point(68, 38);
             this.Temp2Status.Name = "Temp2Status";
             this.Temp2Status.Size = new System.Drawing.Size(61, 18);
             this.Temp2Status.TabIndex = 13;
@@ -315,7 +221,7 @@
             // Temp1Status
             // 
             this.Temp1Status.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Temp1Status.Location = new System.Drawing.Point(8, 26);
+            this.Temp1Status.Location = new System.Drawing.Point(8, 38);
             this.Temp1Status.Name = "Temp1Status";
             this.Temp1Status.Size = new System.Drawing.Size(61, 18);
             this.Temp1Status.TabIndex = 11;
@@ -326,7 +232,7 @@
             // 
             this.hslWaterBox3.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox3.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox3.Location = new System.Drawing.Point(123, 52);
+            this.hslWaterBox3.Location = new System.Drawing.Point(123, 64);
             this.hslWaterBox3.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox3.Name = "hslWaterBox3";
             this.hslWaterBox3.Size = new System.Drawing.Size(60, 87);
@@ -338,7 +244,7 @@
             // 
             this.hslWaterBox4.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox4.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox4.Location = new System.Drawing.Point(183, 52);
+            this.hslWaterBox4.Location = new System.Drawing.Point(183, 64);
             this.hslWaterBox4.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox4.Name = "hslWaterBox4";
             this.hslWaterBox4.Size = new System.Drawing.Size(60, 87);
@@ -350,7 +256,7 @@
             // 
             this.hslWaterBox2.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox2.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox2.Location = new System.Drawing.Point(63, 52);
+            this.hslWaterBox2.Location = new System.Drawing.Point(63, 64);
             this.hslWaterBox2.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox2.Name = "hslWaterBox2";
             this.hslWaterBox2.Size = new System.Drawing.Size(60, 87);
@@ -362,7 +268,7 @@
             // 
             this.hslWaterBox1.BorderColor = System.Drawing.Color.Gray;
             this.hslWaterBox1.EdgeColor = System.Drawing.Color.Silver;
-            this.hslWaterBox1.Location = new System.Drawing.Point(3, 52);
+            this.hslWaterBox1.Location = new System.Drawing.Point(3, 64);
             this.hslWaterBox1.Margin = new System.Windows.Forms.Padding(0);
             this.hslWaterBox1.Name = "hslWaterBox1";
             this.hslWaterBox1.Size = new System.Drawing.Size(60, 87);
@@ -610,9 +516,8 @@
             this.standardCbx.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.standardCbx.FormattingEnabled = true;
             this.standardCbx.Items.AddRange(new object[] {
-            "EN1111-2017",
             "灵敏度流程",
-            "自定义"});
+            "自定义标准"});
             this.standardCbx.Location = new System.Drawing.Point(5, 31);
             this.standardCbx.Name = "standardCbx";
             this.standardCbx.Size = new System.Drawing.Size(110, 25);
@@ -633,7 +538,7 @@
             this.rightPanel.Controls.Add(this.right4);
             this.rightPanel.Controls.Add(this.right1);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.rightPanel.Location = new System.Drawing.Point(960, 0);
+            this.rightPanel.Location = new System.Drawing.Point(1308, 0);
             this.rightPanel.Name = "rightPanel";
             this.rightPanel.Size = new System.Drawing.Size(324, 548);
             this.rightPanel.TabIndex = 1;
@@ -938,11 +843,13 @@
             // sensitivityRbt
             // 
             this.sensitivityRbt.AutoSize = true;
+            this.sensitivityRbt.Checked = true;
             this.sensitivityRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.sensitivityRbt.Location = new System.Drawing.Point(7, 29);
             this.sensitivityRbt.Name = "sensitivityRbt";
             this.sensitivityRbt.Size = new System.Drawing.Size(86, 21);
             this.sensitivityRbt.TabIndex = 10;
+            this.sensitivityRbt.TabStop = true;
             this.sensitivityRbt.Text = "灵敏度测试";
             this.sensitivityRbt.UseVisualStyleBackColor = true;
             this.sensitivityRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
@@ -998,13 +905,11 @@
             // safeTestRbt
             // 
             this.safeTestRbt.AutoSize = true;
-            this.safeTestRbt.Checked = true;
             this.safeTestRbt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.safeTestRbt.Location = new System.Drawing.Point(7, 29);
             this.safeTestRbt.Name = "safeTestRbt";
             this.safeTestRbt.Size = new System.Drawing.Size(86, 21);
             this.safeTestRbt.TabIndex = 5;
-            this.safeTestRbt.TabStop = true;
             this.safeTestRbt.Text = "安全性测试";
             this.safeTestRbt.UseVisualStyleBackColor = true;
             this.safeTestRbt.CheckedChanged += new System.EventHandler(this.RadioBtn_CheckedChange);
@@ -1017,7 +922,7 @@
             this.centerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.centerPanel.Location = new System.Drawing.Point(320, 0);
             this.centerPanel.Name = "centerPanel";
-            this.centerPanel.Size = new System.Drawing.Size(640, 548);
+            this.centerPanel.Size = new System.Drawing.Size(988, 548);
             this.centerPanel.TabIndex = 2;
             // 
             // center1
@@ -1048,7 +953,7 @@
             this.Title.Name = "Title";
             this.Title.Size = new System.Drawing.Size(393, 80);
             this.Title.TabIndex = 1;
-            this.Title.Text = "恒温测试界面";
+            this.Title.Text = "灵敏度测试界面";
             this.Title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // m_instantAoCtrl
@@ -1071,7 +976,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1284, 548);
+            this.ClientSize = new System.Drawing.Size(1632, 548);
             this.Controls.Add(this.centerPanel);
             this.Controls.Add(this.rightPanel);
             this.Controls.Add(this.leftPanel);
@@ -1178,13 +1083,6 @@
         private HslControls.HslButton hslButton6;
         private HslControls.HslButton hslButton5;
         private HslControls.HslButton hslButton4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton sensitivityRbt;
         private System.Windows.Forms.RadioButton freRbt;
         private System.Windows.Forms.RadioButton TmSteadyRbt;

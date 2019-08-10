@@ -65,18 +65,18 @@ namespace 恒温测试机.UI
             }
             else
             {
-                foreach (Control c in this.Controls)
-                {
-                    Button btn = c as Button;
-                    if (btn != null)
-                    {
-                        var val = formMain.doData[GetFirstIndex(btn.Text)].get_bit(GetSecondIndex(btn.Text));
-                        if (val == 1)
-                        {
-                            btn.BackColor = Color.Green;
-                        }
-                    }
-                }
+                //foreach (Control c in this.Controls)
+                //{
+                //    Button btn = c as Button;
+                //    if (btn != null)
+                //    {
+                //        var val = formMain.doData[GetFirstIndex(btn.Text)].get_bit(GetSecondIndex(btn.Text));
+                //        if (val == 1)
+                //        {
+                //            btn.BackColor = Color.Green;
+                //        }
+                //    }
+                //}
             }
         }
 
@@ -165,161 +165,161 @@ namespace 恒温测试机.UI
 
         private bool CheckClick(string name)
         {
-            #region 液面过高时，无法开启进水阀
-            if (((name == "冷水箱进水阀")
-                    && (formMain.WhCool > (double)Properties.Settings.Default.WhMax))||(
-                    (name == "热水箱进水阀")
-                    && (formMain.WhHeat > (double)Properties.Settings.Default.WhMax)
-                    ))
-            {
-                MessageBox.Show("液面过高，无法开启");
-                return true;
-            }
-            #endregion
+            //#region 液面过高时，无法开启进水阀
+            //if (((name == "冷水箱进水阀")
+            //        && (formMain.WhCool > (double)Properties.Settings.Default.WhMax))||(
+            //        (name == "热水箱进水阀")
+            //        && (formMain.WhHeat > (double)Properties.Settings.Default.WhMax)
+            //        ))
+            //{
+            //    MessageBox.Show("液面过高，无法开启");
+            //    return true;
+            //}
+            //#endregion
 
-            #region 冷水箱液面过低时，无法打开
-            if(((name=="冷水泵")|| (name == "冷循环泵")|| (name == "冷水制冷")||(name=="冷水变压泵"))&&
-                (formMain.WhCool < (double)Properties.Settings.Default.WhMin))
-            {
-                MessageBox.Show("冷水箱液面过低，无法开启");
-                return true;
-            }
+            //#region 冷水箱液面过低时，无法打开
+            //if(((name=="冷水泵")|| (name == "冷循环泵")|| (name == "冷水制冷")||(name=="冷水变压泵"))&&
+            //    (formMain.WhCool < (double)Properties.Settings.Default.WhMin))
+            //{
+            //    MessageBox.Show("冷水箱液面过低，无法开启");
+            //    return true;
+            //}
 
-            #endregion
+            //#endregion
 
-            #region 热水箱液面过低时，无法打开
-            if (((name == "热水泵") || (name == "热循环泵") || (name == "热水加热")||(name=="热水变压泵")) &&
-                (formMain.WhCool < (double)Properties.Settings.Default.WhMin))
-            {
-                MessageBox.Show("热水箱液面过低，无法开启");
-                return true;
-            }
+            //#region 热水箱液面过低时，无法打开
+            //if (((name == "热水泵") || (name == "热循环泵") || (name == "热水加热")||(name=="热水变压泵")) &&
+            //    (formMain.WhCool < (double)Properties.Settings.Default.WhMin))
+            //{
+            //    MessageBox.Show("热水箱液面过低，无法开启");
+            //    return true;
+            //}
 
-            #endregion
+            //#endregion
 
-            #region 数字量输入报警，冷水泵、冷水变压泵、热水泵、热水变压泵 无法开启
-            if ((name == "冷水泵") && formMain.isAlarm011)
-            {
-                MessageBox.Show("冷水泵报警，无法开启");
-                return true;
-            }
-            if ((name == "冷水变压泵") && formMain.isAlarm012)
-            {
-                MessageBox.Show("冷水变压泵报警，无法开启");
-                return true;
-            }
-            if ((name == "热水泵") && formMain.isAlarm021)
-            {
-                MessageBox.Show("热水泵报警，无法开启");
-                return true;
-            }
-            if ((name == "热水变压泵") && formMain.isAlarm022)
-            {
-                MessageBox.Show("热水变压泵报警，无法开启");
-                return true;
-            }
+            //#region 数字量输入报警，冷水泵、冷水变压泵、热水泵、热水变压泵 无法开启
+            //if ((name == "冷水泵") && formMain.isAlarm011)
+            //{
+            //    MessageBox.Show("冷水泵报警，无法开启");
+            //    return true;
+            //}
+            //if ((name == "冷水变压泵") && formMain.isAlarm012)
+            //{
+            //    MessageBox.Show("冷水变压泵报警，无法开启");
+            //    return true;
+            //}
+            //if ((name == "热水泵") && formMain.isAlarm021)
+            //{
+            //    MessageBox.Show("热水泵报警，无法开启");
+            //    return true;
+            //}
+            //if ((name == "热水变压泵") && formMain.isAlarm022)
+            //{
+            //    MessageBox.Show("热水变压泵报警，无法开启");
+            //    return true;
+            //}
 
-            #endregion
+            //#endregion
 
-            #region 热水加热
-            if ((name == "热水加热"))
-            {
-                if (formMain.Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
-                {
-                    MessageBox.Show("热水箱温度已符合设定温度，无法继续加热");
-                    return true;
-                }
-                if (formMain.WhHeat < (double)Properties.Settings.Default.WhMin)
-                {
-                    MessageBox.Show("热水箱液面过低，无法开启");
-                    return true;
-                }
-                if (formMain.doData[1].get_bit(3) == 0)
-                {
-                    MessageBox.Show("请先开启热循环泵");
-                    return true;
-                }
-            }
-            if((name=="热循环泵")&& (formMain.WhHeat < (double)Properties.Settings.Default.WhMin))
-            {
-                MessageBox.Show("热水箱液面过低，无法开启");
-                return true;
-            }
-            #endregion
+            //#region 热水加热
+            //if ((name == "热水加热"))
+            //{
+            //    if (formMain.Temp2 >= (double)(Properties.Settings.Default.Temp2Set))
+            //    {
+            //        MessageBox.Show("热水箱温度已符合设定温度，无法继续加热");
+            //        return true;
+            //    }
+            //    if (formMain.WhHeat < (double)Properties.Settings.Default.WhMin)
+            //    {
+            //        MessageBox.Show("热水箱液面过低，无法开启");
+            //        return true;
+            //    }
+            //    if (formMain.doData[1].get_bit(3) == 0)
+            //    {
+            //        MessageBox.Show("请先开启热循环泵");
+            //        return true;
+            //    }
+            //}
+            //if((name=="热循环泵")&& (formMain.WhHeat < (double)Properties.Settings.Default.WhMin))
+            //{
+            //    MessageBox.Show("热水箱液面过低，无法开启");
+            //    return true;
+            //}
+            //#endregion
 
-            #region 高温加热
-            if ((name == "高温加热"))
-            {
-                if (formMain.Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
-                {
-                    MessageBox.Show("高温水箱温度已符合设定温度，无法继续加热");
-                    return true;
-                }
-                if (formMain.doData[1].get_bit(4) == 0)
-                {
-                    MessageBox.Show("请先开启高循环泵");
-                    return true;
-                }
-            }
-            #endregion
+            //#region 高温加热
+            //if ((name == "高温加热"))
+            //{
+            //    if (formMain.Temp3 >= (double)(Properties.Settings.Default.Temp3Set))
+            //    {
+            //        MessageBox.Show("高温水箱温度已符合设定温度，无法继续加热");
+            //        return true;
+            //    }
+            //    if (formMain.doData[1].get_bit(4) == 0)
+            //    {
+            //        MessageBox.Show("请先开启高循环泵");
+            //        return true;
+            //    }
+            //}
+            //#endregion
 
-            #region 中温加热
-            if ((name == "中温加热"))
-            {
-                if (formMain.Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
-                {
-                    MessageBox.Show("中温水箱温度已符合设定温度，无法继续加热");
-                    return true;
-                }
-                if (formMain.doData[1].get_bit(5) == 0)
-                {
-                    MessageBox.Show("请先开启中循环泵");
-                    return true;
-                }
-            }
-            #endregion
+            //#region 中温加热
+            //if ((name == "中温加热"))
+            //{
+            //    if (formMain.Temp4 >= (double)(Properties.Settings.Default.Temp4Set))
+            //    {
+            //        MessageBox.Show("中温水箱温度已符合设定温度，无法继续加热");
+            //        return true;
+            //    }
+            //    if (formMain.doData[1].get_bit(5) == 0)
+            //    {
+            //        MessageBox.Show("请先开启中循环泵");
+            //        return true;
+            //    }
+            //}
+            //#endregion
 
-            #region 冷水制冷
-            if ((name == "冷水制冷"))
-            {
-                if (formMain.Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
-                {
-                    MessageBox.Show("冷水箱温度已符合设定温度，无法继续制冷");
-                    return true;
-                }
-                if (formMain.WhCool < (double)Properties.Settings.Default.WhMin)
-                {
-                    MessageBox.Show("冷水箱液面过低，无法开启");
-                    return true;
-                }
-                if (formMain.doData[1].get_bit(2) == 0)
-                {
-                    MessageBox.Show("请先开启冷循环泵");
-                    return true;
-                }
-            }
-            if ((name == "冷循环泵") && (formMain.WhCool < (double)Properties.Settings.Default.WhMin))
-            {
-                MessageBox.Show("冷水箱液面过低，无法开启");
-                return true;
-            }
-            #endregion
+            //#region 冷水制冷
+            //if ((name == "冷水制冷"))
+            //{
+            //    if (formMain.Temp1 <= (double)(Properties.Settings.Default.Temp1Set))
+            //    {
+            //        MessageBox.Show("冷水箱温度已符合设定温度，无法继续制冷");
+            //        return true;
+            //    }
+            //    if (formMain.WhCool < (double)Properties.Settings.Default.WhMin)
+            //    {
+            //        MessageBox.Show("冷水箱液面过低，无法开启");
+            //        return true;
+            //    }
+            //    if (formMain.doData[1].get_bit(2) == 0)
+            //    {
+            //        MessageBox.Show("请先开启冷循环泵");
+            //        return true;
+            //    }
+            //}
+            //if ((name == "冷循环泵") && (formMain.WhCool < (double)Properties.Settings.Default.WhMin))
+            //{
+            //    MessageBox.Show("冷水箱液面过低，无法开启");
+            //    return true;
+            //}
+            //#endregion
 
-            #region 常温制冷
-            if ((name == "常温制冷"))
-            {
-                if (formMain.Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
-                {
-                    MessageBox.Show("常温制冷温度已符合设定温度，无法继续制冷");
-                    return true;
-                }
-                if (formMain.doData[1].get_bit(6) == 0)
-                {
-                    MessageBox.Show("请先开启常循环泵");
-                    return true;
-                }
-            }
-            #endregion
+            //#region 常温制冷
+            //if ((name == "常温制冷"))
+            //{
+            //    if (formMain.Temp5 <= (double)(Properties.Settings.Default.Temp5Set))
+            //    {
+            //        MessageBox.Show("常温制冷温度已符合设定温度，无法继续制冷");
+            //        return true;
+            //    }
+            //    if (formMain.doData[1].get_bit(6) == 0)
+            //    {
+            //        MessageBox.Show("请先开启常循环泵");
+            //        return true;
+            //    }
+            //}
+            //#endregion
 
             return false;
         }
@@ -327,34 +327,34 @@ namespace 恒温测试机.UI
         private void DOBtn_Click(object sender, MouseEventArgs e)
         {
             
-            Button btn = sender as Button;
-            var val = formMain.doData[GetFirstIndex(btn.Text)].get_bit(GetSecondIndex(btn.Text));
-            Console.WriteLine("Click Before:" + val);
-            if (btn.BackColor == Color.LightGray)     // 关->开
-            {
-                if (CheckClick(btn.Text))
-                    return;
+            //Button btn = sender as Button;
+            //var val = formMain.doData[GetFirstIndex(btn.Text)].get_bit(GetSecondIndex(btn.Text));
+            //Console.WriteLine("Click Before:" + val);
+            //if (btn.BackColor == Color.LightGray)     // 关->开
+            //{
+            //    if (CheckClick(btn.Text))
+            //        return;
 
-                btn.BackColor = Color.Green;
-                set_bit(ref formMain.doData[GetFirstIndex(btn.Text)], GetSecondIndex(btn.Text), true);
-                formMain.control.InstantDo_Write(formMain.doData);
-                if (DOOpenDict.ContainsKey(DOIndexDict[btn.Text]) == false)
-                {
-                    DOOpenDict.Add(DOIndexDict[btn.Text], true);
-                }
-            }
-            else
-            {
-                btn.BackColor = Color.LightGray;
-                set_bit(ref formMain.doData[GetFirstIndex(btn.Text)], GetSecondIndex(btn.Text), false);
-                formMain.control.InstantDo_Write(formMain.doData);
-                if (DOOpenDict.ContainsKey(DOIndexDict[btn.Text]))
-                {
-                    DOOpenDict.Remove(DOIndexDict[btn.Text]);
-                }
-            }
-            val = formMain.doData[GetFirstIndex(btn.Text)].get_bit(GetSecondIndex(btn.Text));
-            Console.WriteLine("Click Afters:" + val);
+            //    btn.BackColor = Color.Green;
+            //    set_bit(ref formMain.doData[GetFirstIndex(btn.Text)], GetSecondIndex(btn.Text), true);
+            //    formMain.control.InstantDo_Write(formMain.doData);
+            //    if (DOOpenDict.ContainsKey(DOIndexDict[btn.Text]) == false)
+            //    {
+            //        DOOpenDict.Add(DOIndexDict[btn.Text], true);
+            //    }
+            //}
+            //else
+            //{
+            //    btn.BackColor = Color.LightGray;
+            //    set_bit(ref formMain.doData[GetFirstIndex(btn.Text)], GetSecondIndex(btn.Text), false);
+            //    formMain.control.InstantDo_Write(formMain.doData);
+            //    if (DOOpenDict.ContainsKey(DOIndexDict[btn.Text]))
+            //    {
+            //        DOOpenDict.Remove(DOIndexDict[btn.Text]);
+            //    }
+            //}
+            //val = formMain.doData[GetFirstIndex(btn.Text)].get_bit(GetSecondIndex(btn.Text));
+            //Console.WriteLine("Click Afters:" + val);
         }
 
         private void TrackBar1_ValueChanged(object sender, EventArgs e)
@@ -373,23 +373,23 @@ namespace 恒温测试机.UI
 
         private void FormDOControl_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                //将当前打开的开关全部关闭
-                foreach (var item in DOOpenDict.Keys)
-                {
-                    set_bit(ref formMain.doData[item / 8], item % 8, false);
-                    Console.WriteLine("doData[" + item / 8 + "]" + (item % 8));
-                }
-                formMain.control.InstantDo_Write(formMain.doData);
-                formMain.IsOpenDC = false;
-                monitorTimer.Enabled = false;
-                monitorTimer.Dispose();
-            }
-            catch(Exception ex)
-            {
-                Log.Error(ex.ToString());
-            }
+            //try
+            //{
+            //    //将当前打开的开关全部关闭
+            //    foreach (var item in DOOpenDict.Keys)
+            //    {
+            //        set_bit(ref formMain.doData[item / 8], item % 8, false);
+            //        Console.WriteLine("doData[" + item / 8 + "]" + (item % 8));
+            //    }
+            //    formMain.control.InstantDo_Write(formMain.doData);
+            //    formMain.IsOpenDC = false;
+            //    monitorTimer.Enabled = false;
+            //    monitorTimer.Dispose();
+            //}
+            //catch(Exception ex)
+            //{
+            //    Log.Error(ex.ToString());
+            //}
         }
     }
 }
