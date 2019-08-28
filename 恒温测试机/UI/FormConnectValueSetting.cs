@@ -31,14 +31,14 @@ namespace 恒温测试机.UI
         public Dictionary<DateTime, double> timeAngleDict = new Dictionary<DateTime, double>();
 
         #region 旋转电机相关地址
-        private string powerAddress_spin = "2056";   //M8-2056   M18-2066
+        public string powerAddress_spin = "2056";   //M8-2056   M18-2066
         public bool powerState_spin = false;
 
         public string forwardWriteAddress_spin = "2048";
         private string forwardReadAddress_spin = "2053";
         public bool forwardState_spin = false;
 
-        private string noForwardWriteAddress_spin = "2049";
+        public string noForwardWriteAddress_spin = "2049";
         private string noForwardReadAddress_spin = "2054";
         private bool noForwadState_spin = false;
 
@@ -52,19 +52,19 @@ namespace 恒温测试机.UI
 
         private string radioAddress_spin = "6096";
         private uint radioValue_spin = 0;
-        private string angleAddress_spin = "4100";//"";
+        public string angleAddress_spin = "4100";//"";
         public int angleValue_spin = 0;
         #endregion
 
         #region 升降电机相关地址
-        private string powerAddress_upDown = "2066";   //M8-2056   M18-2066
+        public string powerAddress_upDown = "2066";   //M8-2056   M18-2066
         public bool powerState_upDown = false;
 
-        private string forwardWriteAddress_upDown = "2058";
+        public string forwardWriteAddress_upDown = "2058";
         private string forwardReadAddress_upDown = "2063";
         private bool forwardState_upDown = false;
 
-        private string noForwardWriteAddress_upDown = "2059";
+        public string noForwardWriteAddress_upDown = "2059";
         private string noForwardReadAddress_upDown = "2064";
         private bool noForwadState_upDown = false;
 

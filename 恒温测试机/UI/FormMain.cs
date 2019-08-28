@@ -431,6 +431,16 @@ namespace 恒温测试机.UI
             ElectDt.Columns.Add("出水重量Qm5", typeof(double));   //9
             ElectDt.Columns.Add("液面高度Wh", typeof(double));   //10
 
+            QmTmTable = new DataTable();
+            ElectDt.Columns.Add("时间", typeof(string));
+            ElectDt.Columns.Add("出水流量Qm", typeof(double));   //新建第一列 通道0
+            ElectDt.Columns.Add("出水温度Tm", typeof(double));   //1
+
+            AngleTmTable = new DataTable();
+            ElectDt.Columns.Add("时间", typeof(string));
+            ElectDt.Columns.Add("角度", typeof(double));   //新建第一列 通道0
+            ElectDt.Columns.Add("出水温度Tm", typeof(double));   //1
+
             bpq_conf.botelv = "19200";
             bpq_conf.zhanhao = "1";//站号
             bpq_conf.shujuwei = "8";
@@ -720,6 +730,8 @@ namespace 恒温测试机.UI
             index = 0;
         }
 
+        public DataTable AngleTmTable;
+        public bool AngleTmFlag = false;
         private void SenstivityTimer_Action(object source, System.Timers.ElapsedEventArgs e)
         {
             try
@@ -729,7 +741,87 @@ namespace 恒温测试机.UI
                 MessageBox.Show("请确认电机已设置好相关参数！");
 
                 #region 启动 011(冷水泵) 021(热水泵) a(热水阀) b(冷水阀)
+                set_bit(ref doData2[0], 0, true);
+                set_bit(ref doData2[0], 1, true);
+                set_bit(ref doData2[0], 2, true);
+                set_bit(ref doData2[0], 3, true);
+                control.InstantDo_Write(doData2);
+                SystemInfoPrint("[初始化系统...]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
 
+                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
+                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束,开始灵敏度测试+保真度测试]\n");
+
+                var orgTm = Tm; //记录当前出水温度
+                SystemInfoPrint("当前热水温度——>" + orgTm);
+
+                #endregion
+
+                #region 电机旋转
+                double G11 = 0;
+                double G21 = 0;
+                double G12 = 0;
+                double G22 = 0;
+                double GA = 0;
+                double GB = 0;
+                AngleTmFlag = true;
+
+                if (settingForm != null)
+                {
+                    //正传到预设角度
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始正传...");
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, true, 5);
+                    while (settingForm.angleValue_spin <= settingForm.autoFindAngle_spin)
+                    {
+                        if (Tm == 38)
+                        {
+                            GB = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("38度的角度B为——>" + GB);
+                        }
+                        if (Tm == orgTm - 4)
+                        {
+                            G11= Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G1的角度为——>" + G11);
+                        }
+                        if (Tm == orgTm + 4)
+                        {
+                            G21 = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G2的角度为——>" + G21);
+                        }
+                    }
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束正传...");
+
+                    //反转回到原点
+                    bpq.write_coil(settingForm.noForwardWriteAddress_spin, true, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始反传...");
+                    while (settingForm.angleValue_spin == 0)
+                    {
+                        //等待角度达到 原点
+                        if (Tm == 38)
+                        {
+                            GA = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("38度的角度A为——>" + GA);
+                        }
+                        if (Tm == orgTm - 4)
+                        {
+                            G12 = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G1的角度为——>" + G12);
+                        }
+                        if (Tm == orgTm + 4)
+                        {
+                            G22 = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G2的角度为——>" + G22);
+                        }
+                    }
+                    bpq.write_coil(settingForm.noForwardWriteAddress_spin, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束反传...");
+
+                }
                 #endregion
             }
             catch (Exception ex)
@@ -738,12 +830,16 @@ namespace 恒温测试机.UI
             }
             finally
             {
+                AngleTmFlag = false;
                 runFlag = false;
                 graphFlag = false;
-                if (autoRunFlag)
-                {
-                    ChangeRadioButton();
-                }
+                AngleTmFlag = false;
+                bpq.write_coil(settingForm.powerAddress_spin, false, 5);
+                bpq.write_coil(settingForm.powerAddress_upDown, false, 5);
+                //if (autoRunFlag)
+                //{
+                //    ChangeRadioButton();
+                //}
             }
         }
 
@@ -756,7 +852,87 @@ namespace 恒温测试机.UI
                 MessageBox.Show("请确认电机已设置好相关参数！");
 
                 #region 启动 011(冷水泵) 021(热水泵) a(热水阀) b(冷水阀)
+                set_bit(ref doData2[0], 0, true);
+                set_bit(ref doData2[0], 1, true);
+                set_bit(ref doData2[0], 2, true);
+                set_bit(ref doData2[0], 3, true);
+                control.InstantDo_Write(doData2);
+                SystemInfoPrint("[初始化系统...]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
 
+                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
+                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束,开始灵敏度测试+保真度测试]\n");
+
+                var orgTm = Tm; //记录当前出水温度
+                SystemInfoPrint("当前热水温度——>" + orgTm);
+
+                #endregion
+
+                #region 电机旋转
+                double G11 = 0;
+                double G21 = 0;
+                double G12 = 0;
+                double G22 = 0;
+                double GA = 0;
+                double GB = 0;
+                AngleTmFlag = true;
+
+                if (settingForm != null)
+                {
+                    //正传到预设角度
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始正传...");
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, true, 5);
+                    while (settingForm.angleValue_spin <= settingForm.autoFindAngle_spin)
+                    {
+                        if (Tm == 38)
+                        {
+                            GB = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("38度的角度B为——>" + GB);
+                        }
+                        if (Tm == orgTm - 4)
+                        {
+                            G11 = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G1的角度为——>" + G11);
+                        }
+                        if (Tm == orgTm + 4)
+                        {
+                            G21 = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G2的角度为——>" + G21);
+                        }
+                    }
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束正传...");
+
+                    //反转回到原点
+                    bpq.write_coil(settingForm.noForwardWriteAddress_spin, true, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始反传...");
+                    while (settingForm.angleValue_spin == 0)
+                    {
+                        //等待角度达到 原点
+                        if (Tm == 38)
+                        {
+                            GA = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("38度的角度A为——>" + GA);
+                        }
+                        if (Tm == orgTm - 4)
+                        {
+                            G12 = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G1的角度为——>" + G12);
+                        }
+                        if (Tm == orgTm + 4)
+                        {
+                            G22 = Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("G2的角度为——>" + G22);
+                        }
+                    }
+                    bpq.write_coil(settingForm.noForwardWriteAddress_spin, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束反传...");
+
+                }
                 #endregion
             }
             catch (Exception ex)
@@ -765,15 +941,21 @@ namespace 恒温测试机.UI
             }
             finally
             {
+                AngleTmFlag = false;
                 runFlag = false;
                 graphFlag = false;
-                if (autoRunFlag)
-                {
-                    ChangeRadioButton();
-                }
+                AngleTmFlag = false;
+                bpq.write_coil(settingForm.powerAddress_spin, false, 5);
+                bpq.write_coil(settingForm.powerAddress_upDown, false, 5);
+                //if (autoRunFlag)
+                //{
+                //    ChangeRadioButton();
+                //}
             }
         }
 
+        public DataTable QmTmTable;
+        public bool QmTmTableFlag = false;
         private void TmSteadyTimer_Action(object source, System.Timers.ElapsedEventArgs e)
         {
             try
@@ -783,8 +965,99 @@ namespace 恒温测试机.UI
                 MessageBox.Show("请确认电机已设置好相关参数！");
 
                 #region 启动 011(冷水泵) 021(热水泵) a(热水阀) b(冷水阀)
+                set_bit(ref doData2[0], 0, true);
+                set_bit(ref doData2[0], 1, true);
+                set_bit(ref doData2[0], 2, true);
+                set_bit(ref doData2[0], 3, true);
+                control.InstantDo_Write(doData2);
+                SystemInfoPrint("[初始化系统...]\n");
+                if (stopFlag)   //手动停止
+                {
+                    StopPro();
+                    return;
+                }
+                var orgTh = Th; //记录当前热水温度
+                SystemInfoPrint("当前热水温度——>" + orgTh);
+
+                System.Threading.Thread.Sleep((int)(1000 * Properties.Settings.Default.t1));
+                SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束,开始出水温度稳定性测试]\n");
+                #endregion
+
+                #region 电机旋转
+                double angle38 = 0;
+                if (settingForm != null)
+                {
+                    //正传到预设角度
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始正传...");
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, true, 5);
+                    while (settingForm.angleValue_spin <= settingForm.autoFindAngle_spin)
+                    {
+                        if (Tm == 38)
+                        {
+                            angle38= Math.Round(settingForm.angleValue_spin / 3200.0, 1);    //角度  读取
+                            SystemInfoPrint("38度的角度B为——>" + angle38);
+                        }
+                    }
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束正传...");
+
+                    //反转回到原点
+                    bpq.write_coil(settingForm.noForwardWriteAddress_spin, true, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始反传...");
+                    while (settingForm.angleValue_spin == 0)
+                    {
+                        //等待角度达到 原点
+                    }
+                    bpq.write_coil(settingForm.noForwardWriteAddress_spin, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束反传...");
+
+                    //正传到38℃
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始正传...");
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, true, 5);
+                    while (Math.Round(settingForm.angleValue_spin / 3200.0, 1) <= angle38)
+                    {
+                        //等待角度达到 38摄氏度
+                    }
+                    bpq.write_coil(settingForm.forwardWriteAddress_spin, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束正传...");
+
+                }
 
                 #endregion
+
+                #region 电机升降
+                double Tm1 = 0;
+                double Tm2 = 0;
+                if (settingForm != null)
+                {
+                    QmTmTableFlag = true;
+                    //下降
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始下降...");
+                    bpq.write_coil(settingForm.noForwardWriteAddress_upDown, true, 5);
+                    while (Qm>=1)
+                    {
+                        //出水流量>=1L/min
+                        if (Qm == 6)
+                        {
+                            Tm1 = Tm;
+                            SystemInfoPrint("流量为6L的出水温度——>" + Tm1);
+                        }
+                        if (Qm == 3)
+                        {
+                            Tm2 = Tm;
+                            SystemInfoPrint("流量为3L的出水温度——>" + Tm2);
+                        }
+                    }
+                    bpq.write_coil(settingForm.noForwardWriteAddress_upDown, false, 5);
+                    SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "结束下降...");
+                }
+                #endregion
+
+                runFlag = false;
+                graphFlag = false;
+                QmTmTableFlag = false;
+                bpq.write_coil(settingForm.powerAddress_spin, false, 5);
+                bpq.write_coil(settingForm.powerAddress_upDown, false, 5);
             }
             catch (Exception ex)
             {
@@ -792,8 +1065,11 @@ namespace 恒温测试机.UI
             }
             finally
             {
+                bpq.write_coil(settingForm.powerAddress_spin, false, 5);
+                bpq.write_coil(settingForm.powerAddress_upDown, false, 5);
                 runFlag = false;
                 graphFlag = false;
+                QmTmTableFlag = false;
             }
         }
 
@@ -1215,6 +1491,20 @@ namespace 恒温测试机.UI
                                 sourceDataPm[i],
                                 sourceDataQm5[i],
                                 Wh);
+                        }
+                        if (QmTmTableFlag)
+                        {
+                            ElectDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
+                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5,
+                                sourceDataTm[i] * 10
+                                );
+                        }
+                        if (AngleTmFlag && settingForm != null)
+                        {
+                            ElectDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
+                                Math.Round(settingForm.angleValue_spin / 3200.0, 1),
+                                sourceDataTm[i] * 10
+                                );
                         }
                         t = t.AddMilliseconds(10.0);
                     }
@@ -1715,6 +2005,44 @@ namespace 恒温测试机.UI
                 data[i] = begin + i * d;
             }
             return data;
+        }
+
+        /// <summary>
+        /// 导出灵敏度和保真度的数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HslButton2_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "文档|*.csv";
+            fileDialog.InitialDirectory = Application.StartupPath;
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                DataTableUtils.DataTableToCsvT(AngleTmTable, fileDialog.FileName);
+                MessageBox.Show("保存成功!");
+                index = 0;
+            }
+            fileDialog.Dispose();
+        }
+
+        /// <summary>
+        /// 导出出水稳定性的数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HslButton6_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "文档|*.csv";
+            fileDialog.InitialDirectory = Application.StartupPath;
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                DataTableUtils.DataTableToCsvT(QmTmTable, fileDialog.FileName);
+                MessageBox.Show("保存成功!");
+                index = 0;
+            }
+            fileDialog.Dispose();
         }
     }
 }

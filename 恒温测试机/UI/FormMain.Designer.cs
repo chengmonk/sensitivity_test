@@ -681,6 +681,8 @@
             this.hslButton6.Name = "hslButton6";
             this.hslButton6.Size = new System.Drawing.Size(93, 45);
             this.hslButton6.TabIndex = 18;
+            this.hslButton6.Text = "导出出水稳定性数据";
+            this.hslButton6.Click += new System.EventHandler(this.HslButton6_Click);
             // 
             // hslButton5
             // 
@@ -829,6 +831,8 @@
             this.hslButton2.Name = "hslButton2";
             this.hslButton2.Size = new System.Drawing.Size(93, 45);
             this.hslButton2.TabIndex = 14;
+            this.hslButton2.Text = "导出灵敏度数据";
+            this.hslButton2.Click += new System.EventHandler(this.HslButton2_Click);
             // 
             // right1
             // 
