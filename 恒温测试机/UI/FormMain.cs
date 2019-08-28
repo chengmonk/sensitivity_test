@@ -57,9 +57,9 @@ namespace 恒温测试机.UI
         bool autoRunFlag = false;               //是否自动运行
         bool stopFlag = false;                  //是否手动停止
 
-        public static DataTable dt;
-        public static DataTable GraphDt;
-        public static DataTable ElectDt;
+        public DataTable dt;
+        public DataTable GraphDt;
+        public DataTable ElectDt;
         public double Temp1;
         public double Temp2;
         public double Temp3;
@@ -249,14 +249,30 @@ namespace 恒温测试机.UI
                     PcShow.Text = Pc.ToString();
                     PhShow.Text = Ph.ToString();
 
-
                     Temp1Status.Text = Temp1 + "℃\n";
                     Temp2Status.Text = Temp2 + "℃\n";
                     Temp3Status.Text = Temp3 + "℃\n";
                     Temp4Status.Text = Temp4 + "℃\n";
                     Temp5Status.Text = Temp5 + "℃\n";
+
+                    #region LED显示
+                    hslLedQm.DisplayText = Qm.ToString();
+                    hslLedQc.DisplayText = Qc.ToString();
+                    hslLedQh.DisplayText = Qh.ToString();
+                    hslLedTm.DisplayText = Tm.ToString();
+                    hslLedTc.DisplayText = Tc.ToString();
+                    hslLedTh.DisplayText = Th.ToString();
+                    hslLedPm.DisplayText = Pm.ToString();
+                    hslLedPc.DisplayText = Pc.ToString();
+                    hslLedPh.DisplayText = Ph.ToString();
+                    hslLedQm5.DisplayText = Qm5.ToString();
+                    #endregion
+
                     for (int i = 3; i < 103; i++)
                     {
+                        var qcTemp = CoolFlow[i - 3];
+                        var qhTemp = HotFlow[i - 3];
+                        var qmTemp = (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5;
                         hslCurve1.AddCurveData(
                             new string[] {
                                     //"冷水箱温度","热水箱温度","高温水箱温度","中温水箱温度","常温水箱温度"
@@ -273,7 +289,10 @@ namespace 恒温测试机.UI
                                     //(float)Tc,(float)Th,(float)Tm,
                                     //(float)Pc,(float)Ph,(float)Pm,
                                     //(float)Qm5
-                                    (float)((sourceDataQc[i]-1)*12.5),(float)((sourceDataQh[i]-1)*12.5),(float)((sourceDataQm[i]-1)*12.5),         //流量 1-5V 对应 0-50L/min
+                                    //(float)((sourceDataQc[i]-1)*12.5),(float)((sourceDataQh[i]-1)*12.5),(float)((sourceDataQm[i]-1)*12.5),         //流量 1-5V 对应 0-50L/min
+                                     (float)qcTemp,
+                                    (float)qhTemp,
+                                    (float)qmTemp,
                                     (float)sourceDataTc[i]*10,(float)sourceDataTh[i]*10,(float)sourceDataTm[i]*10,
                                     (float)sourceDataPc[i],(float)sourceDataPh[i],(float)sourceDataPm[i],
                                     //(float)sourceDataQm5[i]
@@ -284,7 +303,7 @@ namespace 恒温测试机.UI
             }
             catch (Exception ex)
             {
-                Log.Error(ex.ToString());
+                Log.Error("数据采集异常:" + ex.ToString());
                 return;
             }
 
@@ -339,7 +358,6 @@ namespace 恒温测试机.UI
         /// </summary>
         private void InitControl()
         {
-            standardCbx.Text = "灵敏度流程";
             sensitivityRbt.Visible = true;
             freRbt.Visible = true;
             TmSteadyRbt.Visible = true;
@@ -601,22 +619,12 @@ namespace 恒温测试机.UI
             {
                 case "EN1111-2017":
                     testStandard = TestStandardEnum.default1711;
-                    safeTestRbt.Visible = true;
-                    pressureTestRbt.Visible = true;
-                    coolTestRbt.Visible = true;
-                    tmpTestRbt.Visible = true;
-                    FlowTestRbt.Visible = true;
                     sensitivityRbt.Visible = false;
                     freRbt.Visible = false;
                     TmSteadyRbt.Visible = false;
                     break;
                 case "灵敏度流程":
                     testStandard = TestStandardEnum.sensitivityProcess;
-                    safeTestRbt.Visible = false;
-                    pressureTestRbt.Visible = false;
-                    coolTestRbt.Visible = false;
-                    tmpTestRbt.Visible = false;
-                    FlowTestRbt.Visible = false;
                     sensitivityRbt.Visible = true;
                     freRbt.Visible = true;
                     TmSteadyRbt.Visible = true;
@@ -716,7 +724,13 @@ namespace 恒温测试机.UI
         {
             try
             {
-                Console.WriteLine("灵敏度测试开始");
+                runFlag = true;
+                graphFlag = true;
+                MessageBox.Show("请确认电机已设置好相关参数！");
+
+                #region 启动 011(冷水泵) 021(热水泵) a(热水阀) b(冷水阀)
+
+                #endregion
             }
             catch (Exception ex)
             {
@@ -737,7 +751,13 @@ namespace 恒温测试机.UI
         {
             try
             {
-                Console.WriteLine("保真度测试");
+                runFlag = true;
+                graphFlag = true;
+                MessageBox.Show("请确认电机已设置好相关参数！");
+
+                #region 启动 011(冷水泵) 021(热水泵) a(热水阀) b(冷水阀)
+
+                #endregion
             }
             catch (Exception ex)
             {
@@ -758,7 +778,13 @@ namespace 恒温测试机.UI
         {
             try
             {
-                Console.WriteLine("出水温度稳定性测试");
+                runFlag = true;
+                graphFlag = true;
+                MessageBox.Show("请确认电机已设置好相关参数！");
+
+                #region 启动 011(冷水泵) 021(热水泵) a(热水阀) b(冷水阀)
+
+                #endregion
             }
             catch (Exception ex)
             {
@@ -771,22 +797,33 @@ namespace 恒温测试机.UI
             }
         }
 
-        public void Read(string address, byte station)
+
+        public short Read(string address, byte station)
         {
             var val = bpq.read_short(address, station);
-            SystemInfoPrint("读取：【" + address + "】【" + val + "】\n");
+            return val;
         }
 
+
+        public void Write_uint(string address, uint val, byte station)
+        {
+
+            bpq.write_uint(address, val, station);
+        }
+        public void Write_short(string address, short val, byte station)
+        {
+            bpq.write_short(address, val, station);
+
+        }
         public void Write(string address, short val, byte station)
         {
             bpq.write_short(address, val, station);
-            SystemInfoPrint("写入：【" + address + "】【" + val + "】\n");
         }
 
-
+        public FormConnectValueSetting settingForm;
         private void ElectControlBtn_Click(object sender, EventArgs e)
         {
-            FormConnectValueSetting settingForm = new FormConnectValueSetting(this);
+            settingForm = new FormConnectValueSetting(this);
             settingForm.Show();
         }
 
@@ -834,13 +871,24 @@ namespace 恒温测试机.UI
             //    }
             //}
         }
+
+        public bool electDataFlag = false;
         private void ShutDownBtn_Click(object sender, EventArgs e)
         {
-            powerState = false;
-            electDataFlag = false;
-            bpq.write_coil(shutdownAddress, true, 5);
-            System.Threading.Thread.Sleep((int)(200));
-            bpq.write_coil(shutdownAddress, false, 5);
+            if (settingForm != null)
+            {
+                electDataFlag = false;
+
+                settingForm.powerState_spin = false;
+                bpq.write_coil(settingForm.shutdownAddress_spin, true, 5);
+                System.Threading.Thread.Sleep((int)(200));
+                bpq.write_coil(settingForm.shutdownAddress_spin, false, 5);
+
+                settingForm.powerState_upDown = false;
+                bpq.write_coil(settingForm.shutdownAddress_upDown, true, 5);
+                System.Threading.Thread.Sleep((int)(200));
+                bpq.write_coil(settingForm.shutdownAddress_upDown, false, 5);
+            }
         }
 
         private void DOControlBtn_Click(object sender, EventArgs e)
@@ -936,6 +984,14 @@ namespace 恒温测试机.UI
 
         private double[] sourceDataTemp5 = new double[106];
 
+        private double[] sourceDataWh = new double[64];
+        private float[] resultDataWh = new float[64];
+
+        double[] tempCoolFlow = new double[11];//读取plc的原始数据
+        double[] tempHotFlow = new double[11];
+        double[] CoolFlow = new double[100];//扩充后的数据
+        double[] HotFlow = new double[100];
+
         private void WaveformAiCtrl1_DataReady(object sender, BfdAiEventArgs args)
         {
             ErrorCode err = ErrorCode.Success;
@@ -960,7 +1016,7 @@ namespace 恒温测试机.UI
                 t.ToString("yyyy-MM-dd hh:mm:ss:fff");
                 //Log.Info(t.ToString("yyyy-MM-dd hh:mm:ss:fff"));
 
-                int index = 0;
+                int dataIndex = 0;
                 for (int i = 0; i < m_dataScaled.Length; i += 16)
                 {
                     Qc = Math.Round(m_dataScaled[i + 0], 2, MidpointRounding.AwayFromZero);// * 5;
@@ -980,49 +1036,77 @@ namespace 恒温测试机.UI
                     Temp5 = Math.Round(m_dataScaled[i + 14], 2, MidpointRounding.AwayFromZero);// * 10;
                     Wh = Math.Round(m_dataScaled[i + 15], 2, MidpointRounding.AwayFromZero) * 200;
 
-                    if (index < 6)
+                    if (dataIndex < 6)
                     {
                         int typeIndex = 0;
-                        sourceDataQc[index] = isFirstAver ? Qc : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataQh[index] = isFirstAver ? Qh : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataQm[index] = isFirstAver ? Qm : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTc[index] = isFirstAver ? Tc : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTh[index] = isFirstAver ? Th : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTm[index] = isFirstAver ? Tm : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataPc[index] = isFirstAver ? Pc : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataPh[index] = isFirstAver ? Ph : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataPm[index] = isFirstAver ? Pm : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataQm5[index] = isFirstAver ? Qm5 : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTemp1[index] = isFirstAver ? Temp1 : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTemp2[index] = isFirstAver ? Temp2 : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTemp3[index] = isFirstAver ? Temp3 : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTemp4[index] = isFirstAver ? Temp4 : lastTempData[typeIndex * 6 + index]; typeIndex++;
-                        sourceDataTemp5[index] = isFirstAver ? Temp5 : lastTempData[typeIndex * 6 + index]; typeIndex++;
+                        sourceDataQc[dataIndex] = isFirstAver ? Qc : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataQh[dataIndex] = isFirstAver ? Qh : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataQm[dataIndex] = isFirstAver ? Qm : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTc[dataIndex] = isFirstAver ? Tc : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTh[dataIndex] = isFirstAver ? Th : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTm[dataIndex] = isFirstAver ? Tm : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataPc[dataIndex] = isFirstAver ? Pc : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataPh[dataIndex] = isFirstAver ? Ph : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataPm[dataIndex] = isFirstAver ? Pm : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataQm5[dataIndex] = isFirstAver ? Qm5 : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTemp1[dataIndex] = isFirstAver ? Temp1 : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTemp2[dataIndex] = isFirstAver ? Temp2 : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTemp3[dataIndex] = isFirstAver ? Temp3 : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTemp4[dataIndex] = isFirstAver ? Temp4 : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
+                        sourceDataTemp5[dataIndex] = isFirstAver ? Temp5 : lastTempData[typeIndex * 6 + dataIndex]; typeIndex++;
                     }
-                    sourceDataQc[index + 5] = Qc;
-                    sourceDataQh[index + 5] = Qh;
-                    sourceDataQm[index + 5] = Qm;
-                    sourceDataTc[index + 5] = Tc;
-                    sourceDataTh[index + 5] = Th;
-                    sourceDataTm[index + 5] = Tm;
+                    if (dataIndex >= 18 && dataIndex <= 81)
+                    {
+                        sourceDataWh[dataIndex - 18] = Wh;
+                    }
+                    sourceDataQc[dataIndex + 5] = Qc;
+                    sourceDataQh[dataIndex + 5] = Qh;
+                    sourceDataQm[dataIndex + 5] = Qm;
+                    sourceDataTc[dataIndex + 5] = Tc;
+                    sourceDataTh[dataIndex + 5] = Th;
+                    sourceDataTm[dataIndex + 5] = Tm;
                     //sourceDataTm2[index + 5] = Tm;
 
-                    sourceDataPc[index + 5] = Pc;
-                    sourceDataPh[index + 5] = Ph;
-                    sourceDataPm[index + 5] = Pm;
-                    sourceDataQm5[index + 5] = Qm5;
-                    sourceDataTemp1[index + 5] = Temp1;
-                    sourceDataTemp2[index + 5] = Temp2;
-                    sourceDataTemp3[index + 5] = Temp3;
-                    sourceDataTemp4[index + 5] = Temp4;
-                    sourceDataTemp5[index + 5] = Temp5;
-                    index++;
+                    sourceDataPc[dataIndex + 5] = Pc;
+                    sourceDataPh[dataIndex + 5] = Ph;
+                    sourceDataPm[dataIndex + 5] = Pm;
+                    sourceDataQm5[dataIndex + 5] = Qm5;
+                    sourceDataTemp1[dataIndex + 5] = Temp1;
+                    sourceDataTemp2[dataIndex + 5] = Temp2;
+                    sourceDataTemp3[dataIndex + 5] = Temp3;
+                    sourceDataTemp4[dataIndex + 5] = Temp4;
+                    sourceDataTemp5[dataIndex + 5] = Temp5;
+                    dataIndex++;
+                    if (dataIndex >= 101)
+                        dataIndex = 0;
                 }
                 //Console.WriteLine("液面高度：" + Wh);
 
+                short[] temp1 = bpq.read_short_batch("4110", 10, 5);
+                short[] temp2 = bpq.read_short_batch("4120", 10, 5);
+                for (int i = 0; i < 10; i++)
+                {//读取
+                    //数值转换 short：0~32767 对应0~50  故需要除以655.34
+                    tempCoolFlow[i] = temp1[i] / 655.34;
+                    tempHotFlow[i] = temp2[i] / 655.34;
+                }
+                tempCoolFlow[10] = tempCoolFlow[9];
+                tempHotFlow[10] = tempHotFlow[9];
+                for (int i = 0; i < 10; i++)
+                {
+
+                    double[] CoolFill = dataFill(tempCoolFlow[i], tempCoolFlow[i + 1], 11);//扩充数据
+                    double[] HotFill = dataFill(tempHotFlow[i], tempHotFlow[i + 1], 11); ;//
+                    for (int j = 0; j < 10; j++)
+                    {
+                        CoolFlow[i * 10 + j] = CoolFill[j];
+                        HotFlow[i * 10 + j] = HotFill[j];
+                    }
+                }
+
                 sourceDataQc = averge(ref sourceDataQc, 0);
-                sourceDataQc = filterKalMan(sourceDataQc);
-                sourceDataQc = averge(ref sourceDataQc, 0);
+                //sourceDataQc = filterKalMan(sourceDataQc);
+                //sourceDataQc = averge(ref sourceDataQc, 0);
 
                 sourceDataQh = averge(ref sourceDataQh, 1);
                 //sourceDataQh = filter(ref sourceDataQh, 10);
@@ -1039,7 +1123,7 @@ namespace 恒温测试机.UI
                 //unsen卡尔曼滤波算法，比纯卡尔曼滤波效果要好
          
                 sourceDataTm = averge(ref sourceDataTm, 5);
-                sourceDataTm = midFilter(ref sourceDataTm, 5);
+                //sourceDataTm = midFilter(ref sourceDataTm, 5);
                 //sourceDataTm = UFK_filter(sourceDataTm);
                
                 //sourceDataTm = filter(ref sourceDataTm, 10);             
@@ -1082,9 +1166,11 @@ namespace 恒温测试机.UI
                         {
                             dt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
                                 t,
-                                (sourceDataQc[i] - 1) * 12.5,
-                                (sourceDataQh[i] - 1) * 12.5,
-                                (sourceDataQm[i] - 1) * 12.5,
+                                //(sourceDataQc[i] - 1) * 12.5,
+                                //(sourceDataQh[i] - 1) * 12.5,
+                                CoolFlow[i - 3],
+                                HotFlow[i - 3] ,
+                                (sourceDataQm[i] - 1)<0?0: (sourceDataQm[i] - 1) * 5,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -1099,13 +1185,14 @@ namespace 恒温测试机.UI
                         if (graphFlag)          //记录流程测试中的，曲线变化
                         {
                             GraphDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                (sourceDataQc[i] - 1) * 12.5,
-                                (sourceDataQh[i] - 1) * 12.5,
-                                (sourceDataQm[i] - 1) * 12.5,
+                                //(sourceDataQc[i] - 1) * 12.5,
+                                //(sourceDataQh[i] - 1) * 12.5,
+                                CoolFlow[i - 3],
+                                HotFlow[i - 3],
+                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
-                                //sourceDataTm2[i] * 10,
                                 sourceDataPc[i],
                                 sourceDataPh[i],
                                 sourceDataPm[i],
@@ -1115,9 +1202,11 @@ namespace 恒温测试机.UI
                         if (electDataFlag)
                         {
                             ElectDt.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                (sourceDataQc[i] - 1) * 12.5,
-                                (sourceDataQh[i] - 1) * 12.5,
-                                (sourceDataQm[i] - 1) * 12.5,
+                                //(sourceDataQc[i] - 1) * 12.5,
+                                //(sourceDataQh[i] - 1) * 12.5,
+                                CoolFlow[i - 3],
+                                HotFlow[i - 3],
+                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -1129,9 +1218,11 @@ namespace 恒温测试机.UI
                         }
                         t = t.AddMilliseconds(10.0);
                     }
-                    Qc = Math.Round((sourceDataQc[3] + sourceDataQc[102] - 2) * 0.5 * 12.5, 2, MidpointRounding.AwayFromZero);
-                    Qh = Math.Round((sourceDataQh[3] + sourceDataQh[102] - 2) * 0.5 * 12.5, 2, MidpointRounding.AwayFromZero);
-                    Qm = Math.Round((sourceDataQm[3] + sourceDataQm[102] - 2) * 0.5 * 12.5, 2, MidpointRounding.AwayFromZero);
+                    //Qc = (sourceDataQc[3] + sourceDataQc[102] - 2) < 0 ? 0 : Math.Round((sourceDataQc[3] + sourceDataQc[102] - 2) * 12.5 * 0.5, 2, MidpointRounding.AwayFromZero) + (double)Properties.Settings.Default.QcAdjust;
+                    //Qh = (sourceDataQh[3] + sourceDataQh[102] - 2) < 0 ? 0 : Math.Round((sourceDataQh[3] + sourceDataQh[102] - 2) * 12.5 * 0.5, 2, MidpointRounding.AwayFromZero) + (double)Properties.Settings.Default.QhAdjust;
+                    Qc = CoolFlow[CoolFlow.Length - 1];
+                    Qh = HotFlow[CoolFlow.Length - 1];
+                    Qm = (sourceDataQm[3] + sourceDataQm[102] - 2) < 0 ? 0 : Math.Round((sourceDataQm[3] + sourceDataQm[102] - 2) * 5 * 0.5, 2, MidpointRounding.AwayFromZero);
                     Tc = Math.Round((sourceDataTc[3] + sourceDataTc[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Th = Math.Round((sourceDataTh[3] + sourceDataTh[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Tm = Math.Round((sourceDataTm[3] + sourceDataTm[102]) * 5, 2, MidpointRounding.AwayFromZero);
@@ -1144,6 +1235,7 @@ namespace 恒温测试机.UI
                     Temp3 = Math.Round((sourceDataTemp3[3] + sourceDataTemp3[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Temp4 = Math.Round((sourceDataTemp4[3] + sourceDataTemp4[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Temp5 = Math.Round((sourceDataTemp5[3] + sourceDataTemp5[102]) * 5, 2, MidpointRounding.AwayFromZero);
+                    Wh = Math.Round(resultDataWh.ToList().Average(), 0, MidpointRounding.AwayFromZero);
                     DataReadyToUpdateStatus();
                 }
                 isFirstAver = false;
@@ -1155,6 +1247,7 @@ namespace 恒温测试机.UI
             }
             catch (Exception ex)
             {
+                Log.Error("数据采集报错：" + ex.ToString());
                 HandleError(err);
             }
         }
@@ -1213,173 +1306,173 @@ namespace 恒温测试机.UI
 
         #endregion
 
-        #region 电机控制
-        /// <summary>
-        /// 电机角度与对应温度
-        /// </summary>
-        public Dictionary<double, double> tempAngleDict = new Dictionary<double, double>();
-        public Dictionary<double, DateTime> tmTimeDict = new Dictionary<double, DateTime>();
-        public Dictionary<DateTime, double> timeAngleDict = new Dictionary<DateTime, double>();
-        public DataTable timeAngleDt;
-        public bool electDataFlag = false;
+        //#region 电机控制
+        ///// <summary>
+        ///// 电机角度与对应温度
+        ///// </summary>
+        //public Dictionary<double, double> tempAngleDict = new Dictionary<double, double>();
+        //public Dictionary<double, DateTime> tmTimeDict = new Dictionary<double, DateTime>();
+        //public Dictionary<DateTime, double> timeAngleDict = new Dictionary<DateTime, double>();
+        //public DataTable timeAngleDt;
+        //public bool electDataFlag = false;
 
-        private ElectricalMachineryType type;
-        private string powerAddress = "";   //M8-2056   M18-2066
-        private bool powerState = false;
+        //private ElectricalMachineryType type;
+        //private string powerAddress = "";   //M8-2056   M18-2066
+        //private bool powerState = false;
 
-        private string forwardWriteAddress = "";
-        private string forwardReadAddress = "";
-        private bool forwardState = false;
+        //private string forwardWriteAddress = "";
+        //private string forwardReadAddress = "";
+        //private bool forwardState = false;
 
-        private string noForwardWriteAddress = "";
-        private string noForwardReadAddress = "";
-        private bool noForwadState = false;
+        //private string noForwardWriteAddress = "";
+        //private string noForwardReadAddress = "";
+        //private bool noForwadState = false;
 
-        private string orignWriteAddress = "";
-        private string orignReadAddress = "";
-        private bool orignState = false;
+        //private string orignWriteAddress = "";
+        //private string orignReadAddress = "";
+        //private bool orignState = false;
 
-        private string autoRunAddress = "";
-        private string backOrignAddress = "";
-        private string shutdownAddress = "";
+        //private string autoRunAddress = "";
+        //private string backOrignAddress = "";
+        //private string shutdownAddress = "";
 
-        private string radioAddress = "";
-        private uint radioValue = 0;
-        private string angleAddress = "";
-        private int angleValue = 0;
+        //private string radioAddress = "";
+        //private uint radioValue = 0;
+        //private string angleAddress = "";
+        //private int angleValue = 0;
 
-        /// <summary>
-        /// 初始化电机通信
-        /// </summary>
-        private void InitE()
-        {
-            type = ElectricalMachineryType.tempType;
-            powerAddress = "2056";
-            forwardWriteAddress = "2048";
-            forwardReadAddress = "2053";
-            noForwardWriteAddress = "2049";
-            noForwardReadAddress = "2054";
-            orignWriteAddress = "2050";
-            orignReadAddress = "2055";
-            autoRunAddress = "2051";
-            backOrignAddress = "2052";
-            shutdownAddress = "2057";
-            radioAddress = "4296";
-            angleAddress = "5432";
+        ///// <summary>
+        ///// 初始化电机通信
+        ///// </summary>
+        //private void InitE()
+        //{
+        //    type = ElectricalMachineryType.tempType;
+        //    powerAddress = "2056";
+        //    forwardWriteAddress = "2048";
+        //    forwardReadAddress = "2053";
+        //    noForwardWriteAddress = "2049";
+        //    noForwardReadAddress = "2054";
+        //    orignWriteAddress = "2050";
+        //    orignReadAddress = "2055";
+        //    autoRunAddress = "2051";
+        //    backOrignAddress = "2052";
+        //    shutdownAddress = "2057";
+        //    radioAddress = "4296";
+        //    angleAddress = "5432";
 
-            timeAngleDt = new DataTable();
-            timeAngleDt.Columns.Add("时间", typeof(string));
-            timeAngleDt.Columns.Add("角度", typeof(double));
+        //    timeAngleDt = new DataTable();
+        //    timeAngleDt.Columns.Add("时间", typeof(string));
+        //    timeAngleDt.Columns.Add("角度", typeof(double));
 
-            monitorDTimer = new System.Timers.Timer(200);
-            monitorDTimer.Elapsed += (o, a) =>
-            {
-                MonitorDActive();
-            };//到达时间的时候执行事件；
-            monitorDTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
-            monitorDTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
-            electDataFlag = true;       //开始记录温度
-        }
+        //    monitorDTimer = new System.Timers.Timer(200);
+        //    monitorDTimer.Elapsed += (o, a) =>
+        //    {
+        //        MonitorDActive();
+        //    };//到达时间的时候执行事件；
+        //    monitorDTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
+        //    monitorDTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
+        //    electDataFlag = true;       //开始记录温度
+        //}
 
-        /// <summary>
-        /// 分析温度与角度对应关系
-        /// </summary>
-        private void AnalyseElect()
-        {
-            foreach (DataRow tmRow in ElectDt.Rows)
-            {
-                if (tmTimeDict.Keys.Count == 3)
-                {
-                    break;
-                }
-                var tm = tmRow["出水温度Tm"].AsDouble();
-                var tmTime = tmRow["时间"].AsDateTime();
-                if (tm == 36)
-                {
-                    if (tmTimeDict.ContainsKey(36))
-                        continue;
-                    else
-                        tmTimeDict.Add(36, tmTime);
-                }
-                if (tm == 38)
-                {
-                    if (tmTimeDict.ContainsKey(38))
-                        continue;
-                    else
-                        tmTimeDict.Add(38, tmTime);
-                }
-                if (tm == 40)
-                {
-                    if (tempAngleDict.ContainsKey(40))
-                        continue;
-                    else
-                        tmTimeDict.Add(40, tmTime);
-                }
-            }
-            foreach (DataRow eleRow in timeAngleDt.Rows)
-            {
-                if (timeAngleDict.Keys.Count == 3)
-                {
-                    break;
-                }
-                var angle = eleRow["角度"].AsDouble();
-                var angleTime = eleRow["时间"].AsDateTime();
+        ///// <summary>
+        ///// 分析温度与角度对应关系
+        ///// </summary>
+        //private void AnalyseElect()
+        //{
+        //    foreach (DataRow tmRow in ElectDt.Rows)
+        //    {
+        //        if (tmTimeDict.Keys.Count == 3)
+        //        {
+        //            break;
+        //        }
+        //        var tm = tmRow["出水温度Tm"].AsDouble();
+        //        var tmTime = tmRow["时间"].AsDateTime();
+        //        if (tm == 36)
+        //        {
+        //            if (tmTimeDict.ContainsKey(36))
+        //                continue;
+        //            else
+        //                tmTimeDict.Add(36, tmTime);
+        //        }
+        //        if (tm == 38)
+        //        {
+        //            if (tmTimeDict.ContainsKey(38))
+        //                continue;
+        //            else
+        //                tmTimeDict.Add(38, tmTime);
+        //        }
+        //        if (tm == 40)
+        //        {
+        //            if (tempAngleDict.ContainsKey(40))
+        //                continue;
+        //            else
+        //                tmTimeDict.Add(40, tmTime);
+        //        }
+        //    }
+        //    foreach (DataRow eleRow in timeAngleDt.Rows)
+        //    {
+        //        if (timeAngleDict.Keys.Count == 3)
+        //        {
+        //            break;
+        //        }
+        //        var angle = eleRow["角度"].AsDouble();
+        //        var angleTime = eleRow["时间"].AsDateTime();
 
-                if (timeAngleDict.ContainsKey(tmTimeDict[36]) == false && (angleTime - tmTimeDict[36]).TotalMilliseconds < 0.5)
-                {
-                    timeAngleDict.Add(tmTimeDict[36], angle);
-                }
+        //        if (timeAngleDict.ContainsKey(tmTimeDict[36]) == false && (angleTime - tmTimeDict[36]).TotalMilliseconds < 0.5)
+        //        {
+        //            timeAngleDict.Add(tmTimeDict[36], angle);
+        //        }
 
-                if (timeAngleDict.ContainsKey(tmTimeDict[38]) == false && (angleTime - tmTimeDict[38]).TotalMilliseconds < 0.5)
-                {
-                    timeAngleDict.Add(tmTimeDict[38], angle);
-                }
+        //        if (timeAngleDict.ContainsKey(tmTimeDict[38]) == false && (angleTime - tmTimeDict[38]).TotalMilliseconds < 0.5)
+        //        {
+        //            timeAngleDict.Add(tmTimeDict[38], angle);
+        //        }
 
-                if (timeAngleDict.ContainsKey(tmTimeDict[40]) == false && (angleTime - tmTimeDict[40]).TotalMilliseconds < 0.5)
-                {
-                    timeAngleDict.Add(tmTimeDict[40], angle);
-                }
-            }
+        //        if (timeAngleDict.ContainsKey(tmTimeDict[40]) == false && (angleTime - tmTimeDict[40]).TotalMilliseconds < 0.5)
+        //        {
+        //            timeAngleDict.Add(tmTimeDict[40], angle);
+        //        }
+        //    }
 
-            tempAngleDict.Add(36, timeAngleDict[tmTimeDict[36]]);
-            tempAngleDict.Add(36, timeAngleDict[tmTimeDict[38]]);
-            tempAngleDict.Add(36, timeAngleDict[tmTimeDict[40]]);
-        }
+        //    tempAngleDict.Add(36, timeAngleDict[tmTimeDict[36]]);
+        //    tempAngleDict.Add(36, timeAngleDict[tmTimeDict[38]]);
+        //    tempAngleDict.Add(36, timeAngleDict[tmTimeDict[40]]);
+        //}
 
-        System.Timers.Timer monitorDTimer;            //监控D寄存器定时器
-        private delegate void MonitorDActiveDelegate();
-        private void MonitorDActive()
-        {
-            try
-            {
-                if (this.InvokeRequired)
-                {
-                    MonitorDActiveDelegate monitorActiveDelegate = MonitorDActive;
-                    this.Invoke(monitorActiveDelegate);
-                }
-                else
-                {
-                    radioValue = bpq.read_uint(radioAddress, 5);
-                    angleValue = bpq.read_int(angleAddress, 5);
+        //System.Timers.Timer monitorDTimer;            //监控D寄存器定时器
+        //private delegate void MonitorDActiveDelegate();
+        //private void MonitorDActive()
+        //{
+        //    try
+        //    {
+        //        if (this.InvokeRequired)
+        //        {
+        //            MonitorDActiveDelegate monitorActiveDelegate = MonitorDActive;
+        //            this.Invoke(monitorActiveDelegate);
+        //        }
+        //        else
+        //        {
+        //            radioValue = bpq.read_uint(radioAddress, 5);
+        //            angleValue = bpq.read_int(angleAddress, 5);
 
-                    var temp1 = (radioValue * 0.0001);
-                    var temp2 = (angleValue * 0.0001);
-                    if (electDataFlag)
-                    {
-                        timeAngleDt.Rows.Add(
-                            DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                            temp2);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
+        //            var temp1 = (radioValue * 0.0001);
+        //            var temp2 = (angleValue * 0.0001);
+        //            if (electDataFlag)
+        //            {
+        //                timeAngleDt.Rows.Add(
+        //                    DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:fff"),
+        //                    temp2);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return;
+        //    }
 
-        }
+        //}
 
-        #endregion
+        //#endregion
 
         #region 预留模拟量输出
 
@@ -1597,5 +1690,31 @@ namespace 恒温测试机.UI
 
         #endregion
 
+        private void HslSwitch1_OnSwitchChanged(object arg1, bool arg2)
+        {
+            if (arg2)
+            {
+                bpq.write_coil("2078", true, 5);
+                hslSwitch1.Text = "夹紧产品";
+            }
+            else
+            {
+                bpq.write_coil("2078", false, 5);
+                hslSwitch1.Text = "松开产品";
+            }
+        }
+
+        public double[] dataFill(double begin, double end, int len)
+        {
+            double[] data = new double[len];
+            data[0] = begin;
+            data[len - 1] = end;
+            double d = (end - begin) / (len - 1);
+            for (int i = 1; i < len - 1; i++)
+            {
+                data[i] = begin + i * d;
+            }
+            return data;
+        }
     }
 }

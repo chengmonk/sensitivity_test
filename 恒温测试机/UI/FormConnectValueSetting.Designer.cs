@@ -38,38 +38,46 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.shutdownBtn = new System.Windows.Forms.Button();
-            this.autoRunBtn = new System.Windows.Forms.Button();
-            this.backOrignBtn = new System.Windows.Forms.Button();
-            this.orignBtn = new System.Windows.Forms.Button();
-            this.angelLb = new System.Windows.Forms.Label();
-            this.radioLb = new System.Windows.Forms.Label();
+            this.angleBtn_spin = new System.Windows.Forms.Button();
+            this.angleTb_spin = new System.Windows.Forms.TextBox();
+            this.autoFindBtn_spin = new System.Windows.Forms.Button();
+            this.radioBtn_spin = new System.Windows.Forms.Button();
+            this.radioTb_spin = new System.Windows.Forms.TextBox();
+            this.shutdownBtn_spin = new System.Windows.Forms.Button();
+            this.autoRunBtn_spin = new System.Windows.Forms.Button();
+            this.backOrignBtn_spin = new System.Windows.Forms.Button();
+            this.orignBtn_spin = new System.Windows.Forms.Button();
+            this.angelLb_spin = new System.Windows.Forms.Label();
+            this.radioLb_spin = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.noForwardBtn = new System.Windows.Forms.Button();
-            this.forwardBtn = new System.Windows.Forms.Button();
-            this.powerBtn = new System.Windows.Forms.Button();
+            this.noForwardBtn_spin = new System.Windows.Forms.Button();
+            this.forwardBtn_spin = new System.Windows.Forms.Button();
+            this.powerBtn_spin = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.angleBtn_upDown = new System.Windows.Forms.Button();
+            this.angleTb_upDown = new System.Windows.Forms.TextBox();
+            this.button11 = new System.Windows.Forms.Button();
+            this.radioTb_upDown = new System.Windows.Forms.TextBox();
+            this.shutdownBtn_upDown = new System.Windows.Forms.Button();
+            this.autoRunBtn_upDown = new System.Windows.Forms.Button();
+            this.backOrignBtn_upDown = new System.Windows.Forms.Button();
+            this.orignBtn_upDown = new System.Windows.Forms.Button();
+            this.angelLb_upDown = new System.Windows.Forms.Label();
+            this.radioLb_upDown = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button10 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.button11 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.noForwardBtn_upDown = new System.Windows.Forms.Button();
+            this.forwardBtn_upDown = new System.Windows.Forms.Button();
+            this.powerBtn_upDown = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.outInfoTb = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -84,7 +92,7 @@
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(314, 108);
+            this.groupBox1.Size = new System.Drawing.Size(331, 108);
             this.groupBox1.TabIndex = 27;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "变频器通讯";
@@ -152,10 +160,12 @@
             // 
             // textBox2
             // 
+            this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(58, 24);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(73, 21);
             this.textBox2.TabIndex = 29;
+            this.textBox2.Text = "8193";
             // 
             // button1
             // 
@@ -169,88 +179,133 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.button10);
-            this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Controls.Add(this.shutdownBtn);
-            this.groupBox2.Controls.Add(this.autoRunBtn);
-            this.groupBox2.Controls.Add(this.backOrignBtn);
-            this.groupBox2.Controls.Add(this.orignBtn);
-            this.groupBox2.Controls.Add(this.angelLb);
-            this.groupBox2.Controls.Add(this.radioLb);
+            this.groupBox2.Controls.Add(this.angleBtn_spin);
+            this.groupBox2.Controls.Add(this.angleTb_spin);
+            this.groupBox2.Controls.Add(this.autoFindBtn_spin);
+            this.groupBox2.Controls.Add(this.radioBtn_spin);
+            this.groupBox2.Controls.Add(this.radioTb_spin);
+            this.groupBox2.Controls.Add(this.shutdownBtn_spin);
+            this.groupBox2.Controls.Add(this.autoRunBtn_spin);
+            this.groupBox2.Controls.Add(this.backOrignBtn_spin);
+            this.groupBox2.Controls.Add(this.orignBtn_spin);
+            this.groupBox2.Controls.Add(this.angelLb_spin);
+            this.groupBox2.Controls.Add(this.radioLb_spin);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.noForwardBtn);
-            this.groupBox2.Controls.Add(this.forwardBtn);
-            this.groupBox2.Controls.Add(this.powerBtn);
+            this.groupBox2.Controls.Add(this.noForwardBtn_spin);
+            this.groupBox2.Controls.Add(this.forwardBtn_spin);
+            this.groupBox2.Controls.Add(this.powerBtn_spin);
             this.groupBox2.Location = new System.Drawing.Point(12, 147);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(314, 232);
+            this.groupBox2.Size = new System.Drawing.Size(331, 186);
             this.groupBox2.TabIndex = 28;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "旋转电机通讯";
             // 
-            // shutdownBtn
+            // angleBtn_spin
             // 
-            this.shutdownBtn.Location = new System.Drawing.Point(202, 145);
-            this.shutdownBtn.Name = "shutdownBtn";
-            this.shutdownBtn.Size = new System.Drawing.Size(74, 29);
-            this.shutdownBtn.TabIndex = 41;
-            this.shutdownBtn.Text = "紧急停止";
-            this.shutdownBtn.UseVisualStyleBackColor = true;
-            this.shutdownBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ShutdownBtn_MouseDown);
-            this.shutdownBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ShutdownBtn_MouseUp);
+            this.angleBtn_spin.Location = new System.Drawing.Point(244, 66);
+            this.angleBtn_spin.Name = "angleBtn_spin";
+            this.angleBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.angleBtn_spin.TabIndex = 46;
+            this.angleBtn_spin.Text = "写入范围";
+            this.angleBtn_spin.UseVisualStyleBackColor = true;
+            this.angleBtn_spin.Click += new System.EventHandler(this.AngleBtn_spin_Click);
             // 
-            // autoRunBtn
+            // angleTb_spin
             // 
-            this.autoRunBtn.Location = new System.Drawing.Point(122, 145);
-            this.autoRunBtn.Name = "autoRunBtn";
-            this.autoRunBtn.Size = new System.Drawing.Size(74, 29);
-            this.autoRunBtn.TabIndex = 40;
-            this.autoRunBtn.Text = "自动运行";
-            this.autoRunBtn.UseVisualStyleBackColor = true;
-            this.autoRunBtn.Click += new System.EventHandler(this.AutoRunBtn_Click);
+            this.angleTb_spin.Location = new System.Drawing.Point(167, 71);
+            this.angleTb_spin.Name = "angleTb_spin";
+            this.angleTb_spin.Size = new System.Drawing.Size(74, 21);
+            this.angleTb_spin.TabIndex = 45;
             // 
-            // backOrignBtn
+            // autoFindBtn_spin
             // 
-            this.backOrignBtn.Location = new System.Drawing.Point(202, 110);
-            this.backOrignBtn.Name = "backOrignBtn";
-            this.backOrignBtn.Size = new System.Drawing.Size(74, 29);
-            this.backOrignBtn.TabIndex = 39;
-            this.backOrignBtn.Text = "回原点";
-            this.backOrignBtn.UseVisualStyleBackColor = true;
-            this.backOrignBtn.Click += new System.EventHandler(this.BackOrignBtn_Click);
+            this.autoFindBtn_spin.Location = new System.Drawing.Point(244, 135);
+            this.autoFindBtn_spin.Name = "autoFindBtn_spin";
+            this.autoFindBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.autoFindBtn_spin.TabIndex = 44;
+            this.autoFindBtn_spin.Text = "自动找点";
+            this.autoFindBtn_spin.UseVisualStyleBackColor = true;
+            this.autoFindBtn_spin.Click += new System.EventHandler(this.autoFindBtn_spin_Click);
             // 
-            // orignBtn
+            // radioBtn_spin
             // 
-            this.orignBtn.Location = new System.Drawing.Point(122, 110);
-            this.orignBtn.Name = "orignBtn";
-            this.orignBtn.Size = new System.Drawing.Size(74, 29);
-            this.orignBtn.TabIndex = 38;
-            this.orignBtn.Text = "原点";
-            this.orignBtn.UseVisualStyleBackColor = true;
-            this.orignBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OrignBtn_MouseDown);
-            this.orignBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OrignBtn_MouseUp);
+            this.radioBtn_spin.Location = new System.Drawing.Point(244, 33);
+            this.radioBtn_spin.Name = "radioBtn_spin";
+            this.radioBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.radioBtn_spin.TabIndex = 43;
+            this.radioBtn_spin.Text = "写入";
+            this.radioBtn_spin.UseVisualStyleBackColor = true;
+            this.radioBtn_spin.Click += new System.EventHandler(this.Radio_spin_Click);
             // 
-            // angelLb
+            // radioTb_spin
             // 
-            this.angelLb.AutoSize = true;
-            this.angelLb.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.angelLb.Location = new System.Drawing.Point(81, 71);
-            this.angelLb.Name = "angelLb";
-            this.angelLb.Size = new System.Drawing.Size(15, 17);
-            this.angelLb.TabIndex = 37;
-            this.angelLb.Text = "0";
+            this.radioTb_spin.Location = new System.Drawing.Point(167, 38);
+            this.radioTb_spin.Name = "radioTb_spin";
+            this.radioTb_spin.Size = new System.Drawing.Size(74, 21);
+            this.radioTb_spin.TabIndex = 42;
             // 
-            // radioLb
+            // shutdownBtn_spin
             // 
-            this.radioLb.AutoSize = true;
-            this.radioLb.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioLb.Location = new System.Drawing.Point(81, 42);
-            this.radioLb.Name = "radioLb";
-            this.radioLb.Size = new System.Drawing.Size(15, 17);
-            this.radioLb.TabIndex = 36;
-            this.radioLb.Text = "0";
+            this.shutdownBtn_spin.Location = new System.Drawing.Point(7, 135);
+            this.shutdownBtn_spin.Name = "shutdownBtn_spin";
+            this.shutdownBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.shutdownBtn_spin.TabIndex = 41;
+            this.shutdownBtn_spin.Text = "紧急停止";
+            this.shutdownBtn_spin.UseVisualStyleBackColor = true;
+            this.shutdownBtn_spin.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ShutdownBtn_spin_MouseDown);
+            this.shutdownBtn_spin.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ShutdownBtn_spin_MouseUp);
+            // 
+            // autoRunBtn_spin
+            // 
+            this.autoRunBtn_spin.Location = new System.Drawing.Point(244, 100);
+            this.autoRunBtn_spin.Name = "autoRunBtn_spin";
+            this.autoRunBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.autoRunBtn_spin.TabIndex = 40;
+            this.autoRunBtn_spin.Text = "自动运行";
+            this.autoRunBtn_spin.UseVisualStyleBackColor = true;
+            this.autoRunBtn_spin.Click += new System.EventHandler(this.AutoRunBtn_spin_Click);
+            // 
+            // backOrignBtn_spin
+            // 
+            this.backOrignBtn_spin.Location = new System.Drawing.Point(167, 135);
+            this.backOrignBtn_spin.Name = "backOrignBtn_spin";
+            this.backOrignBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.backOrignBtn_spin.TabIndex = 39;
+            this.backOrignBtn_spin.Text = "回原点";
+            this.backOrignBtn_spin.UseVisualStyleBackColor = true;
+            this.backOrignBtn_spin.Click += new System.EventHandler(this.BackOrignBtn_spin_Click);
+            // 
+            // orignBtn_spin
+            // 
+            this.orignBtn_spin.Location = new System.Drawing.Point(87, 135);
+            this.orignBtn_spin.Name = "orignBtn_spin";
+            this.orignBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.orignBtn_spin.TabIndex = 38;
+            this.orignBtn_spin.Text = "原点";
+            this.orignBtn_spin.UseVisualStyleBackColor = true;
+            this.orignBtn_spin.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OrignBtn_spin_MouseClick);
+            // 
+            // angelLb_spin
+            // 
+            this.angelLb_spin.AutoSize = true;
+            this.angelLb_spin.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.angelLb_spin.Location = new System.Drawing.Point(81, 71);
+            this.angelLb_spin.Name = "angelLb_spin";
+            this.angelLb_spin.Size = new System.Drawing.Size(15, 17);
+            this.angelLb_spin.TabIndex = 37;
+            this.angelLb_spin.Text = "0";
+            // 
+            // radioLb_spin
+            // 
+            this.radioLb_spin.AutoSize = true;
+            this.radioLb_spin.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.radioLb_spin.Location = new System.Drawing.Point(81, 42);
+            this.radioLb_spin.Name = "radioLb_spin";
+            this.radioLb_spin.Size = new System.Drawing.Size(15, 17);
+            this.radioLb_spin.TabIndex = 36;
+            this.radioLb_spin.Text = "0";
             // 
             // label4
             // 
@@ -272,117 +327,155 @@
             this.label3.TabIndex = 34;
             this.label3.Text = "转速(度/秒)：";
             // 
-            // noForwardBtn
+            // noForwardBtn_spin
             // 
-            this.noForwardBtn.Location = new System.Drawing.Point(202, 75);
-            this.noForwardBtn.Name = "noForwardBtn";
-            this.noForwardBtn.Size = new System.Drawing.Size(74, 29);
-            this.noForwardBtn.TabIndex = 33;
-            this.noForwardBtn.Text = "反传";
-            this.noForwardBtn.UseVisualStyleBackColor = true;
-            this.noForwardBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.NoForwardBtn_MouseDown);
-            this.noForwardBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.NoForwardBtn_MouseUp);
+            this.noForwardBtn_spin.Location = new System.Drawing.Point(167, 100);
+            this.noForwardBtn_spin.Name = "noForwardBtn_spin";
+            this.noForwardBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.noForwardBtn_spin.TabIndex = 33;
+            this.noForwardBtn_spin.Text = "反传";
+            this.noForwardBtn_spin.UseVisualStyleBackColor = true;
+            this.noForwardBtn_spin.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NoForwardBtn_spin_MouseClick);
             // 
-            // forwardBtn
+            // forwardBtn_spin
             // 
-            this.forwardBtn.Location = new System.Drawing.Point(122, 75);
-            this.forwardBtn.Name = "forwardBtn";
-            this.forwardBtn.Size = new System.Drawing.Size(74, 29);
-            this.forwardBtn.TabIndex = 32;
-            this.forwardBtn.Text = "正传";
-            this.forwardBtn.UseVisualStyleBackColor = true;
-            this.forwardBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ForwardBtn_MouseDown);
-            this.forwardBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ForwardBtn_MouseUp);
+            this.forwardBtn_spin.Location = new System.Drawing.Point(87, 100);
+            this.forwardBtn_spin.Name = "forwardBtn_spin";
+            this.forwardBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.forwardBtn_spin.TabIndex = 32;
+            this.forwardBtn_spin.Text = "正传";
+            this.forwardBtn_spin.UseVisualStyleBackColor = true;
+            this.forwardBtn_spin.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ForwardBtn_spin_MouseClick);
             // 
-            // powerBtn
+            // powerBtn_spin
             // 
-            this.powerBtn.BackColor = System.Drawing.SystemColors.Control;
-            this.powerBtn.Location = new System.Drawing.Point(122, 40);
-            this.powerBtn.Name = "powerBtn";
-            this.powerBtn.Size = new System.Drawing.Size(74, 29);
-            this.powerBtn.TabIndex = 29;
-            this.powerBtn.Text = "伺服开关";
-            this.powerBtn.UseVisualStyleBackColor = false;
-            this.powerBtn.Click += new System.EventHandler(this.PowerSwitchBtn_Click);
+            this.powerBtn_spin.BackColor = System.Drawing.SystemColors.Control;
+            this.powerBtn_spin.Location = new System.Drawing.Point(7, 100);
+            this.powerBtn_spin.Name = "powerBtn_spin";
+            this.powerBtn_spin.Size = new System.Drawing.Size(74, 29);
+            this.powerBtn_spin.TabIndex = 29;
+            this.powerBtn_spin.Text = "伺服开关";
+            this.powerBtn_spin.UseVisualStyleBackColor = false;
+            this.powerBtn_spin.Click += new System.EventHandler(this.PowerSwitchBtn_spin_Click);
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.label11);
+            this.groupBox3.Controls.Add(this.angleBtn_upDown);
+            this.groupBox3.Controls.Add(this.angleTb_upDown);
             this.groupBox3.Controls.Add(this.button11);
-            this.groupBox3.Controls.Add(this.textBox4);
-            this.groupBox3.Controls.Add(this.button3);
-            this.groupBox3.Controls.Add(this.button4);
-            this.groupBox3.Controls.Add(this.button5);
-            this.groupBox3.Controls.Add(this.button6);
-            this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Controls.Add(this.label7);
+            this.groupBox3.Controls.Add(this.radioTb_upDown);
+            this.groupBox3.Controls.Add(this.shutdownBtn_upDown);
+            this.groupBox3.Controls.Add(this.autoRunBtn_upDown);
+            this.groupBox3.Controls.Add(this.backOrignBtn_upDown);
+            this.groupBox3.Controls.Add(this.orignBtn_upDown);
+            this.groupBox3.Controls.Add(this.angelLb_upDown);
+            this.groupBox3.Controls.Add(this.radioLb_upDown);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Controls.Add(this.button7);
-            this.groupBox3.Controls.Add(this.button8);
-            this.groupBox3.Controls.Add(this.button9);
-            this.groupBox3.Location = new System.Drawing.Point(10, 401);
+            this.groupBox3.Controls.Add(this.noForwardBtn_upDown);
+            this.groupBox3.Controls.Add(this.forwardBtn_upDown);
+            this.groupBox3.Controls.Add(this.powerBtn_upDown);
+            this.groupBox3.Location = new System.Drawing.Point(10, 348);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(314, 229);
+            this.groupBox3.Size = new System.Drawing.Size(333, 194);
             this.groupBox3.TabIndex = 29;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "升降电机通讯";
             // 
-            // button3
+            // angleBtn_upDown
             // 
-            this.button3.Location = new System.Drawing.Point(202, 145);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(74, 29);
-            this.button3.TabIndex = 41;
-            this.button3.Text = "紧急停止";
-            this.button3.UseVisualStyleBackColor = true;
+            this.angleBtn_upDown.Location = new System.Drawing.Point(245, 72);
+            this.angleBtn_upDown.Name = "angleBtn_upDown";
+            this.angleBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.angleBtn_upDown.TabIndex = 48;
+            this.angleBtn_upDown.Text = "写入范围";
+            this.angleBtn_upDown.UseVisualStyleBackColor = true;
+            this.angleBtn_upDown.Click += new System.EventHandler(this.AngleBtn_upDown_Click);
             // 
-            // button4
+            // angleTb_upDown
             // 
-            this.button4.Location = new System.Drawing.Point(122, 145);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(74, 29);
-            this.button4.TabIndex = 40;
-            this.button4.Text = "自动运行";
-            this.button4.UseVisualStyleBackColor = true;
+            this.angleTb_upDown.Location = new System.Drawing.Point(169, 78);
+            this.angleTb_upDown.Name = "angleTb_upDown";
+            this.angleTb_upDown.Size = new System.Drawing.Size(70, 21);
+            this.angleTb_upDown.TabIndex = 47;
             // 
-            // button5
+            // button11
             // 
-            this.button5.Location = new System.Drawing.Point(202, 110);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(74, 29);
-            this.button5.TabIndex = 39;
-            this.button5.Text = "回原点";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button11.Location = new System.Drawing.Point(245, 37);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(74, 29);
+            this.button11.TabIndex = 46;
+            this.button11.Text = "写入";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.RadioBtn_upDown_Click);
             // 
-            // button6
+            // radioTb_upDown
             // 
-            this.button6.Location = new System.Drawing.Point(122, 110);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(74, 29);
-            this.button6.TabIndex = 38;
-            this.button6.Text = "原点";
-            this.button6.UseVisualStyleBackColor = true;
+            this.radioTb_upDown.Location = new System.Drawing.Point(169, 43);
+            this.radioTb_upDown.Name = "radioTb_upDown";
+            this.radioTb_upDown.Size = new System.Drawing.Size(70, 21);
+            this.radioTb_upDown.TabIndex = 45;
             // 
-            // label6
+            // shutdownBtn_upDown
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(81, 73);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(15, 17);
-            this.label6.TabIndex = 37;
-            this.label6.Text = "0";
+            this.shutdownBtn_upDown.Location = new System.Drawing.Point(6, 145);
+            this.shutdownBtn_upDown.Name = "shutdownBtn_upDown";
+            this.shutdownBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.shutdownBtn_upDown.TabIndex = 41;
+            this.shutdownBtn_upDown.Text = "紧急停止";
+            this.shutdownBtn_upDown.UseVisualStyleBackColor = true;
+            this.shutdownBtn_upDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ShutdownBtn_upDown_MouseDown);
+            this.shutdownBtn_upDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ShutdownBtn_upDown_MouseUp);
             // 
-            // label7
+            // autoRunBtn_upDown
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(81, 44);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(15, 17);
-            this.label7.TabIndex = 36;
-            this.label7.Text = "0";
+            this.autoRunBtn_upDown.Location = new System.Drawing.Point(245, 110);
+            this.autoRunBtn_upDown.Name = "autoRunBtn_upDown";
+            this.autoRunBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.autoRunBtn_upDown.TabIndex = 40;
+            this.autoRunBtn_upDown.Text = "自动运行";
+            this.autoRunBtn_upDown.UseVisualStyleBackColor = true;
+            this.autoRunBtn_upDown.Click += new System.EventHandler(this.AutoRunBtn_upDown_Click);
+            // 
+            // backOrignBtn_upDown
+            // 
+            this.backOrignBtn_upDown.Location = new System.Drawing.Point(166, 145);
+            this.backOrignBtn_upDown.Name = "backOrignBtn_upDown";
+            this.backOrignBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.backOrignBtn_upDown.TabIndex = 39;
+            this.backOrignBtn_upDown.Text = "回原点";
+            this.backOrignBtn_upDown.UseVisualStyleBackColor = true;
+            this.backOrignBtn_upDown.Click += new System.EventHandler(this.BackOrignBtn_upDown_Click);
+            // 
+            // orignBtn_upDown
+            // 
+            this.orignBtn_upDown.Location = new System.Drawing.Point(86, 145);
+            this.orignBtn_upDown.Name = "orignBtn_upDown";
+            this.orignBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.orignBtn_upDown.TabIndex = 38;
+            this.orignBtn_upDown.Text = "原点";
+            this.orignBtn_upDown.UseVisualStyleBackColor = true;
+            this.orignBtn_upDown.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OrignBtn_upDown_MouseClick);
+            // 
+            // angelLb_upDown
+            // 
+            this.angelLb_upDown.AutoSize = true;
+            this.angelLb_upDown.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.angelLb_upDown.Location = new System.Drawing.Point(81, 73);
+            this.angelLb_upDown.Name = "angelLb_upDown";
+            this.angelLb_upDown.Size = new System.Drawing.Size(15, 17);
+            this.angelLb_upDown.TabIndex = 37;
+            this.angelLb_upDown.Text = "0";
+            // 
+            // radioLb_upDown
+            // 
+            this.radioLb_upDown.AutoSize = true;
+            this.radioLb_upDown.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.radioLb_upDown.Location = new System.Drawing.Point(81, 44);
+            this.radioLb_upDown.Name = "radioLb_upDown";
+            this.radioLb_upDown.Size = new System.Drawing.Size(15, 17);
+            this.radioLb_upDown.TabIndex = 36;
+            this.radioLb_upDown.Text = "0";
             // 
             // label8
             // 
@@ -390,9 +483,9 @@
             this.label8.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label8.Location = new System.Drawing.Point(6, 73);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(64, 17);
+            this.label8.Size = new System.Drawing.Size(74, 17);
             this.label8.TabIndex = 35;
-            this.label8.Text = "角度(度)：";
+            this.label8.Text = "位移(mm)：";
             // 
             // label9
             // 
@@ -400,95 +493,90 @@
             this.label9.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label9.Location = new System.Drawing.Point(6, 44);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(81, 17);
+            this.label9.Size = new System.Drawing.Size(85, 17);
             this.label9.TabIndex = 34;
-            this.label9.Text = "转速(度/秒)：";
+            this.label9.Text = "转速(mm/s)：";
             // 
-            // button7
+            // noForwardBtn_upDown
             // 
-            this.button7.Location = new System.Drawing.Point(202, 75);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(74, 29);
-            this.button7.TabIndex = 33;
-            this.button7.Text = "反传";
-            this.button7.UseVisualStyleBackColor = true;
+            this.noForwardBtn_upDown.Location = new System.Drawing.Point(166, 110);
+            this.noForwardBtn_upDown.Name = "noForwardBtn_upDown";
+            this.noForwardBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.noForwardBtn_upDown.TabIndex = 33;
+            this.noForwardBtn_upDown.Text = "后退";
+            this.noForwardBtn_upDown.UseVisualStyleBackColor = true;
+            this.noForwardBtn_upDown.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NoForwardBtn_upDown_MouseClick);
             // 
-            // button8
+            // forwardBtn_upDown
             // 
-            this.button8.Location = new System.Drawing.Point(122, 75);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(74, 29);
-            this.button8.TabIndex = 32;
-            this.button8.Text = "正传";
-            this.button8.UseVisualStyleBackColor = true;
+            this.forwardBtn_upDown.Location = new System.Drawing.Point(86, 110);
+            this.forwardBtn_upDown.Name = "forwardBtn_upDown";
+            this.forwardBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.forwardBtn_upDown.TabIndex = 32;
+            this.forwardBtn_upDown.Text = "前进";
+            this.forwardBtn_upDown.UseVisualStyleBackColor = true;
+            this.forwardBtn_upDown.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ForwardBtn_upDown_MouseClick);
             // 
-            // button9
+            // powerBtn_upDown
             // 
-            this.button9.BackColor = System.Drawing.SystemColors.Control;
-            this.button9.Location = new System.Drawing.Point(122, 40);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(74, 29);
-            this.button9.TabIndex = 29;
-            this.button9.Text = "伺服开关";
-            this.button9.UseVisualStyleBackColor = false;
+            this.powerBtn_upDown.BackColor = System.Drawing.SystemColors.Control;
+            this.powerBtn_upDown.Location = new System.Drawing.Point(6, 110);
+            this.powerBtn_upDown.Name = "powerBtn_upDown";
+            this.powerBtn_upDown.Size = new System.Drawing.Size(74, 29);
+            this.powerBtn_upDown.TabIndex = 29;
+            this.powerBtn_upDown.Text = "伺服开关";
+            this.powerBtn_upDown.UseVisualStyleBackColor = false;
+            this.powerBtn_upDown.Click += new System.EventHandler(this.PowerSwitchBtn_upDown_Click);
             // 
-            // textBox1
+            // groupBox4
             // 
-            this.textBox1.Location = new System.Drawing.Point(123, 185);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(73, 21);
-            this.textBox1.TabIndex = 42;
+            this.groupBox4.Controls.Add(this.outInfoTb);
+            this.groupBox4.Location = new System.Drawing.Point(374, 12);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(237, 530);
+            this.groupBox4.TabIndex = 30;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "输出";
             // 
-            // button10
+            // outInfoTb
             // 
-            this.button10.Location = new System.Drawing.Point(202, 180);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(74, 29);
-            this.button10.TabIndex = 43;
-            this.button10.Text = "写入";
-            this.button10.UseVisualStyleBackColor = true;
+            this.outInfoTb.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.outInfoTb.Location = new System.Drawing.Point(6, 19);
+            this.outInfoTb.Multiline = true;
+            this.outInfoTb.Name = "outInfoTb";
+            this.outInfoTb.ReadOnly = true;
+            this.outInfoTb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.outInfoTb.Size = new System.Drawing.Size(225, 500);
+            this.outInfoTb.TabIndex = 23;
             // 
-            // label10
+            // button4
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label10.Location = new System.Drawing.Point(6, 185);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(68, 17);
-            this.label10.TabIndex = 44;
-            this.label10.Text = "转速设置：";
+            this.button4.Location = new System.Drawing.Point(182, 557);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(164, 29);
+            this.button4.TabIndex = 44;
+            this.button4.Text = "导出温度与时间数据";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
-            // label11
+            // button5
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label11.Location = new System.Drawing.Point(8, 185);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(68, 17);
-            this.label11.TabIndex = 47;
-            this.label11.Text = "转速设置：";
-            // 
-            // button11
-            // 
-            this.button11.Location = new System.Drawing.Point(202, 180);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(74, 29);
-            this.button11.TabIndex = 46;
-            this.button11.Text = "写入";
-            this.button11.UseVisualStyleBackColor = true;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(123, 185);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(73, 21);
-            this.textBox4.TabIndex = 45;
+            this.button5.Location = new System.Drawing.Point(12, 557);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(164, 29);
+            this.button5.TabIndex = 43;
+            this.button5.Text = "导出角度与时间数据";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // FormConnectValueSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 642);
+            this.ClientSize = new System.Drawing.Size(630, 598);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -501,6 +589,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -516,35 +606,42 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button powerBtn;
+        private System.Windows.Forms.Button powerBtn_spin;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button noForwardBtn;
-        private System.Windows.Forms.Button forwardBtn;
-        private System.Windows.Forms.Label angelLb;
-        private System.Windows.Forms.Label radioLb;
-        private System.Windows.Forms.Button orignBtn;
-        private System.Windows.Forms.Button backOrignBtn;
-        private System.Windows.Forms.Button shutdownBtn;
-        private System.Windows.Forms.Button autoRunBtn;
+        private System.Windows.Forms.Button noForwardBtn_spin;
+        private System.Windows.Forms.Button forwardBtn_spin;
+        private System.Windows.Forms.Label angelLb_spin;
+        private System.Windows.Forms.Label radioLb_spin;
+        private System.Windows.Forms.Button orignBtn_spin;
+        private System.Windows.Forms.Button backOrignBtn_spin;
+        private System.Windows.Forms.Button shutdownBtn_spin;
+        private System.Windows.Forms.Button autoRunBtn_spin;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button shutdownBtn_upDown;
+        private System.Windows.Forms.Button autoRunBtn_upDown;
+        private System.Windows.Forms.Button backOrignBtn_upDown;
+        private System.Windows.Forms.Button orignBtn_upDown;
+        private System.Windows.Forms.Label angelLb_upDown;
+        private System.Windows.Forms.Label radioLb_upDown;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button noForwardBtn_upDown;
+        private System.Windows.Forms.Button forwardBtn_upDown;
+        private System.Windows.Forms.Button powerBtn_upDown;
+        private System.Windows.Forms.Button radioBtn_spin;
+        private System.Windows.Forms.TextBox radioTb_spin;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox radioTb_upDown;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TextBox outInfoTb;
+        private System.Windows.Forms.Button autoFindBtn_spin;
+        private System.Windows.Forms.Button angleBtn_spin;
+        private System.Windows.Forms.TextBox angleTb_spin;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button angleBtn_upDown;
+        private System.Windows.Forms.TextBox angleTb_upDown;
     }
 }
