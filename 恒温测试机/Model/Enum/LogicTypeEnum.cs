@@ -22,11 +22,14 @@ namespace 恒温测试机.Model.Enum
         TemTest = 4,
         [EnumDescription("流量减少测试")]
         FlowTest = 5,
-        [EnumDescription("灵敏度测试")]
+        [EnumDescription("灵敏度测试+保真度测试")]
         SensitivityTest=6,
         [EnumDescription("保真度测试")]
         FidelityTest=7,
-        [EnumDescription("出水温度稳定性测试")]
-        TmSteadyTest=8
+        [EnumDescription("出水温度稳定性测试（65℃）")]
+        TmSteadyTest65=8,
+        [EnumDescription("出水温度稳定性测试（50℃）")]
+        TmSteadyTest50 = 9
+
     }
 }
