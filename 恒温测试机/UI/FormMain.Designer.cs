@@ -182,7 +182,7 @@
             // 
             // systemInfoTb
             // 
-            this.systemInfoTb.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.systemInfoTb.Font = new System.Drawing.Font("微软雅黑", 12.75F);
             this.systemInfoTb.Location = new System.Drawing.Point(11, 32);
             this.systemInfoTb.Multiline = true;
             this.systemInfoTb.Name = "systemInfoTb";
@@ -513,7 +513,7 @@
             this.hslCurve1.TabIndex = 7;
             this.hslCurve1.ValueMaxLeft = 70F;
             this.hslCurve1.ValueMaxRight = 70F;
-            this.hslCurve1.ValueSegment = 7;
+            this.hslCurve1.ValueSegment = 20;
             // 
             // m_instantAoCtrl
             // 
@@ -636,7 +636,7 @@
             this.hslLedPh.ForeColor = System.Drawing.Color.Snow;
             this.hslLedPh.LedNumberSize = 1;
             this.hslLedPh.LeftRightOffect = 15;
-            this.hslLedPh.Location = new System.Drawing.Point(275, 261);
+            this.hslLedPh.Location = new System.Drawing.Point(275, 297);
             this.hslLedPh.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.hslLedPh.Name = "hslLedPh";
             this.hslLedPh.Size = new System.Drawing.Size(110, 25);
@@ -672,7 +672,7 @@
             this.label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label7.ForeColor = System.Drawing.Color.Cyan;
-            this.label7.Location = new System.Drawing.Point(619, 298);
+            this.label7.Location = new System.Drawing.Point(619, 264);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(39, 23);
             this.label7.TabIndex = 246;
@@ -684,7 +684,7 @@
             this.label12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label12.ForeColor = System.Drawing.Color.Cyan;
-            this.label12.Location = new System.Drawing.Point(619, 262);
+            this.label12.Location = new System.Drawing.Point(619, 298);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(40, 23);
             this.label12.TabIndex = 245;
@@ -706,7 +706,7 @@
             this.label13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label13.ForeColor = System.Drawing.Color.Red;
-            this.label13.Location = new System.Drawing.Point(233, 262);
+            this.label13.Location = new System.Drawing.Point(233, 298);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(41, 23);
             this.label13.TabIndex = 244;
@@ -748,7 +748,7 @@
             this.label18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label18.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label18.ForeColor = System.Drawing.Color.Red;
-            this.label18.Location = new System.Drawing.Point(233, 298);
+            this.label18.Location = new System.Drawing.Point(233, 262);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(40, 23);
             this.label18.TabIndex = 243;
@@ -838,7 +838,7 @@
             this.hslLedTh.ForeColor = System.Drawing.Color.Lime;
             this.hslLedTh.LedNumberSize = 1;
             this.hslLedTh.LeftRightOffect = 15;
-            this.hslLedTh.Location = new System.Drawing.Point(275, 298);
+            this.hslLedTh.Location = new System.Drawing.Point(275, 262);
             this.hslLedTh.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.hslLedTh.Name = "hslLedTh";
             this.hslLedTh.Size = new System.Drawing.Size(110, 25);
@@ -876,7 +876,7 @@
             this.hslLedTc.ForeColor = System.Drawing.Color.Lime;
             this.hslLedTc.LedNumberSize = 1;
             this.hslLedTc.LeftRightOffect = 15;
-            this.hslLedTc.Location = new System.Drawing.Point(661, 296);
+            this.hslLedTc.Location = new System.Drawing.Point(661, 262);
             this.hslLedTc.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.hslLedTc.Name = "hslLedTc";
             this.hslLedTc.Size = new System.Drawing.Size(110, 25);
@@ -893,7 +893,7 @@
             this.hslLedPc.ForeColor = System.Drawing.Color.Snow;
             this.hslLedPc.LedNumberSize = 1;
             this.hslLedPc.LeftRightOffect = 15;
-            this.hslLedPc.Location = new System.Drawing.Point(661, 261);
+            this.hslLedPc.Location = new System.Drawing.Point(661, 297);
             this.hslLedPc.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.hslLedPc.Name = "hslLedPc";
             this.hslLedPc.Size = new System.Drawing.Size(110, 25);

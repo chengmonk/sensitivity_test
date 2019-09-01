@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using 恒温测试机.Model.Enum;
 using 恒温测试机.Utils;
 
 namespace 恒温测试机
@@ -20,72 +21,55 @@ namespace 恒温测试机
             InitializeComponent();
         }
 
-        public FormPressureCurve(DataTable dt)
+        public FormPressureCurve(DataTable dt, LogicTypeEnum logicType)
         {
             InitializeComponent();
             this.graphDt = dt;
+            this.logicType = logicType;
         }
 
         private DataTable graphDt;
+        private LogicTypeEnum logicType;
 
         private void FormPressureCurve_Load(object sender, EventArgs e)
         {
-            load_Data();
+            if (logicType == LogicTypeEnum.SensitivityTest||logicType==LogicTypeEnum.FidelityTest)
+            {
+                load_Data_AngleTm();
+            }
+            else
+            {
+                load_Data_QmTm();
+            }
         }
-        private void load_Data()
+        #region 灵敏度曲线
+        private void load_Data_AngleTm()
         {
-
-            new Thread(new ThreadStart(ThreadReadExample1)) { IsBackground = true }.Start();
-
+            new Thread(new ThreadStart(ThreadRead_AngleTm)) { IsBackground = true }.Start();
         }
 
-        private void ThreadReadExample1()
+        private void ThreadRead_AngleTm()
         {
-            //float[] Qc = new float[graphDt.Rows.Count];
-            //float[] Qh = new float[graphDt.Rows.Count];
-            float[] Qm = new float[graphDt.Rows.Count];
-            //float[] Tc = new float[graphDt.Rows.Count];
-            //float[] Th = new float[graphDt.Rows.Count];
             float[] Tm = new float[graphDt.Rows.Count];
-            //float[] Tm2 = new float[graphDt.Rows.Count];
-            //float[] Pc = new float[graphDt.Rows.Count];
-            //float[] Ph = new float[graphDt.Rows.Count];
-            //float[] Pm = new float[graphDt.Rows.Count];
-            //float[] Qm5 = new float[graphDt.Rows.Count];
-            //float[] Wh = new float[graphDt.Rows.Count];
+            float[] Angle = new float[graphDt.Rows.Count];
             DateTime[] dateTime = new DateTime[graphDt.Rows.Count];
             DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
             dtFormat.ShortDatePattern = "yyyy-MM-dd hh:mm:ss:fff";
-            //加载流量数据
+            //加载数据
             for (int i = 0; i < graphDt.Rows.Count; i++)
             {
                 try
                 {
-                    //Qc[i] = (float)Convert.ToDouble(graphDt.Rows[i][1]);
-                    //Qh[i] = (float)Convert.ToDouble(graphDt.Rows[i][2]);
-                    Qm[i] = (float)Convert.ToDouble(graphDt.Rows[i][3]);
-                    //Tc[i] = (float)Convert.ToDouble(graphDt.Rows[i][4]);
-                    //Th[i] = (float)Convert.ToDouble(graphDt.Rows[i][5]);
-                    Tm[i] = (float)Convert.ToDouble(graphDt.Rows[i][6]);
-                    //Tm2[i] = (float)Convert.ToDouble(graphDt.Rows[i][7]);
-                    //Pc[i] = (float)Convert.ToDouble(graphDt.Rows[i][7]);
-                    //Ph[i] = (float)Convert.ToDouble(graphDt.Rows[i][8]);
-                    //Pm[i] = (float)Convert.ToDouble(graphDt.Rows[i][9]);
-                    //Qm5[i] = (float)Convert.ToDouble(graphDt.Rows[i][10]);
-                    //Wh[i] = (float)Convert.ToDouble(graphDt.Rows[i][11]);
-                    // dateTime[i] = Convert.ToDateTime(dt.Rows[i][0],dtFormat);
-
+                    Angle[i] = (float)Convert.ToDouble(graphDt.Rows[i][1]);
+                    Tm[i] = (float)Convert.ToDouble(graphDt.Rows[i][2]);
                     dateTime[i] = DateTime.ParseExact((string)graphDt.Rows[i][0], "yyyy-MM-dd hh:mm:ss:fff", dtFormat);
                 }
-                catch(Exception ex){
+                catch (Exception ex)
+                {
                     Log.Error(ex.ToString());
                     return;
                 }
             }
-
-
-
-
             DateTime start = dateTime[0];
             DateTime PointA = dateTime[0].AddSeconds(2);
             TimeSpan ts = new TimeSpan(1);
@@ -103,18 +87,8 @@ namespace 恒温测试机
                 {
                     hslCurveHistory1.Text = "正在加载数据...";
                     hslCurveHistory1.RemoveAllCurve();
-                    hslCurveHistory1.SetLeftCurve("出水流量Qm", Qm, Color.DodgerBlue, true, "{0:F2} L/min");//布尔变量：是否开启曲线平滑
-                    //hslCurveHistory1.SetLeftCurve("冷水流量Qc", Qc, Color.Tomato, true, "{0:F2} L/min");
-                    //hslCurveHistory1.SetLeftCurve("热水流量Qh", Qh, Color.GreenYellow, true, "{0:F2} L/min");
-                    //hslCurveHistory1.SetLeftCurve("Qm5", Qm5, Color.Purple, true, "{0:F2} L/min");
-                    //hslCurveHistory1.SetLeftCurve("出水压力Pm", Pm, Color.Red, true, "{0:F2} Bar");
-                    //hslCurveHistory1.SetLeftCurve("热水压力Ph", Ph, Color.Orange, true, "{0:F2} Bar");
-                    //hslCurveHistory1.SetLeftCurve("冷水压力Pc", Pc, Color.Yellow, true, "{0:F2} Bar");
-                    hslCurveHistory1.SetLeftCurve("出水温度Tm", Tm, Color.Red, true, "{0:F2} ℃");
-                    //hslCurveHistory1.SetLeftCurve("出水温度Tm2", Tm2, Color.Yellow, true, "{0:F2} ℃");
-                    //hslCurveHistory1.SetRightCurve("热水温度Th", Th, Color.Honeydew, true, "{0:F2} ℃");
-                    //hslCurveHistory1.SetRightCurve("冷水温度Tc", Tc, Color.Pink, true, "{0:F2} ℃");
-                    //hslCurveHistory1.SetRightCurve("液面高度Wh", Tc, Color.Blue, true, "{0:F2} mm");
+                    hslCurveHistory1.SetLeftCurve("出水温度Tm", Tm, Color.Green, true, "{0:F2} ℃");//布尔变量：是否开启曲线平滑
+                    hslCurveHistory1.SetLeftCurve("旋转角度Angle", Angle, Color.Red, true, "{0:F2} °");
 
                     hslCurveHistory1.SetDateTimes(dateTime);
 
@@ -137,10 +111,10 @@ namespace 恒温测试机
                     //hslCurveHistory1.ValueMaxLeft = 10;
                     //hslCurveHistory1.ValueMinLeft = 0;
 
-                    SetTempLight(28);
-                    SetTempLight(29);
-                    SetTempLight(30);
-                    SetRemark(29f,28f,Tm);
+                    //SetTempLight(28);
+                    //SetTempLight(29);
+                    //SetTempLight(30);
+                    //SetRemark(29f,28f,Tm);
                     hslCurveHistory1.SetScaleByXAxis(xAxis);
                     hslCurveHistory1.RenderCurveUI();
 
@@ -151,6 +125,92 @@ namespace 恒温测试机
             }
             ));
         }
+        #endregion
+
+        #region 温度稳定性曲线
+        private void load_Data_QmTm()
+        {
+            new Thread(new ThreadStart(ThreadRead_QmTm)) { IsBackground = true }.Start();
+        }
+
+        private void ThreadRead_QmTm()
+        {
+            float[] Tm = new float[graphDt.Rows.Count];
+            float[] Qm = new float[graphDt.Rows.Count];
+            DateTime[] dateTime = new DateTime[graphDt.Rows.Count];
+            DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
+            dtFormat.ShortDatePattern = "yyyy-MM-dd hh:mm:ss:fff";
+            //加载数据
+            for (int i = 0; i < graphDt.Rows.Count; i++)
+            {
+                try
+                {
+                    Qm[i] = (float)Convert.ToDouble(graphDt.Rows[i][1]);
+                    Tm[i] = (float)Convert.ToDouble(graphDt.Rows[i][2]);
+                    dateTime[i] = DateTime.ParseExact((string)graphDt.Rows[i][0], "yyyy-MM-dd hh:mm:ss:fff", dtFormat);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.ToString());
+                    return;
+                }
+            }
+            DateTime start = dateTime[0];
+            DateTime PointA = dateTime[0].AddSeconds(2);
+            TimeSpan ts = new TimeSpan(1);
+
+            // 显示出数据信息来
+            Invoke(new Action(() =>
+            {
+                //总流量达到6L加载数据
+                if (false)
+                {
+                    hslCurveHistory1.Text = "累计流量未达到6L...";
+                    hslCurveHistory1.RemoveAllCurve();
+                }
+                else
+                {
+                    hslCurveHistory1.Text = "正在加载数据...";
+                    hslCurveHistory1.RemoveAllCurve();
+                    hslCurveHistory1.SetLeftCurve("出水温度Tm", Tm, Color.Green, true, "{0:F2} ℃");//布尔变量：是否开启曲线平滑
+                    hslCurveHistory1.SetLeftCurve("出水流量Qm", Qm, Color.Red, true, "{0:F2} L/Min");
+
+                    hslCurveHistory1.SetDateTimes(dateTime);
+
+                    // 增加一个三角形的线段标记示例 Points的每个点的X是数据索引，Y是数据值（需要选对参考坐标轴，默认为左坐标轴）                             
+
+
+
+                    // 添加一个活动的标记
+                    HslControls.HslMarkForeSection active = new HslControls.HslMarkForeSection()
+                    {
+                        StartIndex = 1000,
+                        EndIndex = 1500,
+                        Height = 0.9f,
+                    };
+                    //active.CursorTexts.Add("条码", "A123123124ashdiahsd是的iahsidasd");
+                    //active.CursorTexts.Add("工号", "asd2sd123dasf");
+                    //hslCurveHistory1.AddMarkActiveSection(active);
+
+                    //hslCurveHistory1.SetCurveVisible("步序", false);   // 步序不是曲线信息，不用显示出来
+                    //hslCurveHistory1.ValueMaxLeft = 10;
+                    //hslCurveHistory1.ValueMinLeft = 0;
+
+                    //SetTempLight(28);
+                    //SetTempLight(29);
+                    //SetTempLight(30);
+                    //SetRemark(29f,28f,Tm);
+                    hslCurveHistory1.SetScaleByXAxis(xAxis);
+                    hslCurveHistory1.RenderCurveUI();
+
+                }
+
+
+
+            }
+            ));
+        }
+        #endregion
 
         /// <summary>
         /// 区间标注（超过或低于设定的温度）

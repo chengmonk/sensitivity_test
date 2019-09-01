@@ -219,8 +219,9 @@ namespace 恒温测试机.UI
                 }
                 else
                 {
+                    systemInfoTb.AppendText("\r\n");
                     systemInfoTb.AppendText("[时间:" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "] " + msg);
-                    systemInfoTb.AppendText("\n");
+                    systemInfoTb.AppendText("\r\n");
                 }
             }
             catch (Exception ex)
@@ -303,7 +304,7 @@ namespace 恒温测试机.UI
                     {
                         var qcTemp = CoolFlow[i - 3];
                         var qhTemp = HotFlow[i - 3];
-                        var qmTemp = (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5;
+                        var qmTemp = (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 25;
                         hslCurve1.AddCurveData(
                             new string[] {
                                     //"冷水箱温度","热水箱温度","高温水箱温度","中温水箱温度","常温水箱温度"
@@ -403,8 +404,8 @@ namespace 恒温测试机.UI
             //hslCurve1.SetLeftCurve("热水流量Qh", null, Color.Orange);
             hslCurve1.SetLeftCurve("出水流量Qm", null, Color.Yellow);
             hslCurve1.SetLeftCurve("冷水温度Tc", null, Color.Green);
-            hslCurve1.SetLeftCurve("热水温度Th", null, Color.Blue);
-            hslCurve1.SetLeftCurve("出水温度Tm", null, Color.Purple);
+            hslCurve1.SetLeftCurve("热水温度Th", null, Color.Red);
+            hslCurve1.SetLeftCurve("出水温度Tm", null, Color.OrangeRed);
             hslCurve1.SetLeftCurve("冷水压力Pc", null, Color.White);
             hslCurve1.SetLeftCurve("热水压力Ph", null, Color.DarkOrange);
             //hslCurve1.SetLeftCurve("出水压力Pm", null, Color.DodgerBlue);
@@ -725,6 +726,7 @@ namespace 恒温测试机.UI
             //collectDataFlag = true;
             if (runFlag)    //避免重复开启
             {
+                Console.WriteLine("正在运行");
                 return;
             }
             switch (logicType)
@@ -836,7 +838,7 @@ namespace 恒温测试机.UI
                 SystemInfoPrint("[t1 = " + Properties.Settings.Default.t1.ToString() + " s 计时结束,开始灵敏度测试+保真度测试]\n");
 
                 var orgTm = Tm; //记录当前出水温度
-                SystemInfoPrint("当前热水温度——>" + orgTm);
+                SystemInfoPrint("当前出水温度——>" + orgTm);
 
                 #endregion
 
@@ -852,9 +854,11 @@ namespace 恒温测试机.UI
                 //if (settingForm != null)
                 //{
                     //正传到预设角度
+                    SystemInfoPrint("预设角度值——>" + autoFindAngle_spin);
                     SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始正传...");
+                    bpq.write_coil(orignWriteAddress_spin, false, 5);
                     bpq.write_coil(forwardWriteAddress_spin, true, 5);
-                    while (angleValue_spin <= autoFindAngle_spin)
+                    while (Math.Round(angleValue_spin / 3200.0, 1) <= autoFindAngle_spin)
                     {
                         if (stopFlag)   //手动停止
                         {
@@ -883,7 +887,7 @@ namespace 恒温测试机.UI
                     //反转回到原点
                     bpq.write_coil(noForwardWriteAddress_spin, true, 5);
                     SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始反传...");
-                    while (angleValue_spin == 0)
+                    while (angleValue_spin >= 0)
                     {
                         if (stopFlag)   //手动停止
                         {
@@ -922,7 +926,6 @@ namespace 恒温测试机.UI
                 AngleTmFlag = false;
                 runFlag = false;
                 graphFlag = false;
-                AngleTmFlag = false;
                 bpq.write_coil(powerAddress_spin, false, 5);
                 bpq.write_coil(powerAddress_upDown, false, 5);
                 //if (autoRunFlag)
@@ -976,7 +979,7 @@ namespace 恒温测试机.UI
                     //正传到预设角度
                     SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始正传...");
                     bpq.write_coil(forwardWriteAddress_spin, true, 5);
-                    while (angleValue_spin <= autoFindAngle_spin)
+                    while (Math.Round(angleValue_spin / 3200.0, 1) <= autoFindAngle_spin)
                     {
                         if (stopFlag)   //手动停止
                         {
@@ -1005,7 +1008,7 @@ namespace 恒温测试机.UI
                     //反转回到原点
                     bpq.write_coil(noForwardWriteAddress_spin, true, 5);
                     SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始反传...");
-                    while (angleValue_spin == 0)
+                    while (angleValue_spin >= 0)
                     {
                         if (stopFlag)   //手动停止
                         {
@@ -1044,9 +1047,13 @@ namespace 恒温测试机.UI
                 AngleTmFlag = false;
                 runFlag = false;
                 graphFlag = false;
-                AngleTmFlag = false;
                 bpq.write_coil(powerAddress_spin, false, 5);
+                bpq.write_coil(forwardWriteAddress_spin, false, 5);
+                bpq.write_coil(noForwardWriteAddress_spin, false, 5);
+
                 bpq.write_coil(powerAddress_upDown, false, 5);
+                bpq.write_coil(forwardWriteAddress_upDown, false, 5);
+                bpq.write_coil(noForwardWriteAddress_upDown, false, 5);
                 //if (autoRunFlag)
                 //{
                 //    ChangeRadioButton();
@@ -1091,7 +1098,7 @@ namespace 恒温测试机.UI
                     //正传到预设角度
                     SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始正传...");
                     bpq.write_coil(forwardWriteAddress_spin, true, 5);
-                    while (angleValue_spin <= autoFindAngle_spin)
+                    while (Math.Round(angleValue_spin / 3200.0, 1) <= autoFindAngle_spin)
                     {
                         if (stopFlag)   //手动停止
                         {
@@ -1110,7 +1117,7 @@ namespace 恒温测试机.UI
                     //反转回到原点
                     bpq.write_coil(noForwardWriteAddress_spin, true, 5);
                     SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始反传...");
-                    while (angleValue_spin == 0)
+                    while (angleValue_spin >= 0)
                     {
                         if (stopFlag)   //手动停止
                         {
@@ -1178,7 +1185,12 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 QmTmTableFlag65 = false;
                 bpq.write_coil(powerAddress_spin, false, 5);
+                bpq.write_coil(forwardWriteAddress_spin, false, 5);
+                bpq.write_coil(noForwardWriteAddress_spin, false, 5);
+
                 bpq.write_coil(powerAddress_upDown, false, 5);
+                bpq.write_coil(forwardWriteAddress_upDown, false, 5);
+                bpq.write_coil(noForwardWriteAddress_upDown, false, 5);
             }
             catch (Exception ex)
             {
@@ -1187,7 +1199,12 @@ namespace 恒温测试机.UI
             finally
             {
                 bpq.write_coil(powerAddress_spin, false, 5);
+                bpq.write_coil(forwardWriteAddress_spin, false, 5);
+                bpq.write_coil(noForwardWriteAddress_spin, false, 5);
+
                 bpq.write_coil(powerAddress_upDown, false, 5);
+                bpq.write_coil(forwardWriteAddress_upDown, false, 5);
+                bpq.write_coil(noForwardWriteAddress_upDown, false, 5);
                 runFlag = false;
                 graphFlag = false;
                 QmTmTableFlag65 = false;
@@ -1318,7 +1335,12 @@ namespace 恒温测试机.UI
                 graphFlag = false;
                 QmTmTableFlag50 = false;
                 bpq.write_coil(powerAddress_spin, false, 5);
+                bpq.write_coil(forwardWriteAddress_spin, false, 5);
+                bpq.write_coil(noForwardWriteAddress_spin, false, 5);
+
                 bpq.write_coil(powerAddress_upDown, false, 5);
+                bpq.write_coil(forwardWriteAddress_upDown, false, 5);
+                bpq.write_coil(noForwardWriteAddress_upDown, false, 5);
             }
             catch (Exception ex)
             {
@@ -1327,7 +1349,12 @@ namespace 恒温测试机.UI
             finally
             {
                 bpq.write_coil(powerAddress_spin, false, 5);
+                bpq.write_coil(forwardWriteAddress_spin, false, 5);
+                bpq.write_coil(noForwardWriteAddress_spin, false, 5);
+
                 bpq.write_coil(powerAddress_upDown, false, 5);
+                bpq.write_coil(forwardWriteAddress_upDown, false, 5);
+                bpq.write_coil(noForwardWriteAddress_upDown, false, 5);
                 runFlag = false;
                 graphFlag = false;
                 QmTmTableFlag50 = false;
@@ -1365,16 +1392,26 @@ namespace 恒温测试机.UI
 
         private void GraphDataBtn_Click(object sender, EventArgs e)
         {
-            if (GraphDt.Rows != null && GraphDt.Rows.Count > 1)
+            if (AngleTmTable.Rows != null && AngleTmTable.Rows.Count > 1)
             {
                 Log.Info("启动图像界面");
-                FormPressureCurve form = new FormPressureCurve(GraphDt);
+                FormPressureCurve form = new FormPressureCurve(AngleTmTable,logicType);
                 form.Show();
             }
             else
             {
                 MessageBox.Show("未采集到数据");
             }
+            //if (GraphDt.Rows != null && GraphDt.Rows.Count > 1)
+            //{
+            //    Log.Info("启动图像界面");
+            //    FormPressureCurve form = new FormPressureCurve(GraphDt);
+            //    form.Show();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("未采集到数据");
+            //}
         }
 
         private void AutoRunBtn_Click(object sender, EventArgs e)
@@ -1667,27 +1704,27 @@ namespace 恒温测试机.UI
                 }
                 //Console.WriteLine("液面高度：" + Wh);
 
-                short[] temp1 = bpq.read_short_batch("4110", 10, 5);
-                short[] temp2 = bpq.read_short_batch("4120", 10, 5);
-                for (int i = 0; i < 10; i++)
-                {//读取
-                    //数值转换 short：0~32767 对应0~50  故需要除以655.34
-                    tempCoolFlow[i] = temp1[i] / 655.34;
-                    tempHotFlow[i] = temp2[i] / 655.34;
-                }
-                tempCoolFlow[10] = tempCoolFlow[9];
-                tempHotFlow[10] = tempHotFlow[9];
-                for (int i = 0; i < 10; i++)
-                {
+                //short[] temp1 = bpq.read_short_batch("4110", 10, 5);
+                //short[] temp2 = bpq.read_short_batch("4120", 10, 5);
+                //for (int i = 0; i < 10; i++)
+                //{//读取
+                //    //数值转换 short：0~32767 对应0~50  故需要除以655.34
+                //    tempCoolFlow[i] = temp1[i] / 655.34;
+                //    tempHotFlow[i] = temp2[i] / 655.34;
+                //}
+                //tempCoolFlow[10] = tempCoolFlow[9];
+                //tempHotFlow[10] = tempHotFlow[9];
+                //for (int i = 0; i < 10; i++)
+                //{
 
-                    double[] CoolFill = dataFill(tempCoolFlow[i], tempCoolFlow[i + 1], 11);//扩充数据
-                    double[] HotFill = dataFill(tempHotFlow[i], tempHotFlow[i + 1], 11); ;//
-                    for (int j = 0; j < 10; j++)
-                    {
-                        CoolFlow[i * 10 + j] = CoolFill[j];
-                        HotFlow[i * 10 + j] = HotFill[j];
-                    }
-                }
+                //    double[] CoolFill = dataFill(tempCoolFlow[i], tempCoolFlow[i + 1], 11);//扩充数据
+                //    double[] HotFill = dataFill(tempHotFlow[i], tempHotFlow[i + 1], 11); ;//
+                //    for (int j = 0; j < 10; j++)
+                //    {
+                //        CoolFlow[i * 10 + j] = CoolFill[j];
+                //        HotFlow[i * 10 + j] = HotFill[j];
+                //    }
+                //}
 
                 sourceDataQc = averge(ref sourceDataQc, 0);
                 //sourceDataQc = filterKalMan(sourceDataQc);
@@ -1755,7 +1792,7 @@ namespace 恒温测试机.UI
                                 //(sourceDataQh[i] - 1) * 12.5,
                                 CoolFlow[i - 3],
                                 HotFlow[i - 3] ,
-                                (sourceDataQm[i] - 1)<0?0: (sourceDataQm[i] - 1) * 5,
+                                (sourceDataQm[i] - 1)<0?0: (sourceDataQm[i] - 1) * 25,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -1774,7 +1811,7 @@ namespace 恒温测试机.UI
                                 //(sourceDataQh[i] - 1) * 12.5,
                                 CoolFlow[i - 3],
                                 HotFlow[i - 3],
-                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5,
+                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 25,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -1791,7 +1828,7 @@ namespace 恒温测试机.UI
                                 //(sourceDataQh[i] - 1) * 12.5,
                                 CoolFlow[i - 3],
                                 HotFlow[i - 3],
-                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5,
+                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 25,
                                 sourceDataTc[i] * 10,
                                 sourceDataTh[i] * 10,
                                 sourceDataTm[i] * 10,
@@ -1804,14 +1841,14 @@ namespace 恒温测试机.UI
                         if (QmTmTableFlag65)
                         {
                             QmTmTable65.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5,
+                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 25,
                                 sourceDataTm[i] * 10
                                 );
                         }
                         if (QmTmTableFlag50)
                         {
                             QmTmTable50.Rows.Add(t.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 5,
+                                (sourceDataQm[i] - 1) < 0 ? 0 : (sourceDataQm[i] - 1) * 25,
                                 sourceDataTm[i] * 10
                                 );
                         }
@@ -1828,7 +1865,7 @@ namespace 恒温测试机.UI
                     //Qh = (sourceDataQh[3] + sourceDataQh[102] - 2) < 0 ? 0 : Math.Round((sourceDataQh[3] + sourceDataQh[102] - 2) * 12.5 * 0.5, 2, MidpointRounding.AwayFromZero) + (double)Properties.Settings.Default.QhAdjust;
                     Qc = CoolFlow[CoolFlow.Length - 1];
                     Qh = HotFlow[CoolFlow.Length - 1];
-                    Qm = (sourceDataQm[3] + sourceDataQm[102] - 2) < 0 ? 0 : Math.Round((sourceDataQm[3] + sourceDataQm[102] - 2) * 5 * 0.5, 2, MidpointRounding.AwayFromZero);
+                    Qm = (sourceDataQm[3] + sourceDataQm[102] - 2) < 0 ? 0 : Math.Round((sourceDataQm[3] + sourceDataQm[102] - 2) * 25 * 0.5, 2, MidpointRounding.AwayFromZero);
                     Tc = Math.Round((sourceDataTc[3] + sourceDataTc[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Th = Math.Round((sourceDataTh[3] + sourceDataTh[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Tm = Math.Round((sourceDataTm[3] + sourceDataTm[102]) * 5, 2, MidpointRounding.AwayFromZero);
@@ -1842,6 +1879,8 @@ namespace 恒温测试机.UI
                     Temp4 = Math.Round((sourceDataTemp4[3] + sourceDataTemp4[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Temp5 = Math.Round((sourceDataTemp5[3] + sourceDataTemp5[102]) * 5, 2, MidpointRounding.AwayFromZero);
                     Wh = Math.Round(resultDataWh.ToList().Average(), 0, MidpointRounding.AwayFromZero);
+                    Pc= Math.Round(Read("8716", 1) / 1000.0, 2, MidpointRounding.AwayFromZero);
+                    Ph= Math.Round(Read("8716", 2) / 1000.0, 2, MidpointRounding.AwayFromZero); 
                     DataReadyToUpdateStatus();
                 }
                 isFirstAver = false;
@@ -2002,9 +2041,9 @@ namespace 恒温测试机.UI
 
                     powerBtn_spin.BackColor = powerState_spin ? Color.Green : DefaultBackColor;
                     powerBtn_spin.Text = powerState_spin ? "伺服开" : "伺服关";
-                    //forwardBtn_spin.BackColor = forwardState_spin ? Color.Green : DefaultBackColor;
-                    //noForwardBtn_spin.BackColor = noForwadState_spin ? Color.Green : DefaultBackColor;
-                    //orignBtn_spin.BackColor = orignState_spin ? Color.Green : DefaultBackColor;
+                    forwardBtn_spin.BackColor = forwardState_spin ? Color.Green : DefaultBackColor;
+                    noForwardBtn_spin.BackColor = noForwadState_spin ? Color.Green : DefaultBackColor;
+                    orignBtn_spin.BackColor = orignState_spin ? Color.Green : DefaultBackColor;
                     #endregion
 
                     #region 升降电机状态
@@ -2015,9 +2054,9 @@ namespace 恒温测试机.UI
 
                     powerBtn_upDown.BackColor = powerState_upDown ? Color.Green : DefaultBackColor;
                     powerBtn_upDown.Text = powerState_upDown ? "伺服开" : "伺服关";
-                    //forwardBtn_upDown.BackColor = forwardState_upDown ? Color.Green : DefaultBackColor;
-                    //noForwardBtn_upDown.BackColor = noForwadState_upDown ? Color.Green : DefaultBackColor;
-                    //orignBtn_upDown.BackColor = orignState_upDown ? Color.Green : DefaultBackColor;
+                    forwardBtn_upDown.BackColor = forwardState_upDown ? Color.Green : DefaultBackColor;
+                    noForwardBtn_upDown.BackColor = noForwadState_upDown ? Color.Green : DefaultBackColor;
+                    orignBtn_upDown.BackColor = orignState_upDown ? Color.Green : DefaultBackColor;
                     #endregion
                 }
             }
@@ -2986,7 +3025,7 @@ namespace 恒温测试机.UI
         /// <param name="e"></param>
         private void CoolPump_ValueChanged(object sender, EventArgs e)
         {
-            int val2 = Convert.ToInt32(CoolPump.Value) * 500;
+            int val2 = Convert.ToInt32(CoolPump.Value * 500) ;
 
             if (val2 < 0 || val2 > 5000)
             {
@@ -3008,7 +3047,7 @@ namespace 恒温测试机.UI
         /// <param name="e"></param>
         private void HeatPump_ValueChanged(object sender, EventArgs e)
         {
-            int val2 = Convert.ToInt32(HeatPump.Value) * 500;
+            int val2 = Convert.ToInt32(HeatPump.Value * 500) ;
 
             if (val2 < 0 || val2 > 5000)
             {
