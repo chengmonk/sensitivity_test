@@ -45,6 +45,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -63,6 +64,7 @@
     <Compile Include="App\AnalyseData.cs" />
     <Compile Include="App\DAQ_profile.cs" />
     <Compile Include="App\DataReportApp.cs" />
+    <Compile Include="App\TWFFT.cs" />
     <Compile Include="Model\Enum\ElectricalMachineryType.cs" />
     <Compile Include="Model\Enum\LogicTypeEnum.cs" />
     <Compile Include="Model\Enum\TestStandardEnum.cs" />
@@ -71,6 +73,12 @@
     </Compile>
     <Compile Include="UI\FormConnectValueSetting.Designer.cs">
       <DependentUpon>FormConnectValueSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormCurve.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormCurve.Designer.cs">
+      <DependentUpon>FormCurve.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\FormDOControl.cs">
       <SubType>Form</SubType>
@@ -136,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormCoolingTest.resx">
       <DependentUpon>FormCoolingTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormCurve.resx">
+      <DependentUpon>FormCurve.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormDOControl.resx">
       <DependentUpon>FormDOControl.cs</DependentUpon>

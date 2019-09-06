@@ -266,6 +266,8 @@
             this.hslButton5.Name = "hslButton5";
             this.hslButton5.Size = new System.Drawing.Size(93, 45);
             this.hslButton5.TabIndex = 17;
+            this.hslButton5.Text = "稳定性曲线示例";
+            this.hslButton5.Click += new System.EventHandler(this.HslButton5_Click);
             // 
             // hslButton4
             // 
@@ -275,6 +277,8 @@
             this.hslButton4.Name = "hslButton4";
             this.hslButton4.Size = new System.Drawing.Size(93, 45);
             this.hslButton4.TabIndex = 16;
+            this.hslButton4.Text = "灵敏度曲线示例";
+            this.hslButton4.Click += new System.EventHandler(this.HslButton4_Click);
             // 
             // setParamBtn
             // 
@@ -1309,22 +1313,22 @@
             // 
             // noForwardBtn_spin
             // 
-            this.noForwardBtn_spin.Location = new System.Drawing.Point(142, 191);
+            this.noForwardBtn_spin.Location = new System.Drawing.Point(10, 191);
             this.noForwardBtn_spin.Name = "noForwardBtn_spin";
             this.noForwardBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.noForwardBtn_spin.TabIndex = 33;
-            this.noForwardBtn_spin.Text = "右转";
+            this.noForwardBtn_spin.Text = "左转";
             this.noForwardBtn_spin.UseVisualStyleBackColor = true;
             this.noForwardBtn_spin.MouseDown += new System.Windows.Forms.MouseEventHandler(this.NoForwardBtn_spin_MouseDown);
             this.noForwardBtn_spin.MouseUp += new System.Windows.Forms.MouseEventHandler(this.NoForwardBtn_spin_MouseUp);
             // 
             // forwardBtn_spin
             // 
-            this.forwardBtn_spin.Location = new System.Drawing.Point(9, 191);
+            this.forwardBtn_spin.Location = new System.Drawing.Point(143, 191);
             this.forwardBtn_spin.Name = "forwardBtn_spin";
             this.forwardBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.forwardBtn_spin.TabIndex = 32;
-            this.forwardBtn_spin.Text = "左转";
+            this.forwardBtn_spin.Text = "右转";
             this.forwardBtn_spin.UseVisualStyleBackColor = true;
             this.forwardBtn_spin.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ForwardBtn_spin_MouseDown);
             this.forwardBtn_spin.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ForwardBtn_spin_MouseUp);
