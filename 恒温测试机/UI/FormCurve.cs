@@ -373,6 +373,9 @@ namespace 恒温测试机.UI
             //线条数据点的大小            
             s.MarkerSize = 8;
             s.IsVisibleInLegend = false;
+            s.SmartLabelStyle.Enabled=true;
+            s.SmartLabelStyle.IsMarkerOverlappingAllowed = false;
+            
             return s;
         }
 
@@ -695,7 +698,7 @@ namespace 恒温测试机.UI
                             Tm1_x = xdata[index];
                             Tm1_y = ydata[index];
                             Tm1Flag = true;
-                            formMain.SystemInfoPrint("流量为6L的出水温度——>"  +Tm1_y);
+                            formMain.SystemInfoPrint("流量为6L的出水温度——>" + Tm1_y);
                         }
                         if (Math.Abs(xdata[index] - 3) <= 0.1 && Tm2Flag == false)
                         {
@@ -706,23 +709,58 @@ namespace 恒温测试机.UI
                         }
                         index++;
                     }
+                    //滤波前数据
+                    Series series2 = this.SetSeriesStyle(2);
+                    for (int i = 0; i < xdata.Length; i++)
+                    {
+                        //添加数据
+                        series2.Points.AddXY(xdata[i], ydata[i]);
+
+                    }
+                    this.myChart.Series.Add(series2);
                     Series series = this.SetSeriesStyle(0);
                     #region 傅里叶变化例子
                     //数据填充
-                    List<double> Y = new List<double>(ydata);                 
-                    Y=TWFFT.DataFill(Y);
+                    List<double> Y = new List<double>(ydata);
+                    Console.WriteLine("ydata:" + ydata.Length);
+                    Console.WriteLine("a:" + Y.ToArray().Length);
+                    Y =TWFFT.DataFill(Y);
+                    Console.WriteLine("b:" + Y.ToArray().Length);                   
                     float[] y = new float[Y.ToArray().Length];
-                    y = TWFFT.FFT_filter(Y.ToArray(), 0.08);//第二个参数可调，调整范围是：(0,1)。为1 的时候没有滤波效果，为0的时候将所有频率都过滤掉。
-                    int putlen = (int)y.Last();//获取填充数据的长度的一半
+                    y = TWFFT.FFT_filter(Y.ToArray(), 0.1);//第二个参数可调，调整范围是：(0,1)。为1 的时候没有滤波效果，为0的时候将所有频率都过滤掉。
+                    int putlen = TWFFT.putlen;//获取填充数据的长度的一半
+                    Console.WriteLine("putlen:" + putlen);
+                    Console.WriteLine("a:" + Y.ToArray().Length);
                     for (int i = 0; i < xdata.Length; i++)
                     {
-                        ydata[i] = y[i + putlen];
+                        ydata[i] = Math.Round(y[i + putlen], 2);
                     }
                     #endregion
+
+                    bool Tm1Flag1 = false;
+                    bool Tm2Flag1 = false;
+                    double Tm1_x1 = 0;
+                    double Tm1_y1 = 0;
+                    double Tm2_x1 = 0;
+                    double Tm2_y1 = 0;
                     for (int i = 0; i < xdata.Length; i++)
                     {
                         //添加数据
                         series.Points.AddXY(xdata[i], ydata[i]);
+                        if (Math.Abs(xdata[i] - 6) <= 0.1 && Tm1Flag1 == false)
+                        {
+                            Tm1_x1 = xdata[i];
+                            Tm1_y1 = ydata[i];
+                            Tm1Flag1 = true;
+                            formMain.SystemInfoPrint("流量为6L的出水温度——>" + Tm1_y1);
+                        }
+                        if (Math.Abs(xdata[i] - 3) <= 0.1 && Tm2Flag1 == false)
+                        {
+                            Tm2_x1 = xdata[i];
+                            Tm2_y1 = ydata[i];
+                            Tm2Flag1 = true;
+                            formMain.SystemInfoPrint("流量为3L的出水温度——>" + Tm2_y1);
+                        }
                     }
                     this.myChart.Series.Add(series);
                     //设置坐标轴范围
@@ -735,6 +773,9 @@ namespace 恒温测试机.UI
                     myChart.Annotations.Add(addLine_Axis("Tm38", "38", 0, 38, 0, -75));
                     myChart.Annotations.Add(addLine_Axis("Qm6_x", "6L", 0, Tm1_y, 0, -75));
                     myChart.Annotations.Add(addLine_Axis("Qm3_x", "3L", 0, Tm2_y, 0,-75));
+                    myChart.Annotations.Add(addLine_Axis("Qm6_x1", "6L", 0, Tm1_y1, 0, -75));
+                    myChart.Annotations.Add(addLine_Axis("Qm3_x1", "3L", 0, Tm2_y1, 0, -75));
+
                     myChart.Annotations.Add(addLine_Axis("Qm6", "6L", 6, 30, -75, 0));
                     myChart.Annotations.Add(addLine_Axis("Qm3", "3L", 3, 30, -75, 0));
 
@@ -744,10 +785,14 @@ namespace 恒温测试机.UI
 
                     myChart.Series.Add(addMarkedPoint(0, Tm1_y, Tm1_y + "℃"));
                     myChart.Series.Add(addMarkedPoint(0, Tm2_y, Tm2_y + "℃"));
+
                     myChart.Series.Add(addMarkedPoint(0, 38, "38℃"));
 
                     myChart.Series.Add(addMarkedPoint(6, Tm1_y, "Q1"));
                     myChart.Series.Add(addMarkedPoint(3, Tm2_y, "Q2"));
+
+                    myChart.Series.Add(addMarkedPoint(6, Tm1_y1, "Q11"));
+                    myChart.Series.Add(addMarkedPoint(3, Tm2_y1, "Q21"));
 
                     double Tm1Diff = Math.Round(Math.Abs(Tm1_y - 38), 2);
                     myChart.Series.Add(addLine_between2Point(13, Tm1_y, 13, 38, MarkerStyle.Diamond));

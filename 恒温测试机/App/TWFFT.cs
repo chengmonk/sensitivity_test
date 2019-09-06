@@ -10,15 +10,14 @@ namespace FFT
         /// </summary>
     public class TWFFT
     {
-
+        public static int putlen;
         /// <summary>
         /// 填充数据：将不够2的n次方的数据长度填充到2的n次方
         /// 最后一个数据是填充的长度的一半，通过这个长度将填充的数据剔除掉。
         /// </summary>
         public static List<double> DataFill(List<double> res)
         {
-            int i = 0;
-            int putlen = 0;
+            int i = 0;           
             int n = Convert.ToString(res.ToArray().Length, 2).Length;
             putlen = (int)(Math.Pow(2.0, n) - res.ToArray().Length);
             putlen = putlen / 2 + 1;
@@ -31,8 +30,7 @@ namespace FFT
             for (i = 0; i < putlen; i++)
             {
                 res.Add(end);
-            }
-            res.Add(putlen);
+            }            
             return res;
         }
 
@@ -86,7 +84,7 @@ namespace FFT
 
             return ans.ToArray();
         }
-
+      
         public static float[] FFT_filter(double[] res, double filter)
         {
             //a是实部、b是虚部
