@@ -33,6 +33,63 @@ namespace FFT
             }            
             return res;
         }
+        public static List<float> DataFill(List<float> res)
+        {
+            int i = 0;
+            int n = Convert.ToString(res.ToArray().Length, 2).Length;
+            putlen = (int)(Math.Pow(2.0, n) - res.ToArray().Length);
+            putlen = putlen / 2 + 1;
+            float begin = res[1];
+            float end = res[res.ToArray().Length - 1];
+            for (i = 0; i < putlen; i++)
+            {
+                res.Insert(0, begin);
+            }
+            for (i = 0; i < putlen; i++)
+            {
+                res.Add(end);
+            }
+            return res;
+        }
+
+        public static double[] filterFFT(double[] res, double filter)
+        {
+            int reslen = res.Length;
+            List<double> Y = new List<double>(res);
+            Console.WriteLine("ydata:" + res.Length);
+            Console.WriteLine("a:" + Y.ToArray().Length);
+            Y = TWFFT.DataFill(Y);
+            Console.WriteLine("b:" + Y.ToArray().Length);
+            float[] y = new float[Y.ToArray().Length];
+            y = TWFFT.FFT_filter(Y.ToArray(), filter);//第二个参数可调，调整范围是：(0,1)。为1 的时候没有滤波效果，为0的时候将所有频率都过滤掉。
+            int putlen = TWFFT.putlen;//获取填充数据的长度的一半
+            Console.WriteLine("putlen:" + putlen);
+            Console.WriteLine("a:" + Y.ToArray().Length);
+            for (int i = 0; i < reslen; i++)
+            {
+                res[i] = Math.Round(y[i + putlen], 2);
+            }
+            return res;
+        }
+        public static float[] filterFFT(float[] res, double filter)
+        {
+            int reslen = res.Length;
+            List<float> Y = new List<float>(res);
+            Console.WriteLine("ydata:" + res.Length);
+            Console.WriteLine("a:" + Y.ToArray().Length);
+            Y = TWFFT.DataFill(Y);
+            Console.WriteLine("b:" + Y.ToArray().Length);
+            float[] y = new float[Y.ToArray().Length];
+            y = TWFFT.FFT_filter(Y.ToArray(),filter);//第二个参数可调，调整范围是：(0,1)。为1 的时候没有滤波效果，为0的时候将所有频率都过滤掉。
+            int putlen = TWFFT.putlen;//获取填充数据的长度的一半
+            Console.WriteLine("putlen:" + putlen);
+            Console.WriteLine("a:" + Y.ToArray().Length);
+            for (int i = 0; i < reslen; i++)
+            {
+                res[i] = (float)Math.Round(y[i + putlen], 2);
+            }
+            return res;
+        }
 
         #region//调用该类的例子
         //res是原始的数据        

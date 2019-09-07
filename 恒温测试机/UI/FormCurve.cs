@@ -721,20 +721,24 @@ namespace 恒温测试机.UI
                     Series series = this.SetSeriesStyle(0);
                     #region 傅里叶变化例子
                     //数据填充
-                    List<double> Y = new List<double>(ydata);
-                    Console.WriteLine("ydata:" + ydata.Length);
-                    Console.WriteLine("a:" + Y.ToArray().Length);
-                    Y =TWFFT.DataFill(Y);
-                    Console.WriteLine("b:" + Y.ToArray().Length);                   
-                    float[] y = new float[Y.ToArray().Length];
-                    y = TWFFT.FFT_filter(Y.ToArray(), 0.1);//第二个参数可调，调整范围是：(0,1)。为1 的时候没有滤波效果，为0的时候将所有频率都过滤掉。
-                    int putlen = TWFFT.putlen;//获取填充数据的长度的一半
-                    Console.WriteLine("putlen:" + putlen);
-                    Console.WriteLine("a:" + Y.ToArray().Length);
-                    for (int i = 0; i < xdata.Length; i++)
-                    {
-                        ydata[i] = Math.Round(y[i + putlen], 2);
-                    }
+                    //List<double> Y = new List<double>(ydata);
+                    //Console.WriteLine("ydata:" + ydata.Length);
+                    //Console.WriteLine("a:" + Y.ToArray().Length);
+                    //Y =TWFFT.DataFill(Y);
+                    //Console.WriteLine("b:" + Y.ToArray().Length);                   
+                    //float[] y = new float[Y.ToArray().Length];
+                    //y = TWFFT.FFT_filter(Y.ToArray(), 0.1);//第二个参数可调，调整范围是：(0,1)。为1 的时候没有滤波效果，为0的时候将所有频率都过滤掉。
+                    //int putlen = TWFFT.putlen;//获取填充数据的长度的一半
+                    //Console.WriteLine("putlen:" + putlen);
+                    //Console.WriteLine("a:" + Y.ToArray().Length);
+                    //for (int i = 0; i < xdata.Length; i++)
+                    //{
+                    //    ydata[i] = Math.Round(y[i + putlen], 2);
+                    //}
+                    ydata = TWFFT.filterFFT(ydata, 0.1);
+                    Console.WriteLine("#:" + ydata.ToArray().Length);
+                    //for (int i = 0; i < ydata.Length; i++)
+                    //    ydata[i] = y[i];
                     #endregion
 
                     bool Tm1Flag1 = false;
