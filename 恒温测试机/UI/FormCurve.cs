@@ -13,13 +13,14 @@ using System.Windows.Forms.DataVisualization.Charting;
 using 恒温测试机.Model.Enum;
 using 恒温测试机.Utils;
 using FFT;
+using HslCommunication.Algorithms.Fourier;
 
 namespace 恒温测试机.UI
 {
     public partial class FormCurve : Form
     {
 
-        public FormCurve(DataTable graphData, Model.Enum.LogicTypeEnum logicType,int AngleTmMidIndex)
+        public FormCurve(DataTable graphData, Model.Enum.LogicTypeEnum logicType,int AngleTmMidIndex,Model.Model_Export model=null,double orgTm=0,int type=0)
         {
             InitializeComponent();
             InitializeChart();
@@ -27,12 +28,19 @@ namespace 恒温测试机.UI
             this.graphData = graphData;
             this.logicType = logicType;
             this.AngleTmMidIndex = AngleTmMidIndex;
+            this.model = model;
+            this.orgTm = orgTm;
+            this.type = type;
         }
 
         /// <summary>
         /// 灵敏度曲线
         /// </summary>
-        public FormCurve(DataTable graphData, Model.Enum.LogicTypeEnum logicType,FormMain formMain, int AngleTmMidIndex=0, bool TestFlag=false)
+        public FormCurve(DataTable graphData, Model.Enum.LogicTypeEnum logicType,FormMain formMain, 
+                                                        int AngleTmMidIndex=0,
+                                                        bool TestFlag=false,
+                                                        Model.Model_Export model = null,
+                                                        int type = 0)
         {
             InitializeComponent();
             InitializeChart();
@@ -42,15 +50,23 @@ namespace 恒温测试机.UI
             this.AngleTmMidIndex = AngleTmMidIndex;
             this.formMain = formMain;
             this.TsetFlag = TestFlag;
+            this.model = model;
+            this.type = type;
         }
 
-
+        private double orgTm=37.15;
         private FormMain formMain;
         private DataTable graphData;
         private LogicTypeEnum logicType;
         private int AngleTmMidIndex;
         private bool TsetFlag = false;
+        private Model.Model_Export model;
+        private int type = 0;
 
+        string pic65Path = System.AppDomain.CurrentDomain.BaseDirectory + "//出水温度稳定性65℃.jpg";
+        string pic50Path = System.AppDomain.CurrentDomain.BaseDirectory + "//出水温度稳定性50℃.jpg";
+        string picSenstivityPath1 = System.AppDomain.CurrentDomain.BaseDirectory + "//保真度曲线.jpg";
+        string picSenstivityPath2 = System.AppDomain.CurrentDomain.BaseDirectory + "//灵敏度曲线.jpg";
 
         public void InitializeChart()
         {
@@ -72,7 +88,7 @@ namespace 恒温测试机.UI
             #region 设置图表的Title
             Title title = new Title();
             //标题内容
-            title.Text = "曲线图演示";
+            title.Text = "";
             //标题的字体
             title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12, FontStyle.Bold);
             //标题字体颜色
@@ -184,7 +200,17 @@ namespace 恒温测试机.UI
         {
             if (logicType == LogicTypeEnum.SensitivityTest || logicType == LogicTypeEnum.FidelityTest)
             {
-                load_Data_AngleTm();
+                if (type == 0)
+                {
+                    load_Data_AngleTm();
+                }else if (type == 1)
+                {
+                    load_Data_AngleTm_type1();
+                }
+                else
+                {
+                    load_Data_AngleTm_type2();
+                }
             }
             else
             {
@@ -405,13 +431,15 @@ namespace 恒温测试机.UI
 
         #region 灵敏度曲线
 
+        private int upCount = 0;
 
+        /// <summary>
+        /// 二合一曲线
+        /// </summary>
         private void load_Data_AngleTm()
         {
             new Thread(new ThreadStart(ThreadRead_AngleTm)) { IsBackground = true }.Start();
         }
-
-        private int upCount = 0;
         private delegate void AngleTmDelegate();   
         private void ThreadRead_AngleTm()
         {
@@ -485,7 +513,7 @@ namespace 恒温测试机.UI
                     double GB_X = 0; bool GBFlag = true;double GB_Y = 0;
                     double GC_X = 0; bool GCFlag = true; double GC_Y = 0;
                     double GD_X = 0; bool GDFlag = true; double GD_Y = 0;
-                    double orgTm = 37.15;
+                    //double orgTm = 37.15;
                     foreach (DataRow row in AngleTmTable.Rows)
                     {
                         xdata[index] = Convert.ToDouble(row[0]);
@@ -586,8 +614,10 @@ namespace 恒温测试机.UI
                     myChart.ChartAreas[0].AxisY.Minimum = 0;
                     //myChart.Annotations.Add(addDescription(GA_X,GA_Y,"pointA","A"));
                     //myChart.Annotations.Add(addDescription(GB_X,GB_Y,"pointB","B"));
-                    myChart.Annotations.Add(addLine_Axis("Tm+4", "41.15", 0, 41.15, 0, 75));
-                    myChart.Annotations.Add(addLine_Axis("Tm-4", "33.15", 0, 33.15, 0, 75));
+                    myChart.Annotations.Add(addLine_Axis("Tm+4", (orgTm + 4) + "", 0, orgTm + 4, 0, 75));
+                    myChart.Annotations.Add(addLine_Axis("Tm-4", (orgTm - 4) + "", 0, orgTm - 4, 0, 75));
+                    myChart.Series.Add(addMarkedPoint(0, (orgTm + 4), (orgTm + 4)+"℃"));
+                    myChart.Series.Add(addMarkedPoint(0, (orgTm - 4), (orgTm - 4)+"℃"));
                     myChart.Series.Add(addMarkedPoint(GA_X, GA_Y, "A"));
                     myChart.Series.Add(addMarkedPoint(GB_X, GB_Y, "B"));
                     myChart.Series.Add(addMarkedPoint(GC_X, GC_Y, "C"));
@@ -625,6 +655,386 @@ namespace 恒温测试机.UI
 
 
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 保真度局部放大曲线
+        /// </summary>
+        private void load_Data_AngleTm_type1()
+        {
+            new Thread(new ThreadStart(ThreadRead_AngleTm_type1)) { IsBackground = true }.Start();
+        }
+        private delegate void AngleTmDelegate_type1();
+        private void ThreadRead_AngleTm_type1()
+        {
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    AngleTmDelegate_type1 angleTmDelegate_type1 = ThreadRead_AngleTm_type1;
+                    this.Invoke(angleTmDelegate_type1);
+                }
+                else
+                {
+                    if (TsetFlag)
+                        graphData = CsvToDataTable(@"D:\灵敏度0904.csv", 1);
+                    Dictionary<double, bool> keyValues1 = new Dictionary<double, bool>();
+                    Dictionary<double, bool> keyValues2 = new Dictionary<double, bool>();
+                    bool flag = true;
+                    int index = 0;
+                    var AngleTmTable = new DataTable();
+                    AngleTmTable.Columns.Add("角度", typeof(double));   //新建第一列 通道0
+                    AngleTmTable.Columns.Add("出水温度Tm", typeof(double));   //1
+                    foreach (DataRow row in graphData.Rows)
+                    {
+                        index++;
+                        if (index == AngleTmMidIndex)
+                        {
+                            flag = false;
+                        }
+                        var qm = Convert.ToDouble(row[1]);
+                        qm = Math.Abs(qm);
+                        if (flag)
+                        {
+                            if (keyValues1.ContainsKey(qm))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                upCount++;
+                                keyValues1.Add(qm, true);
+                            }
+                        }
+                        else
+                        {
+                            if (keyValues2.ContainsKey(qm))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                keyValues2.Add(qm, true);
+                            }
+                        }
+
+                        AngleTmTable.Rows.Add(
+                            qm,
+                            Convert.ToDouble(row[2])
+                            );
+                    }
+                    //QmTmTable.DefaultView.Sort = "出水流量Qm DESC";//按Id倒序;
+
+                    //var orderData = QmTmTable.DefaultView.ToTable();
+                    double[] xdata = new double[AngleTmTable.Rows.Count];
+                    double[] ydata = new double[AngleTmTable.Rows.Count];
+                    index = 0;
+                    double G11_X = 0; bool G11Flag = true; double G11_Y = 0;
+                    double G21_X = 0; bool G21Flag = true; double G21_Y = 0;
+                    double G12_X = 0; bool G12Flag = true; double G12_Y = 0;
+                    double G22_X = 0; bool G22Flag = true; double G22_Y = 0;
+                    double GA_X = 0; bool GAFlag = true; double GA_Y = 0;
+                    double GB_X = 0; bool GBFlag = true; double GB_Y = 0;
+                    double GC_X = 0; bool GCFlag = true; double GC_Y = 0;
+                    double GD_X = 0; bool GDFlag = true; double GD_Y = 0;
+                    //double orgTm = 37.15;
+                    foreach (DataRow row in AngleTmTable.Rows)
+                    {
+                        xdata[index] = Convert.ToDouble(row[0]);
+                        ydata[index] = Convert.ToDouble(row[1]);
+                        if (index < upCount)        //当前数据为左转数据
+                        {
+                            if (Math.Abs(ydata[index] - 38) <= 0.2 && GBFlag)
+                            {
+                                GB_X = xdata[index];    //角度  读取
+                                GB_Y = ydata[index];
+                                //formMain.SystemInfoPrint("38度的角度B为——>" + GB_X);
+                                GBFlag = false;
+                            }
+                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G21Flag)
+                            {
+                                G21_X = xdata[index];    //角度  读取
+                                G21_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G2:" + (orgTm - 4) + "的角度为——>" + G21_X);
+                                G21Flag = false;
+                            }
+                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G22Flag)
+                            {
+                                G22_X = xdata[index];    //角度  读取
+                                G22_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G2:" + (orgTm + 4) + "的角度为——>" + G22_X);
+                                G22Flag = false;
+                            }
+                        }
+                        else
+                        {
+                            if (Math.Abs(ydata[index] - 38) <= 0.2 && GAFlag)
+                            {
+                                GA_X = xdata[index];    //角度  读取
+                                GA_Y = ydata[index];
+                                //formMain.SystemInfoPrint("38度的角度A为——>" + GA_X);
+                                GAFlag = false;
+                            }
+                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G11Flag)
+                            {
+                                G11_X = xdata[index];    //角度  读取
+                                G11_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G1:" + (orgTm - 4) + "的角度为——>" + G11_X);
+                                G11Flag = false;
+                            }
+                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G12Flag)
+                            {
+                                G12_X = xdata[index];    //角度  读取
+                                G12_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G1:" + (orgTm + 4) + "的角度为——>" + G12_X);
+                                G12Flag = false;
+                            }
+                        }
+                        if (index == 0)
+                        {
+                            Console.WriteLine(xdata[index]);
+                            Console.WriteLine(ydata[index]);
+                        }
+                        index++;
+                    }
+                    index = 0;
+                    foreach (DataRow row in AngleTmTable.Rows)
+                    {
+                        xdata[index] = Convert.ToDouble(row[0]);
+                        ydata[index] = Convert.ToDouble(row[1]);
+                        if (index < upCount)        //当前数据为左转数据
+                        {
+                            if (Math.Abs(xdata[index] - (GA_X + GB_X) * 0.5) <= 0.2 && GCFlag)
+                            {
+                                GC_X = xdata[index];    //角度  读取
+                                GC_Y = ydata[index];
+                                GCFlag = false;
+                            }
+                        }
+                        else
+                        {
+                            if (Math.Abs(xdata[index] - (GA_X + GB_X) * 0.5) <= 0.2 && GDFlag)
+                            {
+                                GD_X = xdata[index];    //角度  读取
+                                GD_Y = ydata[index];
+                                GDFlag = false;
+                            }
+                        }
+                        index++;
+                    }
+
+                    Series series = this.SetSeriesStyle(0);
+
+                    
+                    //修改图例里面显示的内容
+                    series.LegendText = "保真度局部放大曲线";
+                    for (int i = 0; i < xdata.Length; i++)
+                    {
+                        if(xdata[i]>=(GA_X-3)&& xdata[i] <= (GB_X + 3)&&ydata[i] >= (GC_Y - 3) && ydata[i] <= (GD_Y + 3))
+                        {
+                            series.Points.AddXY(xdata[i], ydata[i]);
+                        }
+                       
+                    }
+                    this.myChart.Series.Add(series);
+                    //设置坐标轴范围
+                    myChart.ChartAreas[0].AxisX.Minimum = GA_X - 3;
+                    myChart.ChartAreas[0].AxisX.Maximum = GB_X + 3;
+                    myChart.ChartAreas[0].AxisY.Maximum = GD_Y + 3;
+                    myChart.ChartAreas[0].AxisY.Minimum = GC_Y - 3;
+                    //myChart.Annotations.Add(addDescription(GA_X,GA_Y,"pointA","A"));
+                    //myChart.Annotations.Add(addDescription(GB_X,GB_Y,"pointB","B"));
+                    myChart.Series.Add(addMarkedPoint(GA_X, GA_Y, "A"));
+                    myChart.Series.Add(addMarkedPoint(GB_X, GB_Y, "B"));
+                    myChart.Series.Add(addMarkedPoint(GC_X, GC_Y, "C"));
+                    myChart.Series.Add(addMarkedPoint(GD_X, GD_Y, "D"));
+
+                    myChart.Series.Add(addLine_between2Point(GA_X, GA_Y, GB_X, GB_Y));
+                    myChart.Series.Add(addLine_between2Point(GC_X, GC_Y, GD_X, GD_Y));
+
+                    var tmDiff = GD_Y - GC_Y;
+                    myChart.Annotations.Add(addDescription(GD_X, GD_Y, "保真度温度差", "保真度温度差:" + tmDiff+"℃"));
+                    myChart.SaveImage(picSenstivityPath1, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    model.tmDiff = tmDiff;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+                return;
+            }
+        }
+
+
+        /// <summary>
+        /// 灵敏度曲线
+        /// </summary>
+        private void load_Data_AngleTm_type2()
+        {
+            new Thread(new ThreadStart(ThreadRead_AngleTm_type2)) { IsBackground = true }.Start();
+        }
+        private delegate void AngleTmDelegate_type2();
+        private void ThreadRead_AngleTm_type2()
+        {
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    AngleTmDelegate_type2 angleTmDelegate_type2 = ThreadRead_AngleTm_type2;
+                    this.Invoke(angleTmDelegate_type2);
+                }
+                else
+                {
+                    if (TsetFlag)
+                        graphData = CsvToDataTable(@"D:\灵敏度0904.csv", 1);
+                    Dictionary<double, bool> keyValues1 = new Dictionary<double, bool>();
+                    Dictionary<double, bool> keyValues2 = new Dictionary<double, bool>();
+                    bool flag = true;
+                    int index = 0;
+                    var AngleTmTable = new DataTable();
+                    AngleTmTable.Columns.Add("角度", typeof(double));   //新建第一列 通道0
+                    AngleTmTable.Columns.Add("出水温度Tm", typeof(double));   //1
+                    foreach (DataRow row in graphData.Rows)
+                    {
+                        index++;
+                        if (index == AngleTmMidIndex)
+                        {
+                            flag = false;
+                        }
+                        var qm = Convert.ToDouble(row[1]);
+                        qm = Math.Abs(qm);
+                        if (flag)
+                        {
+                            if (keyValues1.ContainsKey(qm))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                upCount++;
+                                keyValues1.Add(qm, true);
+                            }
+                        }
+                        else
+                        {
+                            if (keyValues2.ContainsKey(qm))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                keyValues2.Add(qm, true);
+                            }
+                        }
+
+                        AngleTmTable.Rows.Add(
+                            qm,
+                            Convert.ToDouble(row[2])
+                            );
+                    }
+                    //QmTmTable.DefaultView.Sort = "出水流量Qm DESC";//按Id倒序;
+
+                    //var orderData = QmTmTable.DefaultView.ToTable();
+                    double[] xdata = new double[AngleTmTable.Rows.Count];
+                    double[] ydata = new double[AngleTmTable.Rows.Count];
+                    index = 0;
+                    double G11_X = 0; bool G11Flag = true; double G11_Y = 0;
+                    double G21_X = 0; bool G21Flag = true; double G21_Y = 0;
+                    double G12_X = 0; bool G12Flag = true; double G12_Y = 0;
+                    double G22_X = 0; bool G22Flag = true; double G22_Y = 0;
+
+                    //double orgTm = 37.15;
+                    foreach (DataRow row in AngleTmTable.Rows)
+                    {
+                        xdata[index] = Convert.ToDouble(row[0]);
+                        ydata[index] = Convert.ToDouble(row[1]);
+                        if (index < upCount)        //当前数据为左转数据
+                        {
+                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G21Flag)
+                            {
+                                G21_X = xdata[index];    //角度  读取
+                                G21_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G2:" + (orgTm - 4) + "的角度为——>" + G21_X);
+                                G21Flag = false;
+                            }
+                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G22Flag)
+                            {
+                                G22_X = xdata[index];    //角度  读取
+                                G22_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G2:" + (orgTm + 4) + "的角度为——>" + G22_X);
+                                G22Flag = false;
+                            }
+                        }
+                        else
+                        {
+                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G11Flag)
+                            {
+                                G11_X = xdata[index];    //角度  读取
+                                G11_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G1:" + (orgTm - 4) + "的角度为——>" + G11_X);
+                                G11Flag = false;
+                            }
+                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G12Flag)
+                            {
+                                G12_X = xdata[index];    //角度  读取
+                                G12_Y = ydata[index];
+                                //formMain.SystemInfoPrint("G1:" + (orgTm + 4) + "的角度为——>" + G12_X);
+                                G12Flag = false;
+                            }
+                        }
+                        if (index == 0)
+                        {
+                            Console.WriteLine(xdata[index]);
+                            Console.WriteLine(ydata[index]);
+                        }
+                        index++;
+                    }
+                  
+                    Series series = this.SetSeriesStyle(0);
+                    //修改图例里面显示的内容
+                    series.LegendText = "灵敏度曲线";
+                    for (int i = 0; i < xdata.Length; i++)
+                    {
+                        series.Points.AddXY(xdata[i], ydata[i]);
+                    }
+                    this.myChart.Series.Add(series);
+                    //设置坐标轴范围
+                    myChart.ChartAreas[0].AxisX.Minimum = 0;
+                    myChart.ChartAreas[0].AxisX.Maximum = 75;
+                    myChart.ChartAreas[0].AxisY.Maximum = 70;
+                    myChart.ChartAreas[0].AxisY.Minimum = 0;
+                    //myChart.Annotations.Add(addDescription(GA_X,GA_Y,"pointA","A"));
+                    //myChart.Annotations.Add(addDescription(GB_X,GB_Y,"pointB","B"));
+                    myChart.Annotations.Add(addLine_Axis("Tm+4", (orgTm + 4) + "", 0, orgTm + 4, 0, 75));
+                    myChart.Annotations.Add(addLine_Axis("Tm-4", (orgTm - 4) + "", 0, orgTm - 4, 0, 75));
+                    myChart.Series.Add(addMarkedPoint(0, (orgTm + 4), (orgTm + 4) + "℃"));
+                    myChart.Series.Add(addMarkedPoint(0, (orgTm - 4), (orgTm - 4) + "℃"));
+                    myChart.Series.Add(addMarkedPoint(G11_X, G11_Y, ""));
+                    myChart.Series.Add(addMarkedPoint(G12_X, G12_Y, ""));
+                    myChart.Series.Add(addMarkedPoint(G21_X, G21_Y, ""));
+                    myChart.Series.Add(addMarkedPoint(G22_X, G22_Y, ""));
+
+                    myChart.Series.Add(addLine_between2Point(G11_X, G11_Y, G11_X, G12_Y + 10, MarkerStyle.None));
+                    myChart.Series.Add(addLine_between2Point(G12_X, G12_Y, G12_X, G12_Y + 10, MarkerStyle.None));
+                    var G1 = G12_X - G11_X;
+                    myChart.Annotations.Add(addDescription(G11_X, G12_Y + 10, "G1", "G1:" + G1));
+                    myChart.Series.Add(addLine_between2Point(G11_X, G12_Y + 10, G12_X, G12_Y + 10, MarkerStyle.Diamond));
+
+                    myChart.Series.Add(addLine_between2Point(G21_X, G21_Y, G21_X, G21_Y - 10, MarkerStyle.None));
+                    myChart.Series.Add(addLine_between2Point(G22_X, G22_Y, G22_X, G21_Y - 10, MarkerStyle.None));
+                    var G2 = G22_X - G21_X;
+                    myChart.Annotations.Add(addDescription(G21_X, G21_Y - 10, "G2", "G2:" + G2));
+                    myChart.Series.Add(addLine_between2Point(G21_X, G21_Y - 10, G22_X, G21_Y - 10, MarkerStyle.Diamond));
+                    myChart.SaveImage(picSenstivityPath2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    model.G1 = G1;
+                    model.G2 = G2;
                 }
             }
             catch (Exception ex)
@@ -681,71 +1091,42 @@ namespace 恒温测试机.UI
                     double[] xdata = new double[orderData.Rows.Count];
                     double[] ydata = new double[orderData.Rows.Count];
                     int index = 0;
+                    
+
+                    foreach (DataRow row in orderData.Rows)
+                    {
+                        xdata[index] = Convert.ToDouble(row[0]);
+                        ydata[index] = Convert.ToDouble(row[1]);
+                        index++;
+                    }
+                    Series series = this.SetSeriesStyle(0);
+
+                    //傅里叶变化例子                    
+                    ydata = TWFFT.filterFFT(ydata, 0.1);
+
                     bool Tm1Flag = false;
                     bool Tm2Flag = false;
                     double Tm1_x = 0;
                     double Tm1_y = 0;
                     double Tm2_x = 0;
                     double Tm2_y = 0;
-
-                    foreach (DataRow row in orderData.Rows)
-                    {
-                        xdata[index] = Convert.ToDouble(row[0]);
-                        ydata[index] = Convert.ToDouble(row[1]);
-
-                        if (Math.Abs(xdata[index] - 6) <= 0.1 && Tm1Flag == false)
-                        {
-                            Tm1_x = xdata[index];
-                            Tm1_y = ydata[index];
-                            Tm1Flag = true;
-                            formMain.SystemInfoPrint("流量为6L的出水温度——>" + Tm1_y);
-                        }
-                        if (Math.Abs(xdata[index] - 3) <= 0.1 && Tm2Flag == false)
-                        {
-                            Tm2_x = xdata[index];
-                            Tm2_y = ydata[index];
-                            Tm2Flag = true;
-                            formMain.SystemInfoPrint("流量为3L的出水温度——>" + Tm2_y);
-                        }
-                        index++;
-                    }
-                    //滤波前数据
-                    Series series2 = this.SetSeriesStyle(2);
-                    for (int i = 0; i < xdata.Length; i++)
-                    {
-                        //添加数据
-                        series2.Points.AddXY(xdata[i], ydata[i]);
-
-                    }
-                    this.myChart.Series.Add(series2);
-                    Series series = this.SetSeriesStyle(0);
-                    #region 傅里叶变化例子                    
-                    ydata = TWFFT.filterFFT(ydata, 0.1);                   
-                    #endregion
-
-                    bool Tm1Flag1 = false;
-                    bool Tm2Flag1 = false;
-                    double Tm1_x1 = 0;
-                    double Tm1_y1 = 0;
-                    double Tm2_x1 = 0;
-                    double Tm2_y1 = 0;
                     for (int i = 0; i < xdata.Length; i++)
                     {
                         //添加数据
                         series.Points.AddXY(xdata[i], ydata[i]);
-                        if (Math.Abs(xdata[i] - 6) <= 0.1 && Tm1Flag1 == false)
+                        if (Math.Abs(xdata[i] - 6) <= 0.1 && Tm1Flag == false)
                         {
-                            Tm1_x1 = xdata[i];
-                            Tm1_y1 = ydata[i];
-                            Tm1Flag1 = true;
-                            formMain.SystemInfoPrint("流量为6L的出水温度——>" + Tm1_y1);
+                            Tm1_x = xdata[i];
+                            Tm1_y = ydata[i];
+                            Tm1Flag = true;
+                            formMain.SystemInfoPrint("流量为6L的出水温度——>" + Tm1_y);
                         }
-                        if (Math.Abs(xdata[i] - 3) <= 0.1 && Tm2Flag1 == false)
+                        if (Math.Abs(xdata[i] - 3) <= 0.1 && Tm2Flag == false)
                         {
-                            Tm2_x1 = xdata[i];
-                            Tm2_y1 = ydata[i];
-                            Tm2Flag1 = true;
-                            formMain.SystemInfoPrint("流量为3L的出水温度——>" + Tm2_y1);
+                            Tm2_x = xdata[i];
+                            Tm2_y = ydata[i];
+                            Tm2Flag = true;
+                            formMain.SystemInfoPrint("流量为3L的出水温度——>" + Tm2_y);
                         }
                     }
                     this.myChart.Series.Add(series);
@@ -759,8 +1140,7 @@ namespace 恒温测试机.UI
                     myChart.Annotations.Add(addLine_Axis("Tm38", "38", 0, 38, 0, -75));
                     myChart.Annotations.Add(addLine_Axis("Qm6_x", "6L", 0, Tm1_y, 0, -75));
                     myChart.Annotations.Add(addLine_Axis("Qm3_x", "3L", 0, Tm2_y, 0,-75));
-                    myChart.Annotations.Add(addLine_Axis("Qm6_x1", "6L", 0, Tm1_y1, 0, -75));
-                    myChart.Annotations.Add(addLine_Axis("Qm3_x1", "3L", 0, Tm2_y1, 0, -75));
+
 
                     myChart.Annotations.Add(addLine_Axis("Qm6", "6L", 6, 30, -75, 0));
                     myChart.Annotations.Add(addLine_Axis("Qm3", "3L", 3, 30, -75, 0));
@@ -777,8 +1157,7 @@ namespace 恒温测试机.UI
                     myChart.Series.Add(addMarkedPoint(6, Tm1_y, "Q1"));
                     myChart.Series.Add(addMarkedPoint(3, Tm2_y, "Q2"));
 
-                    myChart.Series.Add(addMarkedPoint(6, Tm1_y1, "Q11"));
-                    myChart.Series.Add(addMarkedPoint(3, Tm2_y1, "Q21"));
+
 
                     double Tm1Diff = Math.Round(Math.Abs(Tm1_y - 38), 2);
                     myChart.Series.Add(addLine_between2Point(13, Tm1_y, 13, 38, MarkerStyle.Diamond));
@@ -788,6 +1167,22 @@ namespace 恒温测试机.UI
                     myChart.Series.Add(addLine_between2Point(12.5, Tm2_y, 12.5, 38, MarkerStyle.Diamond));
                     myChart.Annotations.Add(addDescription(12.5, Tm2_y, "Qm3Des", "Tm2与38℃的温差：" + Tm2Diff + "℃"));
 
+                    if (logicType == LogicTypeEnum.TmSteadyTest65)
+                    {
+                        myChart.SaveImage(pic65Path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        model.Tm_65_6 = Tm1_y;
+                        model.Tm_65_6diff = Tm1Diff;
+                        model.Tm_65_3 = Tm2_y;
+                        model.Tm_65_3diff = Tm2Diff;
+                    }
+                    else
+                    {
+                        myChart.SaveImage(pic50Path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        model.Tm_50_6 = Tm1_y;
+                        model.Tm_50_6diff = Tm1Diff;
+                        model.Tm_50_3 = Tm2_y;
+                        model.Tm_50_3diff = Tm2Diff;
+                    }
                 }
             }
             catch(Exception ex)
@@ -978,5 +1373,14 @@ namespace 恒温测试机.UI
         }
         #endregion
 
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog savefile = new SaveFileDialog();
+            savefile.Filter = "JPEG文件|*.jpg";
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                myChart.SaveImage(savefile.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
     }
 }
