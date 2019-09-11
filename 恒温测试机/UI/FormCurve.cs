@@ -20,7 +20,7 @@ namespace 恒温测试机.UI
     public partial class FormCurve : Form
     {
 
-        public FormCurve(DataTable graphData, Model.Enum.LogicTypeEnum logicType,int AngleTmMidIndex,Model.Model_Export model=null,double orgTm=0,int type=0)
+        public FormCurve(DataTable graphData, Model.Enum.LogicTypeEnum logicType, FormMain formMain, int AngleTmMidIndex,Model.Model_Export model=null,double orgTm=0,int type=0)
         {
             InitializeComponent();
             InitializeChart();
@@ -31,6 +31,8 @@ namespace 恒温测试机.UI
             this.model = model;
             this.orgTm = orgTm;
             this.type = type;
+            this.formMain = formMain;
+            this.orgDiff = formMain.isNormalCategory ? 4 : 2;
         }
 
         /// <summary>
@@ -52,9 +54,11 @@ namespace 恒温测试机.UI
             this.TsetFlag = TestFlag;
             this.model = model;
             this.type = type;
+            this.orgDiff = formMain.isNormalCategory ? 4 : 2;
         }
 
-        private double orgTm=37.15;
+        private double orgDiff = 4;
+        private double orgTm=38.95;
         private FormMain formMain;
         private DataTable graphData;
         private LogicTypeEnum logicType;
@@ -453,7 +457,7 @@ namespace 恒温测试机.UI
                 else
                 {
                     if(TsetFlag)
-                        graphData = CsvToDataTable(@"D:\灵敏度0904.csv", 1);
+                        graphData = CsvToDataTable(@"D:\灵敏度0911.csv", 1);
                     Dictionary<double, bool> keyValues1 = new Dictionary<double, bool>();
                     Dictionary<double, bool> keyValues2 = new Dictionary<double, bool>();
                     bool flag = true;
@@ -520,25 +524,25 @@ namespace 恒温测试机.UI
                         ydata[index] = Convert.ToDouble(row[1]);
                         if (index < upCount)        //当前数据为左转数据
                         {
-                            if (Math.Abs(ydata[index] - 38) <= 0.2 && GBFlag)
+                            if (Math.Abs(ydata[index] - 38) <= 0.5 && GBFlag)
                             {
                                 GB_X = xdata[index];    //角度  读取
                                 GB_Y = ydata[index];
                                 formMain.SystemInfoPrint("38度的角度B为——>" + GB_X);
                                 GBFlag = false;
                             }
-                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G21Flag)
+                            if (Math.Abs(ydata[index] - (orgTm - orgDiff)) <= 0.5 && G21Flag)
                             {
                                 G21_X = xdata[index];    //角度  读取
                                 G21_Y = ydata[index];
-                                formMain.SystemInfoPrint("G2:" + (orgTm - 4) + "的角度为——>" + G21_X);
+                                formMain.SystemInfoPrint("G2:" + (orgTm - orgDiff) + "的角度为——>" + G21_X);
                                 G21Flag = false;
                             }
-                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G22Flag)
+                            if (Math.Abs(ydata[index] - (orgTm + orgDiff)) <= 0.5 && G22Flag)
                             {
                                 G22_X = xdata[index];    //角度  读取
                                 G22_Y = ydata[index];
-                                formMain.SystemInfoPrint("G2:" + (orgTm + 4) + "的角度为——>" + G22_X);
+                                formMain.SystemInfoPrint("G2:" + (orgTm + orgDiff) + "的角度为——>" + G22_X);
                                 G22Flag = false;
                             }
                         }
@@ -551,18 +555,18 @@ namespace 恒温测试机.UI
                                 formMain.SystemInfoPrint("38度的角度A为——>" + GA_X);
                                 GAFlag = false;
                             }
-                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G11Flag)
+                            if (Math.Abs(ydata[index] - (orgTm - orgDiff)) <= 0.2 && G11Flag)
                             {
                                 G11_X = xdata[index];    //角度  读取
                                 G11_Y = ydata[index];
-                                formMain.SystemInfoPrint("G1:" + (orgTm - 4) + "的角度为——>" + G11_X);
+                                formMain.SystemInfoPrint("G1:" + (orgTm - orgDiff) + "的角度为——>" + G11_X);
                                 G11Flag = false;
                             }
-                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G12Flag)
+                            if (Math.Abs(ydata[index] - (orgTm + orgDiff)) <= 0.2 && G12Flag)
                             {
                                 G12_X = xdata[index];    //角度  读取
                                 G12_Y = ydata[index];
-                                formMain.SystemInfoPrint("G1:" + (orgTm + 4) + "的角度为——>" + G12_X);
+                                formMain.SystemInfoPrint("G1:" + (orgTm + orgDiff) + "的角度为——>" + G12_X);
                                 G12Flag = false;
                             }
                         }
@@ -574,13 +578,14 @@ namespace 恒温测试机.UI
                         index++;
                     }
                     index = 0;
+
                     foreach (DataRow row in AngleTmTable.Rows)
                     {
                         xdata[index] = Convert.ToDouble(row[0]);
                         ydata[index] = Convert.ToDouble(row[1]);
                         if (index < upCount)        //当前数据为左转数据
                         {
-                            if (Math.Abs(xdata[index] - (GA_X+GB_X)*0.5) <= 0.2 && GCFlag)
+                            if (Math.Abs(xdata[index] - (GA_X+GB_X)*0.5) <= 0.4 && GCFlag)
                             {
                                 GC_X = xdata[index];    //角度  读取
                                 GC_Y = ydata[index];
@@ -589,7 +594,7 @@ namespace 恒温测试机.UI
                         }
                         else
                         {
-                            if (Math.Abs(xdata[index] - (GA_X + GB_X) * 0.5) <= 0.2 && GDFlag)
+                            if (Math.Abs(xdata[index] - (GA_X + GB_X) * 0.5) <= 0.4 && GDFlag)
                             {
                                 GD_X = xdata[index];    //角度  读取
                                 GD_Y = ydata[index];
@@ -684,7 +689,7 @@ namespace 恒温测试机.UI
                 else
                 {
                     if (TsetFlag)
-                        graphData = CsvToDataTable(@"D:\灵敏度0904.csv", 1);
+                        graphData = CsvToDataTable(@"D:\灵敏度0911.csv", 1);
                     Dictionary<double, bool> keyValues1 = new Dictionary<double, bool>();
                     Dictionary<double, bool> keyValues2 = new Dictionary<double, bool>();
                     bool flag = true;
@@ -736,10 +741,6 @@ namespace 恒温测试机.UI
                     double[] xdata = new double[AngleTmTable.Rows.Count];
                     double[] ydata = new double[AngleTmTable.Rows.Count];
                     index = 0;
-                    double G11_X = 0; bool G11Flag = true; double G11_Y = 0;
-                    double G21_X = 0; bool G21Flag = true; double G21_Y = 0;
-                    double G12_X = 0; bool G12Flag = true; double G12_Y = 0;
-                    double G22_X = 0; bool G22Flag = true; double G22_Y = 0;
                     double GA_X = 0; bool GAFlag = true; double GA_Y = 0;
                     double GB_X = 0; bool GBFlag = true; double GB_Y = 0;
                     double GC_X = 0; bool GCFlag = true; double GC_Y = 0;
@@ -758,20 +759,6 @@ namespace 恒温测试机.UI
                                 //formMain.SystemInfoPrint("38度的角度B为——>" + GB_X);
                                 GBFlag = false;
                             }
-                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G21Flag)
-                            {
-                                G21_X = xdata[index];    //角度  读取
-                                G21_Y = ydata[index];
-                                //formMain.SystemInfoPrint("G2:" + (orgTm - 4) + "的角度为——>" + G21_X);
-                                G21Flag = false;
-                            }
-                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G22Flag)
-                            {
-                                G22_X = xdata[index];    //角度  读取
-                                G22_Y = ydata[index];
-                                //formMain.SystemInfoPrint("G2:" + (orgTm + 4) + "的角度为——>" + G22_X);
-                                G22Flag = false;
-                            }
                         }
                         else
                         {
@@ -781,20 +768,6 @@ namespace 恒温测试机.UI
                                 GA_Y = ydata[index];
                                 //formMain.SystemInfoPrint("38度的角度A为——>" + GA_X);
                                 GAFlag = false;
-                            }
-                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G11Flag)
-                            {
-                                G11_X = xdata[index];    //角度  读取
-                                G11_Y = ydata[index];
-                                //formMain.SystemInfoPrint("G1:" + (orgTm - 4) + "的角度为——>" + G11_X);
-                                G11Flag = false;
-                            }
-                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G12Flag)
-                            {
-                                G12_X = xdata[index];    //角度  读取
-                                G12_Y = ydata[index];
-                                //formMain.SystemInfoPrint("G1:" + (orgTm + 4) + "的角度为——>" + G12_X);
-                                G12Flag = false;
                             }
                         }
                         if (index == 0)
@@ -893,7 +866,7 @@ namespace 恒温测试机.UI
                 else
                 {
                     if (TsetFlag)
-                        graphData = CsvToDataTable(@"D:\灵敏度0904.csv", 1);
+                        graphData = CsvToDataTable(@"D:\灵敏度0911.csv", 1);
                     Dictionary<double, bool> keyValues1 = new Dictionary<double, bool>();
                     Dictionary<double, bool> keyValues2 = new Dictionary<double, bool>();
                     bool flag = true;
@@ -957,14 +930,14 @@ namespace 恒温测试机.UI
                         ydata[index] = Convert.ToDouble(row[1]);
                         if (index < upCount)        //当前数据为左转数据
                         {
-                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G21Flag)
+                            if (Math.Abs(ydata[index] - (orgTm - orgDiff)) <= 0.2 && G21Flag)
                             {
                                 G21_X = xdata[index];    //角度  读取
                                 G21_Y = ydata[index];
                                 //formMain.SystemInfoPrint("G2:" + (orgTm - 4) + "的角度为——>" + G21_X);
                                 G21Flag = false;
                             }
-                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G22Flag)
+                            if (Math.Abs(ydata[index] - (orgTm + orgDiff)) <= 0.2 && G22Flag)
                             {
                                 G22_X = xdata[index];    //角度  读取
                                 G22_Y = ydata[index];
@@ -974,14 +947,14 @@ namespace 恒温测试机.UI
                         }
                         else
                         {
-                            if (Math.Abs(ydata[index] - (orgTm - 4)) <= 0.2 && G11Flag)
+                            if (Math.Abs(ydata[index] - (orgTm - orgDiff)) <= 0.2 && G11Flag)
                             {
                                 G11_X = xdata[index];    //角度  读取
                                 G11_Y = ydata[index];
                                 //formMain.SystemInfoPrint("G1:" + (orgTm - 4) + "的角度为——>" + G11_X);
                                 G11Flag = false;
                             }
-                            if (Math.Abs(ydata[index] - (orgTm + 4)) <= 0.2 && G12Flag)
+                            if (Math.Abs(ydata[index] - (orgTm + orgDiff)) <= 0.2 && G12Flag)
                             {
                                 G12_X = xdata[index];    //角度  读取
                                 G12_Y = ydata[index];
@@ -1012,10 +985,10 @@ namespace 恒温测试机.UI
                     myChart.ChartAreas[0].AxisY.Minimum = 0;
                     //myChart.Annotations.Add(addDescription(GA_X,GA_Y,"pointA","A"));
                     //myChart.Annotations.Add(addDescription(GB_X,GB_Y,"pointB","B"));
-                    myChart.Annotations.Add(addLine_Axis("Tm+4", (orgTm + 4) + "", 0, orgTm + 4, 0, 75));
-                    myChart.Annotations.Add(addLine_Axis("Tm-4", (orgTm - 4) + "", 0, orgTm - 4, 0, 75));
-                    myChart.Series.Add(addMarkedPoint(0, (orgTm + 4), (orgTm + 4) + "℃"));
-                    myChart.Series.Add(addMarkedPoint(0, (orgTm - 4), (orgTm - 4) + "℃"));
+                    myChart.Annotations.Add(addLine_Axis("Tm+"+ orgDiff , (orgTm + orgDiff) + "", 0, orgTm + orgDiff, 0, 75));
+                    myChart.Annotations.Add(addLine_Axis("Tm-"+ orgDiff, (orgTm - orgDiff) + "", 0, orgTm - orgDiff, 0, 75));
+                    myChart.Series.Add(addMarkedPoint(0, (orgTm + orgDiff), (orgTm + orgDiff) + "℃"));
+                    myChart.Series.Add(addMarkedPoint(0, (orgTm - orgDiff), (orgTm - orgDiff) + "℃"));
                     myChart.Series.Add(addMarkedPoint(G11_X, G11_Y, ""));
                     myChart.Series.Add(addMarkedPoint(G12_X, G12_Y, ""));
                     myChart.Series.Add(addMarkedPoint(G21_X, G21_Y, ""));

@@ -101,6 +101,8 @@
             this.hslPipeLine22 = new HslControls.HslPipeLine();
             this.hslPumpOne8 = new HslControls.HslPumpOne();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.categoryCbx = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.HeatPump = new System.Windows.Forms.NumericUpDown();
             this.label28 = new System.Windows.Forms.Label();
@@ -118,6 +120,8 @@
             this.forwardBtn_upDown = new System.Windows.Forms.Button();
             this.powerBtn_upDown = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.rBtn = new System.Windows.Forms.Button();
+            this.rTb = new System.Windows.Forms.TextBox();
             this.angleBtn_spin = new System.Windows.Forms.Button();
             this.angleTb_spin = new System.Windows.Forms.TextBox();
             this.autoFindBtn_spin = new System.Windows.Forms.Button();
@@ -1004,6 +1008,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.categoryCbx);
+            this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.HeatPump);
             this.groupBox3.Controls.Add(this.label28);
@@ -1011,15 +1017,36 @@
             this.groupBox3.Font = new System.Drawing.Font("宋体", 12.75F);
             this.groupBox3.Location = new System.Drawing.Point(10, 126);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(298, 124);
+            this.groupBox3.Size = new System.Drawing.Size(298, 156);
             this.groupBox3.TabIndex = 251;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "参数配置";
             // 
+            // categoryCbx
+            // 
+            this.categoryCbx.FormattingEnabled = true;
+            this.categoryCbx.Items.AddRange(new object[] {
+            "普通",
+            "恒温"});
+            this.categoryCbx.Location = new System.Drawing.Point(171, 120);
+            this.categoryCbx.Name = "categoryCbx";
+            this.categoryCbx.Size = new System.Drawing.Size(118, 25);
+            this.categoryCbx.TabIndex = 17;
+            this.categoryCbx.Text = "普通";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 123);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(127, 17);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "设置龙头种类：";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 87);
+            this.label1.Location = new System.Drawing.Point(7, 80);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(127, 17);
             this.label1.TabIndex = 14;
@@ -1033,7 +1060,7 @@
             0,
             0,
             65536});
-            this.HeatPump.Location = new System.Drawing.Point(171, 85);
+            this.HeatPump.Location = new System.Drawing.Point(171, 78);
             this.HeatPump.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1205,6 +1232,8 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.rBtn);
+            this.groupBox6.Controls.Add(this.rTb);
             this.groupBox6.Controls.Add(this.angleBtn_spin);
             this.groupBox6.Controls.Add(this.angleTb_spin);
             this.groupBox6.Controls.Add(this.autoFindBtn_spin);
@@ -1220,10 +1249,27 @@
             this.groupBox6.Font = new System.Drawing.Font("宋体", 12.75F);
             this.groupBox6.Location = new System.Drawing.Point(10, 301);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(298, 350);
+            this.groupBox6.Size = new System.Drawing.Size(298, 372);
             this.groupBox6.TabIndex = 252;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "旋转电机通讯";
+            // 
+            // rBtn
+            // 
+            this.rBtn.Location = new System.Drawing.Point(10, 136);
+            this.rBtn.Name = "rBtn";
+            this.rBtn.Size = new System.Drawing.Size(108, 29);
+            this.rBtn.TabIndex = 48;
+            this.rBtn.Text = "预设半径";
+            this.rBtn.UseVisualStyleBackColor = true;
+            this.rBtn.Click += new System.EventHandler(this.rBtn_Click);
+            // 
+            // rTb
+            // 
+            this.rTb.Location = new System.Drawing.Point(144, 138);
+            this.rTb.Name = "rTb";
+            this.rTb.Size = new System.Drawing.Size(108, 27);
+            this.rTb.TabIndex = 47;
             // 
             // angleBtn_spin
             // 
@@ -1244,7 +1290,7 @@
             // 
             // autoFindBtn_spin
             // 
-            this.autoFindBtn_spin.Location = new System.Drawing.Point(9, 291);
+            this.autoFindBtn_spin.Location = new System.Drawing.Point(9, 334);
             this.autoFindBtn_spin.Name = "autoFindBtn_spin";
             this.autoFindBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.autoFindBtn_spin.TabIndex = 44;
@@ -1271,7 +1317,7 @@
             // 
             // shutdownBtn_spin
             // 
-            this.shutdownBtn_spin.Location = new System.Drawing.Point(142, 142);
+            this.shutdownBtn_spin.Location = new System.Drawing.Point(142, 185);
             this.shutdownBtn_spin.Name = "shutdownBtn_spin";
             this.shutdownBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.shutdownBtn_spin.TabIndex = 41;
@@ -1282,7 +1328,7 @@
             // 
             // autoRunBtn_spin
             // 
-            this.autoRunBtn_spin.Location = new System.Drawing.Point(142, 291);
+            this.autoRunBtn_spin.Location = new System.Drawing.Point(142, 334);
             this.autoRunBtn_spin.Name = "autoRunBtn_spin";
             this.autoRunBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.autoRunBtn_spin.TabIndex = 40;
@@ -1292,7 +1338,7 @@
             // 
             // backOrignBtn_spin
             // 
-            this.backOrignBtn_spin.Location = new System.Drawing.Point(142, 241);
+            this.backOrignBtn_spin.Location = new System.Drawing.Point(142, 284);
             this.backOrignBtn_spin.Name = "backOrignBtn_spin";
             this.backOrignBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.backOrignBtn_spin.TabIndex = 39;
@@ -1302,7 +1348,7 @@
             // 
             // orignBtn_spin
             // 
-            this.orignBtn_spin.Location = new System.Drawing.Point(9, 241);
+            this.orignBtn_spin.Location = new System.Drawing.Point(9, 284);
             this.orignBtn_spin.Name = "orignBtn_spin";
             this.orignBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.orignBtn_spin.TabIndex = 38;
@@ -1313,7 +1359,7 @@
             // 
             // noForwardBtn_spin
             // 
-            this.noForwardBtn_spin.Location = new System.Drawing.Point(10, 191);
+            this.noForwardBtn_spin.Location = new System.Drawing.Point(10, 234);
             this.noForwardBtn_spin.Name = "noForwardBtn_spin";
             this.noForwardBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.noForwardBtn_spin.TabIndex = 33;
@@ -1324,7 +1370,7 @@
             // 
             // forwardBtn_spin
             // 
-            this.forwardBtn_spin.Location = new System.Drawing.Point(143, 191);
+            this.forwardBtn_spin.Location = new System.Drawing.Point(143, 234);
             this.forwardBtn_spin.Name = "forwardBtn_spin";
             this.forwardBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.forwardBtn_spin.TabIndex = 32;
@@ -1336,7 +1382,7 @@
             // powerBtn_spin
             // 
             this.powerBtn_spin.BackColor = System.Drawing.SystemColors.Control;
-            this.powerBtn_spin.Location = new System.Drawing.Point(9, 142);
+            this.powerBtn_spin.Location = new System.Drawing.Point(9, 185);
             this.powerBtn_spin.Name = "powerBtn_spin";
             this.powerBtn_spin.Size = new System.Drawing.Size(108, 29);
             this.powerBtn_spin.TabIndex = 29;
@@ -1492,5 +1538,9 @@
         private System.Windows.Forms.Button noForwardBtn_spin;
         private System.Windows.Forms.Button forwardBtn_spin;
         private System.Windows.Forms.Button powerBtn_spin;
+        private System.Windows.Forms.Button rBtn;
+        private System.Windows.Forms.TextBox rTb;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox categoryCbx;
     }
 }
