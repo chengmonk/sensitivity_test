@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button1 = new System.Windows.Forms.Button();
             this.myChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -51,15 +50,16 @@
             this.myChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea1.AxisX.MajorGrid.Enabled = false;
+            chartArea1.AxisY.MajorGrid.Enabled = false;
+            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea1.AxisY2.MajorGrid.Enabled = false;
             chartArea1.Name = "ChartArea1";
             this.myChart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.myChart.Legends.Add(legend1);
             this.myChart.Location = new System.Drawing.Point(9, 9);
             this.myChart.Margin = new System.Windows.Forms.Padding(0);
             this.myChart.Name = "myChart";
             series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.myChart.Series.Add(series1);
             this.myChart.Size = new System.Drawing.Size(960, 622);

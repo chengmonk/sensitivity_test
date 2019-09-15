@@ -790,6 +790,7 @@ namespace 恒温测试机.UI
 
         public bool isNormalCategory = true;
         private int AngleTmIndex = 0;
+        private bool isForwardFlag = true;
         private int AngleTmMidIndex = 0;
         public DataTable AngleTmTable;
         public bool AngleTmFlag = false;
@@ -800,6 +801,7 @@ namespace 恒温测试机.UI
             {
                 runFlag = true;
                 graphFlag = true;
+                isForwardFlag = true;
                 MessageBox.Show("请确认电机已设置好相关参数！");
 
                 #region 启动 011(冷水泵) 021(热水泵) a(热水阀) b(冷水阀)
@@ -887,6 +889,7 @@ namespace 恒温测试机.UI
                 bpq.write_coil(forwardWriteAddress_spin, true, 5);
                 SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "开始右转...");
                 AngleTmMidIndex = AngleTmIndex;
+                isForwardFlag = false;
                 SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + "Index:"+ AngleTmMidIndex);
                 //SystemInfoPrint("【" + DateTime.Now.ToString() + "】" + angleValue_spin);
                 while (angleValue_spin <= 0)
@@ -1580,20 +1583,33 @@ namespace 恒温测试机.UI
                 sourceDataTemp5 = averge(ref sourceDataTemp5, 14);
                 //sourceDataTemp5 = filter(ref sourceDataTemp5, 10);
 
-                var currentAngle = Math.Round(angleValue_spin / 3200.0, 1);
+                var currentAngle = Math.Round(angleValue_spin / 3200.0, 2);
+                var diffAngle = radio * 0.01;
+                Console.WriteLine("diffAngle：--->" + diffAngle);
+                Console.WriteLine("currentAngle：--->" + currentAngle);
+                Console.WriteLine("lastAngle：--->" + lastAngle);
+
                 //将每秒采集到的角度扩充到100个
-                for (int i = 0; i < 10; i++)
-                {
-                    double[] angleFill = dataFill(lastAngle, currentAngle, 11);//扩充数据
-                    for (int j = 0; j < 10; j++)
-                    {
-                        AngleExtends[i * 10 + j] = angleFill[j];
-                    }
-                }
-                //for (int i = 0; i < 100; i++)
+                //for (int i = 0; i < 10; i++)
                 //{
-                //    Console.WriteLine("AngleExtends[" + i + "]：--->" + AngleExtends[i]);
+                //    double[] angleFill = dataFill(lastAngle, currentAngle, 11);//扩充数据
+                //    for (int j = 0; j < 10; j++)
+                //    {
+                //        AngleExtends[i * 10 + j] = angleFill[j];
+                //    }
                 //}
+                for (int i = 0; i < 100; i++)
+                {
+                    if (lastAngle <= currentAngle)
+                    {
+                        AngleExtends[i] = Math.Round(lastAngle + diffAngle * i, 2);
+                    }
+                    else
+                    {
+                        AngleExtends[i] = Math.Round(lastAngle - diffAngle * i, 2);
+                    }
+                    //Console.WriteLine("AngleExtends[" + i + "]：--->" + AngleExtends[i]);
+                }
                 lastAngle = currentAngle;
                 if (isFirstAver == false)
                 {
@@ -2153,23 +2169,32 @@ namespace 恒温测试机.UI
                 bpq.write_coil(autoRunAddress_spin, true, 5);
             }
         }
+
+        public double radio = 0;
         private void Radio_spin_Click(object sender, EventArgs e)
         {
-            uint val2 = (uint)(double.Parse(radioTb_spin.Text) * 3200);
-
-            if (val2 < 0 || val2 > 20000)
+            try
             {
-                MessageBox.Show("请输入0-6.25 范围内的值");
-                radioTb_spin.Text = "";
+                uint val2 = (uint)(double.Parse(radioTb_spin.Text) * 3200);
+                radio = double.Parse(radioTb_spin.Text);
+                if (val2 < 0 || val2 > 20000)
+                {
+                    MessageBox.Show("请输入0-6.25 范围内的值");
+                    radioTb_spin.Text = "";
+                }
+                else if (isAutoFindAngle)
+                {
+                    return;
+                }
+                else
+                {
+                    Write_uint(radioAddress_spin, val2, 5);
+                    SystemInfoPrint("写入：【" + radioAddress_spin + "】【" + val2 + "】\n\n");
+                }
             }
-            else if (isAutoFindAngle)
+            catch(Exception ex)
             {
                 return;
-            }
-            else
-            {
-                Write_uint(radioAddress_spin, val2, 5);
-                SystemInfoPrint("写入：【" + radioAddress_spin + "】【" + val2 + "】\n\n");
             }
         }
 
@@ -2919,12 +2944,12 @@ namespace 恒温测试机.UI
 
         private void HslButton4_Click(object sender, EventArgs e)
         {
-            FormCurve form = new FormCurve(AngleTmTable, LogicTypeEnum.SensitivityTest, this, 16600, true,model);
+            FormCurve form = new FormCurve(AngleTmTable, LogicTypeEnum.SensitivityTest, this, 17100, true, model);
             form.Show();
-            //FormCurve form2 = new FormCurve(AngleTmTable, LogicTypeEnum.SensitivityTest, this, 16600, true, model, 1);
-            //form2.Show();
-            //FormCurve form3 = new FormCurve(AngleTmTable, LogicTypeEnum.SensitivityTest, this, 16600, true, model, 2);
-            //form3.Show();
+            FormCurve form2 = new FormCurve(AngleTmTable, LogicTypeEnum.SensitivityTest, this, 17100, true, model, 1);
+            form2.Show();
+            FormCurve form3 = new FormCurve(AngleTmTable, LogicTypeEnum.SensitivityTest, this, 17100, true, model, 2);
+            form3.Show();
         }
 
         private void HslButton5_Click(object sender, EventArgs e)
