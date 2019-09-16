@@ -38,7 +38,7 @@
             },
             "HslControls": {
               "target": "Package",
-              "version": "[2.1.8, )"
+              "version": "[2.2.2, )"
             },
             "MathNet.Numerics": {
               "target": "Package",

@@ -14,7 +14,7 @@
           "lib/net451/HslCommunication.dll": {}
         }
       },
-      "HslControls/2.1.8": {
+      "HslControls/2.2.2": {
         "type": "package",
         "compile": {
           "lib/net45/HslControls.dll": {}
@@ -70,7 +70,7 @@
           "lib/net451/HslCommunication.dll": {}
         }
       },
-      "HslControls/2.1.8": {
+      "HslControls/2.2.2": {
         "type": "package",
         "compile": {
           "lib/net45/HslControls.dll": {}
@@ -126,7 +126,7 @@
           "lib/net451/HslCommunication.dll": {}
         }
       },
-      "HslControls/2.1.8": {
+      "HslControls/2.2.2": {
         "type": "package",
         "compile": {
           "lib/net45/HslControls.dll": {}
@@ -182,7 +182,7 @@
           "lib/net451/HslCommunication.dll": {}
         }
       },
-      "HslControls/2.1.8": {
+      "HslControls/2.2.2": {
         "type": "package",
         "compile": {
           "lib/net45/HslControls.dll": {}
@@ -244,14 +244,14 @@
         "lib/netstandard2.0/HslCommunication.xml"
       ]
     },
-    "HslControls/2.1.8": {
-      "sha512": "zhV5DAva99rlEFAC+4GwHIJ+BivkfiCa08Ev7+enZd/sAvtJEuLieDGnJqeG7dyYu2t6+/HbpBKObgWxq79G3Q==",
+    "HslControls/2.2.2": {
+      "sha512": "qhikgLtCw0BopJbE3CmuVxMMiYrAxMkEChIqr63gkYQWegznoVqrVzIFYWMSVeOsdkGssy1Jnp5agUg2v/UtSw==",
       "type": "package",
-      "path": "hslcontrols/2.1.8",
+      "path": "hslcontrols/2.2.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "hslcontrols.2.1.8.nupkg.sha512",
+        "hslcontrols.2.2.2.nupkg.sha512",
         "hslcontrols.nuspec",
         "lib/MonoAndroid/HslControls.dll",
         "lib/MonoAndroid/HslControls.pdb",
@@ -341,7 +341,7 @@
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.7.2": [
       "HslCommunication >= 7.0.1",
-      "HslControls >= 2.1.8",
+      "HslControls >= 2.2.2",
       "MathNet.Numerics >= 4.8.1",
       "Newtonsoft.Json >= 12.0.2",
       "log4net >= 2.0.8"
@@ -384,7 +384,7 @@
           },
           "HslControls": {
             "target": "Package",
-            "version": "[2.1.8, )"
+            "version": "[2.2.2, )"
           },
           "MathNet.Numerics": {
             "target": "Package",
