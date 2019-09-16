@@ -1,0 +1,416 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v4.7.2": {
+      "HslCommunication/7.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "compile": {
+          "lib/net451/HslCommunication.dll": {}
+        },
+        "runtime": {
+          "lib/net451/HslCommunication.dll": {}
+        }
+      },
+      "HslControls/2.1.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/HslControls.dll": {}
+        },
+        "runtime": {
+          "lib/net45/HslControls.dll": {}
+        }
+      },
+      "log4net/2.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45-full/log4net.dll": {}
+        },
+        "runtime": {
+          "lib/net45-full/log4net.dll": {}
+        }
+      },
+      "MathNet.Numerics/4.8.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Core",
+          "System.Numerics",
+          "System.Runtime.Serialization"
+        ],
+        "compile": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        },
+        "runtime": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        }
+      },
+      "Newtonsoft.Json/12.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.7.2/win": {
+      "HslCommunication/7.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "compile": {
+          "lib/net451/HslCommunication.dll": {}
+        },
+        "runtime": {
+          "lib/net451/HslCommunication.dll": {}
+        }
+      },
+      "HslControls/2.1.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/HslControls.dll": {}
+        },
+        "runtime": {
+          "lib/net45/HslControls.dll": {}
+        }
+      },
+      "log4net/2.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45-full/log4net.dll": {}
+        },
+        "runtime": {
+          "lib/net45-full/log4net.dll": {}
+        }
+      },
+      "MathNet.Numerics/4.8.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Core",
+          "System.Numerics",
+          "System.Runtime.Serialization"
+        ],
+        "compile": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        },
+        "runtime": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        }
+      },
+      "Newtonsoft.Json/12.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.7.2/win-x64": {
+      "HslCommunication/7.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "compile": {
+          "lib/net451/HslCommunication.dll": {}
+        },
+        "runtime": {
+          "lib/net451/HslCommunication.dll": {}
+        }
+      },
+      "HslControls/2.1.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/HslControls.dll": {}
+        },
+        "runtime": {
+          "lib/net45/HslControls.dll": {}
+        }
+      },
+      "log4net/2.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45-full/log4net.dll": {}
+        },
+        "runtime": {
+          "lib/net45-full/log4net.dll": {}
+        }
+      },
+      "MathNet.Numerics/4.8.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Core",
+          "System.Numerics",
+          "System.Runtime.Serialization"
+        ],
+        "compile": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        },
+        "runtime": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        }
+      },
+      "Newtonsoft.Json/12.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.7.2/win-x86": {
+      "HslCommunication/7.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "compile": {
+          "lib/net451/HslCommunication.dll": {}
+        },
+        "runtime": {
+          "lib/net451/HslCommunication.dll": {}
+        }
+      },
+      "HslControls/2.1.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/HslControls.dll": {}
+        },
+        "runtime": {
+          "lib/net45/HslControls.dll": {}
+        }
+      },
+      "log4net/2.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45-full/log4net.dll": {}
+        },
+        "runtime": {
+          "lib/net45-full/log4net.dll": {}
+        }
+      },
+      "MathNet.Numerics/4.8.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Core",
+          "System.Numerics",
+          "System.Runtime.Serialization"
+        ],
+        "compile": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        },
+        "runtime": {
+          "lib/net461/MathNet.Numerics.dll": {}
+        }
+      },
+      "Newtonsoft.Json/12.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "HslCommunication/7.0.1": {
+      "sha512": "0bCqL+x6ExItJmb4tFAxh0tNsUdpuUH+PUC08H+SmENY0YKD/TeaA29bcWP7M4nxfGNqhSf8qLhR8eUGSUK+6A==",
+      "type": "package",
+      "path": "hslcommunication/7.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "hslcommunication.7.0.1.nupkg.sha512",
+        "hslcommunication.nuspec",
+        "lib/net35/HslCommunication.dll",
+        "lib/net35/HslCommunication.xml",
+        "lib/net451/HslCommunication.dll",
+        "lib/net451/HslCommunication.xml",
+        "lib/netstandard2.0/HslCommunication.dll",
+        "lib/netstandard2.0/HslCommunication.xml"
+      ]
+    },
+    "HslControls/2.1.8": {
+      "sha512": "zhV5DAva99rlEFAC+4GwHIJ+BivkfiCa08Ev7+enZd/sAvtJEuLieDGnJqeG7dyYu2t6+/HbpBKObgWxq79G3Q==",
+      "type": "package",
+      "path": "hslcontrols/2.1.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "hslcontrols.2.1.8.nupkg.sha512",
+        "hslcontrols.nuspec",
+        "lib/MonoAndroid/HslControls.dll",
+        "lib/MonoAndroid/HslControls.pdb",
+        "lib/MonoAndroid/HslControls.xml",
+        "lib/net35/HslControls.dll",
+        "lib/net35/HslControls.pdb",
+        "lib/net35/HslControls.xml",
+        "lib/net45/HslControls.dll",
+        "lib/net45/HslControls.pdb",
+        "lib/net45/HslControls.xml"
+      ]
+    },
+    "log4net/2.0.8": {
+      "sha512": "N41MQGHZImiCfn0cUuSBjZxrcNfIQCuCgQP0rpgB3J/NWponEh3lc1LxJEuIsPAR9Oc1jVvfkNNFCY1C5hf9LA==",
+      "type": "package",
+      "path": "log4net/2.0.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net20-full/log4net.dll",
+        "lib/net20-full/log4net.xml",
+        "lib/net35-client/log4net.dll",
+        "lib/net35-client/log4net.xml",
+        "lib/net35-full/log4net.dll",
+        "lib/net35-full/log4net.xml",
+        "lib/net40-client/log4net.dll",
+        "lib/net40-client/log4net.xml",
+        "lib/net40-full/log4net.dll",
+        "lib/net40-full/log4net.xml",
+        "lib/net45-full/log4net.dll",
+        "lib/net45-full/log4net.xml",
+        "lib/netstandard1.3/log4net.dll",
+        "log4net.2.0.8.nupkg.sha512",
+        "log4net.nuspec"
+      ]
+    },
+    "MathNet.Numerics/4.8.1": {
+      "sha512": "HK97Btmlx8WLioRpWpyO3kCpvm3y9n4WzgFDQxaxUP9zbScOxB6JevGyGydcDtVDDPC4Gtv4u/j7pQjK6N+sUA==",
+      "type": "package",
+      "path": "mathnet.numerics/4.8.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/MathNet.Numerics.dll",
+        "lib/net40/MathNet.Numerics.xml",
+        "lib/net461/MathNet.Numerics.dll",
+        "lib/net461/MathNet.Numerics.xml",
+        "lib/netstandard1.3/MathNet.Numerics.dll",
+        "lib/netstandard1.3/MathNet.Numerics.xml",
+        "lib/netstandard2.0/MathNet.Numerics.dll",
+        "lib/netstandard2.0/MathNet.Numerics.xml",
+        "mathnet.numerics.4.8.1.nupkg.sha512",
+        "mathnet.numerics.nuspec"
+      ]
+    },
+    "Newtonsoft.Json/12.0.2": {
+      "sha512": "rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
+      "type": "package",
+      "path": "newtonsoft.json/12.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.dll",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
+        "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
+        "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
+        "newtonsoft.json.12.0.2.nupkg.sha512",
+        "newtonsoft.json.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v4.7.2": [
+      "HslCommunication >= 7.0.1",
+      "HslControls >= 2.1.8",
+      "MathNet.Numerics >= 4.8.1",
+      "Newtonsoft.Json >= 12.0.2",
+      "log4net >= 2.0.8"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\恒温测试机.csproj",
+      "projectName": "恒温测试机",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\恒温测试机.csproj",
+      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\obj\\",
+      "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
+      "configFilePaths": [
+        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net472"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net472": {
+          "projectReferences": {}
+        }
+      }
+    },
+    "frameworks": {
+      "net472": {
+        "dependencies": {
+          "HslCommunication": {
+            "target": "Package",
+            "version": "[7.0.1, )"
+          },
+          "HslControls": {
+            "target": "Package",
+            "version": "[2.1.8, )"
+          },
+          "MathNet.Numerics": {
+            "target": "Package",
+            "version": "[4.8.1, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[12.0.2, )"
+          },
+          "log4net": {
+            "target": "Package",
+            "version": "[2.0.8, )"
+          }
+        }
+      }
+    },
+    "runtimes": {
+      "win": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
+      }
+    }
+  }
+}

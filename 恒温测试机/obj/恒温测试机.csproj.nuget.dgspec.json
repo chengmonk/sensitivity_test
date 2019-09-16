@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\恒温测试机.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\恒温测试机.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\恒温测试机.csproj",
+        "projectName": "恒温测试机",
+        "projectPath": "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\恒温测试机.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\Desktop\\灵敏度测试\\恒温测试机\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "dependencies": {
+            "HslCommunication": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "HslControls": {
+              "target": "Package",
+              "version": "[2.1.8, )"
+            },
+            "MathNet.Numerics": {
+              "target": "Package",
+              "version": "[4.8.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
+            },
+            "log4net": {
+              "target": "Package",
+              "version": "[2.0.8, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
